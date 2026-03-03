@@ -18,7 +18,7 @@ namespace Group1Project
         public Match FindMatch(Guid matchId)
         {
             // Code to find a match in the bracket by its ID
-            return matches.FirstOrDefault(m => m.id == matchId);
+            return matches.FirstOrDefault(m => m.Id == matchId);
         }
 
     }

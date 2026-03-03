@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group1Project
 {
-    internal class Team
+    public class Team
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -16,6 +16,7 @@ namespace Group1Project
 
         public Team(string name)
         {
+            Id = Guid.NewGuid();
             Name = name;
             Players = new List<Player>();
         }

@@ -1,5 +1,15 @@
 using System.Net.NetworkInformation;
 
+/// <summary>
+/// Group 1 Project - Main Form
+/// Author: Cameron
+///         Jun
+///         Jonathan 
+/// Date: March 2, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=visualstudio
+/// </summary>
 namespace Group1Project
 {
     public partial class Form1 : Form
@@ -70,6 +80,19 @@ namespace Group1Project
 
                 lblTournament.Text = $"Tournament: {currentTournament.Name}";
             }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the Add Team toolbar button by displaying a popup for adding a new team.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the control that triggered the event.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
+        private void tsbAddTeam_Click(object sender, EventArgs e)
+        {
+            addTeam addTeamForm = new addTeam();
+            addTeamForm.ShowDialog(this);
+
+            addTeamForm.Dispose();
         }
     }
 }

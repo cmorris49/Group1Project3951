@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Group1Project
 {
-    internal class Player
+    public class Player
     {
         public Guid id { get; set; }
 

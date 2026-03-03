@@ -29,37 +29,38 @@
         private void InitializeComponent()
         {
             splitTeamsPlayers = new SplitContainer();
-            panelTeamsHeader = new Panel();
-            labelTeams = new Label();
-            buttonEditTeam = new Button();
-            buttonAddTeam = new Button();
-            buttonRemoveTeam = new Button();
             dataViewTeams = new DataGridView();
             columnTeamName = new DataGridViewTextBoxColumn();
             columnSeed = new DataGridViewTextBoxColumn();
             columnPlayerCount = new DataGridViewTextBoxColumn();
-            panelPlayersHeader = new Panel();
-            labelPlayers = new Label();
-            buttonRemovePlayer = new Button();
-            buttonAddPlayer = new Button();
-            buttonEditPlayer = new Button();
+            panelTeamsHeader = new Panel();
+            buttonRemoveTeam = new Button();
+            buttonAddTeam = new Button();
+            buttonEditTeam = new Button();
+            labelTeams = new Label();
             dataGridViewPlayers = new DataGridView();
             columnPlayerDisplayName = new DataGridViewTextBoxColumn();
             columnPlayerNumber = new DataGridViewTextBoxColumn();
+            panelPlayersHeader = new Panel();
+            buttonEditPlayer = new Button();
+            buttonAddPlayer = new Button();
+            buttonRemovePlayer = new Button();
+            labelPlayers = new Label();
             ((System.ComponentModel.ISupportInitialize)splitTeamsPlayers).BeginInit();
             splitTeamsPlayers.Panel1.SuspendLayout();
             splitTeamsPlayers.Panel2.SuspendLayout();
             splitTeamsPlayers.SuspendLayout();
-            panelTeamsHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataViewTeams).BeginInit();
-            panelPlayersHeader.SuspendLayout();
+            panelTeamsHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).BeginInit();
+            panelPlayersHeader.SuspendLayout();
             SuspendLayout();
             // 
             // splitTeamsPlayers
             // 
             splitTeamsPlayers.Dock = DockStyle.Fill;
             splitTeamsPlayers.Location = new Point(0, 0);
+            splitTeamsPlayers.Margin = new Padding(2, 2, 2, 2);
             splitTeamsPlayers.Name = "splitTeamsPlayers";
             splitTeamsPlayers.Orientation = Orientation.Horizontal;
             // 
@@ -74,61 +75,10 @@
             splitTeamsPlayers.Panel2.Controls.Add(dataGridViewPlayers);
             splitTeamsPlayers.Panel2.Controls.Add(panelPlayersHeader);
             splitTeamsPlayers.Panel2MinSize = 220;
-            splitTeamsPlayers.Size = new Size(759, 594);
-            splitTeamsPlayers.SplitterDistance = 260;
+            splitTeamsPlayers.Size = new Size(409, 316);
+            splitTeamsPlayers.SplitterDistance = 138;
+            splitTeamsPlayers.SplitterWidth = 2;
             splitTeamsPlayers.TabIndex = 0;
-            // 
-            // panelTeamsHeader
-            // 
-            panelTeamsHeader.Controls.Add(buttonRemoveTeam);
-            panelTeamsHeader.Controls.Add(buttonAddTeam);
-            panelTeamsHeader.Controls.Add(buttonEditTeam);
-            panelTeamsHeader.Controls.Add(labelTeams);
-            panelTeamsHeader.Dock = DockStyle.Top;
-            panelTeamsHeader.Location = new Point(0, 0);
-            panelTeamsHeader.Name = "panelTeamsHeader";
-            panelTeamsHeader.Size = new Size(759, 56);
-            panelTeamsHeader.TabIndex = 0;
-            // 
-            // labelTeams
-            // 
-            labelTeams.AutoSize = true;
-            labelTeams.Font = new Font("Segoe UI", 12F);
-            labelTeams.Location = new Point(10, 5);
-            labelTeams.Name = "labelTeams";
-            labelTeams.Size = new Size(109, 45);
-            labelTeams.TabIndex = 0;
-            labelTeams.Text = "Teams";
-            // 
-            // buttonEditTeam
-            // 
-            buttonEditTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonEditTeam.Location = new Point(530, 5);
-            buttonEditTeam.Name = "buttonEditTeam";
-            buttonEditTeam.Size = new Size(110, 45);
-            buttonEditTeam.TabIndex = 1;
-            buttonEditTeam.Text = "Edit";
-            buttonEditTeam.UseVisualStyleBackColor = true;
-            // 
-            // buttonAddTeam
-            // 
-            buttonAddTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonAddTeam.Location = new Point(414, 5);
-            buttonAddTeam.Name = "buttonAddTeam";
-            buttonAddTeam.Size = new Size(110, 45);
-            buttonAddTeam.TabIndex = 2;
-            buttonAddTeam.Text = "Add";
-            buttonAddTeam.UseVisualStyleBackColor = true;
-            // 
-            // buttonRemoveTeam
-            // 
-            buttonRemoveTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonRemoveTeam.Location = new Point(646, 5);
-            buttonRemoveTeam.Name = "buttonRemoveTeam";
-            buttonRemoveTeam.Size = new Size(110, 45);
-            buttonRemoveTeam.TabIndex = 3;
-            buttonRemoveTeam.Text = "Remove";
-            buttonRemoveTeam.UseVisualStyleBackColor = true;
             // 
             // dataViewTeams
             // 
@@ -138,13 +88,14 @@
             dataViewTeams.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataViewTeams.Columns.AddRange(new DataGridViewColumn[] { columnTeamName, columnSeed, columnPlayerCount });
             dataViewTeams.Dock = DockStyle.Fill;
-            dataViewTeams.Location = new Point(0, 56);
+            dataViewTeams.Location = new Point(0, 30);
+            dataViewTeams.Margin = new Padding(2, 2, 2, 2);
             dataViewTeams.Name = "dataViewTeams";
             dataViewTeams.ReadOnly = true;
             dataViewTeams.RowHeadersVisible = false;
             dataViewTeams.RowHeadersWidth = 82;
             dataViewTeams.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataViewTeams.Size = new Size(759, 204);
+            dataViewTeams.Size = new Size(409, 108);
             dataViewTeams.TabIndex = 1;
             // 
             // columnTeamName
@@ -168,57 +119,63 @@
             columnPlayerCount.Name = "columnPlayerCount";
             columnPlayerCount.ReadOnly = true;
             // 
-            // panelPlayersHeader
+            // panelTeamsHeader
             // 
-            panelPlayersHeader.Controls.Add(buttonEditPlayer);
-            panelPlayersHeader.Controls.Add(buttonAddPlayer);
-            panelPlayersHeader.Controls.Add(buttonRemovePlayer);
-            panelPlayersHeader.Controls.Add(labelPlayers);
-            panelPlayersHeader.Dock = DockStyle.Top;
-            panelPlayersHeader.Location = new Point(0, 0);
-            panelPlayersHeader.Name = "panelPlayersHeader";
-            panelPlayersHeader.Size = new Size(759, 56);
-            panelPlayersHeader.TabIndex = 0;
+            panelTeamsHeader.Controls.Add(buttonRemoveTeam);
+            panelTeamsHeader.Controls.Add(buttonAddTeam);
+            panelTeamsHeader.Controls.Add(buttonEditTeam);
+            panelTeamsHeader.Controls.Add(labelTeams);
+            panelTeamsHeader.Dock = DockStyle.Top;
+            panelTeamsHeader.Location = new Point(0, 0);
+            panelTeamsHeader.Margin = new Padding(2, 2, 2, 2);
+            panelTeamsHeader.Name = "panelTeamsHeader";
+            panelTeamsHeader.Size = new Size(409, 30);
+            panelTeamsHeader.TabIndex = 0;
             // 
-            // labelPlayers
+            // buttonRemoveTeam
             // 
-            labelPlayers.AutoSize = true;
-            labelPlayers.Font = new Font("Segoe UI", 12F);
-            labelPlayers.Location = new Point(10, 5);
-            labelPlayers.Name = "labelPlayers";
-            labelPlayers.Size = new Size(353, 45);
-            labelPlayers.TabIndex = 0;
-            labelPlayers.Text = "Players (Selected Team)";
+            buttonRemoveTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonRemoveTeam.Location = new Point(348, 3);
+            buttonRemoveTeam.Margin = new Padding(2, 2, 2, 2);
+            buttonRemoveTeam.Name = "buttonRemoveTeam";
+            buttonRemoveTeam.Size = new Size(59, 24);
+            buttonRemoveTeam.TabIndex = 3;
+            buttonRemoveTeam.Text = "Remove";
+            buttonRemoveTeam.UseVisualStyleBackColor = true;
             // 
-            // buttonRemovePlayer
+            // buttonAddTeam
             // 
-            buttonRemovePlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonRemovePlayer.Location = new Point(646, 3);
-            buttonRemovePlayer.Name = "buttonRemovePlayer";
-            buttonRemovePlayer.Size = new Size(110, 45);
-            buttonRemovePlayer.TabIndex = 1;
-            buttonRemovePlayer.Text = "Remove";
-            buttonRemovePlayer.UseVisualStyleBackColor = true;
+            buttonAddTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonAddTeam.Location = new Point(223, 3);
+            buttonAddTeam.Margin = new Padding(2, 2, 2, 2);
+            buttonAddTeam.Name = "buttonAddTeam";
+            buttonAddTeam.Size = new Size(59, 24);
+            buttonAddTeam.TabIndex = 2;
+            buttonAddTeam.Text = "Add";
+            buttonAddTeam.UseVisualStyleBackColor = true;
+            buttonAddTeam.Click += buttonAddTeam_Click;
             // 
-            // buttonAddPlayer
+            // buttonEditTeam
             // 
-            buttonAddPlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonAddPlayer.Location = new Point(414, 3);
-            buttonAddPlayer.Name = "buttonAddPlayer";
-            buttonAddPlayer.Size = new Size(110, 45);
-            buttonAddPlayer.TabIndex = 2;
-            buttonAddPlayer.Text = "Add";
-            buttonAddPlayer.UseVisualStyleBackColor = true;
+            buttonEditTeam.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditTeam.Location = new Point(285, 3);
+            buttonEditTeam.Margin = new Padding(2, 2, 2, 2);
+            buttonEditTeam.Name = "buttonEditTeam";
+            buttonEditTeam.Size = new Size(59, 24);
+            buttonEditTeam.TabIndex = 1;
+            buttonEditTeam.Text = "Edit";
+            buttonEditTeam.UseVisualStyleBackColor = true;
             // 
-            // buttonEditPlayer
+            // labelTeams
             // 
-            buttonEditPlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonEditPlayer.Location = new Point(530, 3);
-            buttonEditPlayer.Name = "buttonEditPlayer";
-            buttonEditPlayer.Size = new Size(110, 45);
-            buttonEditPlayer.TabIndex = 3;
-            buttonEditPlayer.Text = "Edit";
-            buttonEditPlayer.UseVisualStyleBackColor = true;
+            labelTeams.AutoSize = true;
+            labelTeams.Font = new Font("Segoe UI", 12F);
+            labelTeams.Location = new Point(5, 3);
+            labelTeams.Margin = new Padding(2, 0, 2, 0);
+            labelTeams.Name = "labelTeams";
+            labelTeams.Size = new Size(61, 25);
+            labelTeams.TabIndex = 0;
+            labelTeams.Text = "Teams";
             // 
             // dataGridViewPlayers
             // 
@@ -229,14 +186,15 @@
             dataGridViewPlayers.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewPlayers.Columns.AddRange(new DataGridViewColumn[] { columnPlayerDisplayName, columnPlayerNumber });
             dataGridViewPlayers.Dock = DockStyle.Fill;
-            dataGridViewPlayers.Location = new Point(0, 56);
+            dataGridViewPlayers.Location = new Point(0, 30);
+            dataGridViewPlayers.Margin = new Padding(2, 2, 2, 2);
             dataGridViewPlayers.MultiSelect = false;
             dataGridViewPlayers.Name = "dataGridViewPlayers";
             dataGridViewPlayers.ReadOnly = true;
             dataGridViewPlayers.RowHeadersVisible = false;
             dataGridViewPlayers.RowHeadersWidth = 82;
             dataGridViewPlayers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewPlayers.Size = new Size(759, 274);
+            dataGridViewPlayers.Size = new Size(409, 145);
             dataGridViewPlayers.TabIndex = 1;
             // 
             // columnPlayerDisplayName
@@ -253,23 +211,81 @@
             columnPlayerNumber.Name = "columnPlayerNumber";
             columnPlayerNumber.ReadOnly = true;
             // 
+            // panelPlayersHeader
+            // 
+            panelPlayersHeader.Controls.Add(buttonEditPlayer);
+            panelPlayersHeader.Controls.Add(buttonAddPlayer);
+            panelPlayersHeader.Controls.Add(buttonRemovePlayer);
+            panelPlayersHeader.Controls.Add(labelPlayers);
+            panelPlayersHeader.Dock = DockStyle.Top;
+            panelPlayersHeader.Location = new Point(0, 0);
+            panelPlayersHeader.Margin = new Padding(2, 2, 2, 2);
+            panelPlayersHeader.Name = "panelPlayersHeader";
+            panelPlayersHeader.Size = new Size(409, 30);
+            panelPlayersHeader.TabIndex = 0;
+            // 
+            // buttonEditPlayer
+            // 
+            buttonEditPlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditPlayer.Location = new Point(285, 2);
+            buttonEditPlayer.Margin = new Padding(2, 2, 2, 2);
+            buttonEditPlayer.Name = "buttonEditPlayer";
+            buttonEditPlayer.Size = new Size(59, 24);
+            buttonEditPlayer.TabIndex = 3;
+            buttonEditPlayer.Text = "Edit";
+            buttonEditPlayer.UseVisualStyleBackColor = true;
+            // 
+            // buttonAddPlayer
+            // 
+            buttonAddPlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonAddPlayer.Location = new Point(223, 2);
+            buttonAddPlayer.Margin = new Padding(2, 2, 2, 2);
+            buttonAddPlayer.Name = "buttonAddPlayer";
+            buttonAddPlayer.Size = new Size(59, 24);
+            buttonAddPlayer.TabIndex = 2;
+            buttonAddPlayer.Text = "Add";
+            buttonAddPlayer.UseVisualStyleBackColor = true;
+            // 
+            // buttonRemovePlayer
+            // 
+            buttonRemovePlayer.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonRemovePlayer.Location = new Point(348, 2);
+            buttonRemovePlayer.Margin = new Padding(2, 2, 2, 2);
+            buttonRemovePlayer.Name = "buttonRemovePlayer";
+            buttonRemovePlayer.Size = new Size(59, 24);
+            buttonRemovePlayer.TabIndex = 1;
+            buttonRemovePlayer.Text = "Remove";
+            buttonRemovePlayer.UseVisualStyleBackColor = true;
+            // 
+            // labelPlayers
+            // 
+            labelPlayers.AutoSize = true;
+            labelPlayers.Font = new Font("Segoe UI", 12F);
+            labelPlayers.Location = new Point(5, 3);
+            labelPlayers.Margin = new Padding(2, 0, 2, 0);
+            labelPlayers.Name = "labelPlayers";
+            labelPlayers.Size = new Size(194, 25);
+            labelPlayers.TabIndex = 0;
+            labelPlayers.Text = "Players (Selected Team)";
+            // 
             // TeamsPlayersPage
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(splitTeamsPlayers);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "TeamsPlayersPage";
-            Size = new Size(759, 594);
+            Size = new Size(409, 316);
             splitTeamsPlayers.Panel1.ResumeLayout(false);
             splitTeamsPlayers.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitTeamsPlayers).EndInit();
             splitTeamsPlayers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataViewTeams).EndInit();
             panelTeamsHeader.ResumeLayout(false);
             panelTeamsHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataViewTeams).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).EndInit();
             panelPlayersHeader.ResumeLayout(false);
             panelPlayersHeader.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridViewPlayers).EndInit();
             ResumeLayout(false);
         }
 

@@ -6,34 +6,79 @@ using System.Threading.Tasks;
 
 namespace Group1Project
 {
-    internal class Match
+    public class Match
     {
-        public Guid id { get; set; }
-        public Team teamA { get; set; }
-        public Team teamB { get; set; }
-        public DateTime scheduledStart { get; set; }
+        public Guid Id { get; private set; }
+        public Team TeamA { get; private set; }
+        public Team TeamB { get; private set; }
+
+        // If you don't schedule, keep it nullable.
+        public DateTime? ScheduledStart { get; private set; }
+
+        public MatchStatus Status { get; private set; }
+
+        public ScoreEntry? Score { get; private set; }
 
         /// <summary>
-        /// Default Match constructor with all
+        /// Match constructor (initially scheduled).
         /// </summary>
-        /// <param name="teamA">frist team</param>
-        /// <param name="teamB">second team</param>
-        /// <param name="scheduledStart">scheduled start date</param>
         public Match(Team teamA, Team teamB, DateTime scheduledStart)
         {
-            this.id = Guid.NewGuid();
-            this.teamA = teamA;
-            this.teamB = teamB;
-            this.scheduledStart = scheduledStart;
+            Id = Guid.NewGuid();
+            TeamA = teamA ?? throw new ArgumentNullException(nameof(teamA));
+            TeamB = teamB ?? throw new ArgumentNullException(nameof(teamB));
+            ScheduledStart = scheduledStart;
+            Status = MatchStatus.Scheduled;
         }
-        public void ScheduleMatch(Team team1, Team team2, DateTime matchDate)
+
+        /// <summary>
+        /// Match constructor (unscheduled).
+        /// </summary>
+        public Match(Team teamA, Team teamB)
         {
-            // Code to schedule a match between two teams on a specific date
+            Id = Guid.NewGuid();
+            TeamA = teamA ?? throw new ArgumentNullException(nameof(teamA));
+            TeamB = teamB ?? throw new ArgumentNullException(nameof(teamB));
+            ScheduledStart = null;
+            Status = MatchStatus.Unscheduled;
         }
-        public Team GetWinner()
+
+        public void Schedule(DateTime matchDate)
         {
-            // Code to determine the winner of the match based on the scores or other criteria
-            return teamA;
+            ScheduledStart = matchDate;
+            Status = MatchStatus.Scheduled;
         }
+
+        /// <summary>
+        /// Sets the score for the match.
+        /// - Scores cannot be negative.
+        /// - Match must be scheduled first.
+        /// - After setting score, Status becomes Complete.
+        /// </summary>
+        public void SetScore(int scoreA, int scoreB)
+        {
+            if (Status == MatchStatus.Unscheduled)
+                throw new InvalidOperationException("Cannot set score for an unscheduled match.");
+
+            Score = new ScoreEntry(scoreA, scoreB);
+            Status = MatchStatus.Complete;
+        }
+
+        /// <summary>
+        /// Returns the winner team.
+        /// - If score not set => null
+        /// - If tie => null
+        /// </summary>
+        public Team? GetWinner()
+        {
+            if (Score is null) return null;
+
+            if (Score.ScoreA > Score.ScoreB) return TeamA;
+            if (Score.ScoreB > Score.ScoreA) return TeamB;
+
+            return null; // tie
+        }
+
+        public bool IsComplete() => Status == MatchStatus.Complete;
     }
 }
