@@ -9,7 +9,7 @@ namespace Group1Project
     internal class Bracket
     {
         public Guid id { get; set; }
-        public TourmamentFormat format { get; set; }
+        // public TourmamentFormat format { get; set; }
         public List<Match> matches { get; set; }
         public Bracket()
         {

@@ -28,12 +28,519 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            menuMain = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            newTournamentToolStripMenuItem = new ToolStripMenuItem();
+            openToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            exitToolStripMenuItem = new ToolStripMenuItem();
+            newToolStripMenuItem = new ToolStripMenuItem();
+            dashboardToolStripMenuItem = new ToolStripMenuItem();
+            teamsPlayersToolStripMenuItem = new ToolStripMenuItem();
+            bracketsToolStripMenuItem = new ToolStripMenuItem();
+            scheduleToolStripMenuItem = new ToolStripMenuItem();
+            standingsToolStripMenuItem = new ToolStripMenuItem();
+            resultsToolStripMenuItem = new ToolStripMenuItem();
+            toolsToolStripMenuItem = new ToolStripMenuItem();
+            generateBracketToolStripMenuItem = new ToolStripMenuItem();
+            autoScheduleToolStripMenuItem = new ToolStripMenuItem();
+            recalculateStandingsToolStripMenuItem = new ToolStripMenuItem();
+            helpToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
+            toolMain = new ToolStrip();
+            tsbSave = new ToolStripButton();
+            tsbAddTeam = new ToolStripButton();
+            tsbGenerateBracket = new ToolStripButton();
+            tsbAutoSchedule = new ToolStripButton();
+            tsbEnterResult = new ToolStripButton();
+            statusMain = new StatusStrip();
+            sslTournament = new ToolStripStatusLabel();
+            sslHint = new ToolStripStatusLabel();
+            splitMain = new SplitContainer();
+            panelNav = new Panel();
+            btnResults = new Button();
+            btnStandings = new Button();
+            btnSchedule = new Button();
+            btnBracket = new Button();
+            btnTeamsPlayers = new Button();
+            btnDashboard = new Button();
+            grpTournament = new GroupBox();
+            btnSaveTournament = new Button();
+            btnOpenTournament = new Button();
+            btnNewTournament = new Button();
+            cboTournament = new ComboBox();
+            lblTournament = new Label();
+            panelWorkspace = new Panel();
+            labelWorkspaceTitle = new Label();
+            menuMain.SuspendLayout();
+            toolMain.SuspendLayout();
+            statusMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitMain).BeginInit();
+            splitMain.Panel1.SuspendLayout();
+            splitMain.Panel2.SuspendLayout();
+            splitMain.SuspendLayout();
+            panelNav.SuspendLayout();
+            grpTournament.SuspendLayout();
+            panelWorkspace.SuspendLayout();
+            SuspendLayout();
+            // 
+            // menuMain
+            // 
+            menuMain.ImageScalingSize = new Size(32, 32);
+            menuMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, newToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            menuMain.Location = new Point(0, 0);
+            menuMain.Name = "menuMain";
+            menuMain.Size = new Size(1538, 40);
+            menuMain.TabIndex = 1;
+            menuMain.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newTournamentToolStripMenuItem, openToolStripMenuItem, saveToolStripMenuItem, exitToolStripMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(71, 36);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // newTournamentToolStripMenuItem
+            // 
+            newTournamentToolStripMenuItem.Name = "newTournamentToolStripMenuItem";
+            newTournamentToolStripMenuItem.Size = new Size(331, 44);
+            newTournamentToolStripMenuItem.Text = "New Tournament";
+            newTournamentToolStripMenuItem.Click += btnNewTournament_Click;
+            // 
+            // openToolStripMenuItem
+            // 
+            openToolStripMenuItem.Name = "openToolStripMenuItem";
+            openToolStripMenuItem.Size = new Size(331, 44);
+            openToolStripMenuItem.Text = "Open";
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(331, 44);
+            saveToolStripMenuItem.Text = "Save";
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(331, 44);
+            exitToolStripMenuItem.Text = "Exit";
+            // 
+            // newToolStripMenuItem
+            // 
+            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dashboardToolStripMenuItem, teamsPlayersToolStripMenuItem, bracketsToolStripMenuItem, scheduleToolStripMenuItem, standingsToolStripMenuItem, resultsToolStripMenuItem });
+            newToolStripMenuItem.Name = "newToolStripMenuItem";
+            newToolStripMenuItem.Size = new Size(89, 36);
+            newToolStripMenuItem.Text = "New ";
+            // 
+            // dashboardToolStripMenuItem
+            // 
+            dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
+            dashboardToolStripMenuItem.Size = new Size(302, 44);
+            dashboardToolStripMenuItem.Text = "Dashboard";
+            // 
+            // teamsPlayersToolStripMenuItem
+            // 
+            teamsPlayersToolStripMenuItem.Name = "teamsPlayersToolStripMenuItem";
+            teamsPlayersToolStripMenuItem.Size = new Size(302, 44);
+            teamsPlayersToolStripMenuItem.Text = "Teams & Players";
+            // 
+            // bracketsToolStripMenuItem
+            // 
+            bracketsToolStripMenuItem.Name = "bracketsToolStripMenuItem";
+            bracketsToolStripMenuItem.Size = new Size(302, 44);
+            bracketsToolStripMenuItem.Text = "Bracket";
+            // 
+            // scheduleToolStripMenuItem
+            // 
+            scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
+            scheduleToolStripMenuItem.Size = new Size(302, 44);
+            scheduleToolStripMenuItem.Text = "Schedule";
+            // 
+            // standingsToolStripMenuItem
+            // 
+            standingsToolStripMenuItem.Name = "standingsToolStripMenuItem";
+            standingsToolStripMenuItem.Size = new Size(302, 44);
+            standingsToolStripMenuItem.Text = "Standings";
+            // 
+            // resultsToolStripMenuItem
+            // 
+            resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
+            resultsToolStripMenuItem.Size = new Size(302, 44);
+            resultsToolStripMenuItem.Text = "Results";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateBracketToolStripMenuItem, autoScheduleToolStripMenuItem, recalculateStandingsToolStripMenuItem });
+            toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            toolsToolStripMenuItem.Size = new Size(89, 36);
+            toolsToolStripMenuItem.Text = "Tools";
+            // 
+            // generateBracketToolStripMenuItem
+            // 
+            generateBracketToolStripMenuItem.Name = "generateBracketToolStripMenuItem";
+            generateBracketToolStripMenuItem.Size = new Size(377, 44);
+            generateBracketToolStripMenuItem.Text = "Generate Bracket";
+            // 
+            // autoScheduleToolStripMenuItem
+            // 
+            autoScheduleToolStripMenuItem.Name = "autoScheduleToolStripMenuItem";
+            autoScheduleToolStripMenuItem.Size = new Size(377, 44);
+            autoScheduleToolStripMenuItem.Text = "Auto Schedule";
+            // 
+            // recalculateStandingsToolStripMenuItem
+            // 
+            recalculateStandingsToolStripMenuItem.Name = "recalculateStandingsToolStripMenuItem";
+            recalculateStandingsToolStripMenuItem.Size = new Size(377, 44);
+            recalculateStandingsToolStripMenuItem.Text = "Recalculate Standings";
+            // 
+            // helpToolStripMenuItem
+            // 
+            helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            helpToolStripMenuItem.Size = new Size(84, 36);
+            helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(212, 44);
+            aboutToolStripMenuItem.Text = "About";
+            // 
+            // toolMain
+            // 
+            toolMain.GripStyle = ToolStripGripStyle.Hidden;
+            toolMain.ImageScalingSize = new Size(32, 32);
+            toolMain.Items.AddRange(new ToolStripItem[] { tsbSave, tsbAddTeam, tsbGenerateBracket, tsbAutoSchedule, tsbEnterResult });
+            toolMain.Location = new Point(0, 40);
+            toolMain.Name = "toolMain";
+            toolMain.Size = new Size(1538, 42);
+            toolMain.TabIndex = 2;
+            toolMain.Text = "toolStrip1";
+            // 
+            // tsbSave
+            // 
+            tsbSave.Image = (Image)resources.GetObject("tsbSave.Image");
+            tsbSave.ImageTransparentColor = Color.Magenta;
+            tsbSave.Name = "tsbSave";
+            tsbSave.Size = new Size(100, 36);
+            tsbSave.Text = "Save";
+            // 
+            // tsbAddTeam
+            // 
+            tsbAddTeam.Image = (Image)resources.GetObject("tsbAddTeam.Image");
+            tsbAddTeam.ImageTransparentColor = Color.Magenta;
+            tsbAddTeam.Name = "tsbAddTeam";
+            tsbAddTeam.Size = new Size(157, 36);
+            tsbAddTeam.Text = "Add Team";
+            // 
+            // tsbGenerateBracket
+            // 
+            tsbGenerateBracket.Image = (Image)resources.GetObject("tsbGenerateBracket.Image");
+            tsbGenerateBracket.ImageTransparentColor = Color.Magenta;
+            tsbGenerateBracket.Name = "tsbGenerateBracket";
+            tsbGenerateBracket.Size = new Size(232, 36);
+            tsbGenerateBracket.Text = "Generate Bracket";
+            // 
+            // tsbAutoSchedule
+            // 
+            tsbAutoSchedule.Image = (Image)resources.GetObject("tsbAutoSchedule.Image");
+            tsbAutoSchedule.ImageTransparentColor = Color.Magenta;
+            tsbAutoSchedule.Name = "tsbAutoSchedule";
+            tsbAutoSchedule.Size = new Size(206, 36);
+            tsbAutoSchedule.Text = "Auto Schedule";
+            // 
+            // tsbEnterResult
+            // 
+            tsbEnterResult.Image = (Image)resources.GetObject("tsbEnterResult.Image");
+            tsbEnterResult.ImageTransparentColor = Color.Magenta;
+            tsbEnterResult.Name = "tsbEnterResult";
+            tsbEnterResult.Size = new Size(176, 36);
+            tsbEnterResult.Text = "Enter Result";
+            // 
+            // statusMain
+            // 
+            statusMain.ImageScalingSize = new Size(32, 32);
+            statusMain.Items.AddRange(new ToolStripItem[] { sslTournament, sslHint });
+            statusMain.Location = new Point(0, 1022);
+            statusMain.Name = "statusMain";
+            statusMain.Size = new Size(1538, 42);
+            statusMain.TabIndex = 3;
+            statusMain.Text = "statusStrip1";
+            // 
+            // sslTournament
+            // 
+            sslTournament.Name = "sslTournament";
+            sslTournament.Size = new Size(224, 32);
+            sslTournament.Text = "Tournament: (none)";
+            // 
+            // sslHint
+            // 
+            sslHint.Name = "sslHint";
+            sslHint.Size = new Size(78, 32);
+            sslHint.Text = "Ready";
+            // 
+            // splitMain
+            // 
+            splitMain.Dock = DockStyle.Fill;
+            splitMain.FixedPanel = FixedPanel.Panel1;
+            splitMain.Location = new Point(0, 82);
+            splitMain.Name = "splitMain";
+            // 
+            // splitMain.Panel1
+            // 
+            splitMain.Panel1.Controls.Add(panelNav);
+            splitMain.Panel1.Controls.Add(grpTournament);
+            splitMain.Panel1MinSize = 260;
+            // 
+            // splitMain.Panel2
+            // 
+            splitMain.Panel2.Controls.Add(panelWorkspace);
+            splitMain.Panel2MinSize = 600;
+            splitMain.Size = new Size(1538, 940);
+            splitMain.SplitterDistance = 280;
+            splitMain.TabIndex = 4;
+            // 
+            // panelNav
+            // 
+            panelNav.Controls.Add(btnResults);
+            panelNav.Controls.Add(btnStandings);
+            panelNav.Controls.Add(btnSchedule);
+            panelNav.Controls.Add(btnBracket);
+            panelNav.Controls.Add(btnTeamsPlayers);
+            panelNav.Controls.Add(btnDashboard);
+            panelNav.Dock = DockStyle.Fill;
+            panelNav.Location = new Point(0, 153);
+            panelNav.Name = "panelNav";
+            panelNav.Padding = new Padding(8);
+            panelNav.Size = new Size(280, 787);
+            panelNav.TabIndex = 1;
+            // 
+            // btnResults
+            // 
+            btnResults.Dock = DockStyle.Top;
+            btnResults.Location = new Point(8, 238);
+            btnResults.Name = "btnResults";
+            btnResults.Size = new Size(264, 46);
+            btnResults.TabIndex = 5;
+            btnResults.Text = "Results";
+            btnResults.UseVisualStyleBackColor = true;
+            btnResults.Click += btnResults_Click;
+            // 
+            // btnStandings
+            // 
+            btnStandings.Dock = DockStyle.Top;
+            btnStandings.Location = new Point(8, 192);
+            btnStandings.Name = "btnStandings";
+            btnStandings.Size = new Size(264, 46);
+            btnStandings.TabIndex = 4;
+            btnStandings.Text = "Standings";
+            btnStandings.UseVisualStyleBackColor = true;
+            btnStandings.Click += btnStandings_Click;
+            // 
+            // btnSchedule
+            // 
+            btnSchedule.Dock = DockStyle.Top;
+            btnSchedule.Location = new Point(8, 146);
+            btnSchedule.Name = "btnSchedule";
+            btnSchedule.Size = new Size(264, 46);
+            btnSchedule.TabIndex = 3;
+            btnSchedule.Text = "Schedule";
+            btnSchedule.UseVisualStyleBackColor = true;
+            btnSchedule.Click += btnSchedule_Click;
+            // 
+            // btnBracket
+            // 
+            btnBracket.Dock = DockStyle.Top;
+            btnBracket.Location = new Point(8, 100);
+            btnBracket.Name = "btnBracket";
+            btnBracket.Size = new Size(264, 46);
+            btnBracket.TabIndex = 2;
+            btnBracket.Text = "Bracket";
+            btnBracket.UseVisualStyleBackColor = true;
+            btnBracket.Click += btnBracket_Click;
+            // 
+            // btnTeamsPlayers
+            // 
+            btnTeamsPlayers.Dock = DockStyle.Top;
+            btnTeamsPlayers.Location = new Point(8, 54);
+            btnTeamsPlayers.Name = "btnTeamsPlayers";
+            btnTeamsPlayers.Size = new Size(264, 46);
+            btnTeamsPlayers.TabIndex = 1;
+            btnTeamsPlayers.Text = "Teams & Players";
+            btnTeamsPlayers.UseVisualStyleBackColor = true;
+            btnTeamsPlayers.Click += btnTeamsPlayers_Click;
+            // 
+            // btnDashboard
+            // 
+            btnDashboard.Dock = DockStyle.Top;
+            btnDashboard.Location = new Point(8, 8);
+            btnDashboard.Name = "btnDashboard";
+            btnDashboard.Size = new Size(264, 46);
+            btnDashboard.TabIndex = 0;
+            btnDashboard.Text = "Dashboard";
+            btnDashboard.UseVisualStyleBackColor = true;
+            btnDashboard.Click += btnDashboard_Click;
+            // 
+            // grpTournament
+            // 
+            grpTournament.Controls.Add(btnSaveTournament);
+            grpTournament.Controls.Add(btnOpenTournament);
+            grpTournament.Controls.Add(btnNewTournament);
+            grpTournament.Controls.Add(cboTournament);
+            grpTournament.Controls.Add(lblTournament);
+            grpTournament.Dock = DockStyle.Top;
+            grpTournament.Location = new Point(0, 0);
+            grpTournament.Name = "grpTournament";
+            grpTournament.Size = new Size(280, 153);
+            grpTournament.TabIndex = 0;
+            grpTournament.TabStop = false;
+            grpTournament.Text = "Current Tournament";
+            // 
+            // btnSaveTournament
+            // 
+            btnSaveTournament.Location = new Point(192, 104);
+            btnSaveTournament.Name = "btnSaveTournament";
+            btnSaveTournament.Size = new Size(85, 46);
+            btnSaveTournament.TabIndex = 4;
+            btnSaveTournament.Text = "Save";
+            btnSaveTournament.UseVisualStyleBackColor = true;
+            // 
+            // btnOpenTournament
+            // 
+            btnOpenTournament.Location = new Point(102, 104);
+            btnOpenTournament.Name = "btnOpenTournament";
+            btnOpenTournament.Size = new Size(85, 46);
+            btnOpenTournament.TabIndex = 3;
+            btnOpenTournament.Text = "Open";
+            btnOpenTournament.UseVisualStyleBackColor = true;
+            // 
+            // btnNewTournament
+            // 
+            btnNewTournament.Location = new Point(12, 104);
+            btnNewTournament.Name = "btnNewTournament";
+            btnNewTournament.Size = new Size(85, 46);
+            btnNewTournament.TabIndex = 2;
+            btnNewTournament.Text = "New";
+            btnNewTournament.UseVisualStyleBackColor = true;
+            btnNewTournament.Click += btnNewTournament_Click;
+            // 
+            // cboTournament
+            // 
+            cboTournament.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            cboTournament.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboTournament.FormattingEnabled = true;
+            cboTournament.Location = new Point(12, 58);
+            cboTournament.Name = "cboTournament";
+            cboTournament.Size = new Size(250, 40);
+            cboTournament.TabIndex = 1;
+            // 
+            // lblTournament
+            // 
+            lblTournament.AutoSize = true;
+            lblTournament.Location = new Point(12, 28);
+            lblTournament.Name = "lblTournament";
+            lblTournament.Size = new Size(148, 32);
+            lblTournament.TabIndex = 0;
+            lblTournament.Text = "Tournament:";
+            // 
+            // panelWorkspace
+            // 
+            panelWorkspace.Controls.Add(labelWorkspaceTitle);
+            panelWorkspace.Dock = DockStyle.Fill;
+            panelWorkspace.Location = new Point(0, 0);
+            panelWorkspace.Name = "panelWorkspace";
+            panelWorkspace.Size = new Size(1254, 940);
+            panelWorkspace.TabIndex = 0;
+            // 
+            // labelWorkspaceTitle
+            // 
+            labelWorkspaceTitle.AutoSize = true;
+            labelWorkspaceTitle.Font = new Font("Segoe UI", 16F);
+            labelWorkspaceTitle.Location = new Point(16, 16);
+            labelWorkspaceTitle.Name = "labelWorkspaceTitle";
+            labelWorkspaceTitle.Size = new Size(231, 59);
+            labelWorkspaceTitle.TabIndex = 0;
+            labelWorkspaceTitle.Text = "Dashboard";
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1538, 1064);
+            Controls.Add(splitMain);
+            Controls.Add(statusMain);
+            Controls.Add(toolMain);
+            Controls.Add(menuMain);
+            MinimumSize = new Size(1100, 700);
+            Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Tournament Bracket Manager";
+            menuMain.ResumeLayout(false);
+            menuMain.PerformLayout();
+            toolMain.ResumeLayout(false);
+            toolMain.PerformLayout();
+            statusMain.ResumeLayout(false);
+            statusMain.PerformLayout();
+            splitMain.Panel1.ResumeLayout(false);
+            splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitMain).EndInit();
+            splitMain.ResumeLayout(false);
+            panelNav.ResumeLayout(false);
+            grpTournament.ResumeLayout(false);
+            grpTournament.PerformLayout();
+            panelWorkspace.ResumeLayout(false);
+            panelWorkspace.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private MenuStrip menuMain;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem newTournamentToolStripMenuItem;
+        private ToolStripMenuItem openToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem newToolStripMenuItem;
+        private ToolStripMenuItem dashboardToolStripMenuItem;
+        private ToolStripMenuItem teamsPlayersToolStripMenuItem;
+        private ToolStripMenuItem bracketsToolStripMenuItem;
+        private ToolStripMenuItem scheduleToolStripMenuItem;
+        private ToolStripMenuItem standingsToolStripMenuItem;
+        private ToolStripMenuItem resultsToolStripMenuItem;
+        private ToolStripMenuItem toolsToolStripMenuItem;
+        private ToolStripMenuItem generateBracketToolStripMenuItem;
+        private ToolStripMenuItem autoScheduleToolStripMenuItem;
+        private ToolStripMenuItem recalculateStandingsToolStripMenuItem;
+        private ToolStripMenuItem helpToolStripMenuItem;
+        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStrip toolMain;
+        private ToolStripButton tsbSave;
+        private ToolStripButton tsbAddTeam;
+        private ToolStripButton tsbGenerateBracket;
+        private ToolStripButton tsbAutoSchedule;
+        private ToolStripButton tsbEnterResult;
+        private StatusStrip statusMain;
+        private ToolStripStatusLabel sslTournament;
+        private ToolStripStatusLabel sslHint;
+        private SplitContainer splitMain;
+        private GroupBox grpTournament;
+        private Button btnNewTournament;
+        private ComboBox cboTournament;
+        private Label lblTournament;
+        private Panel panelNav;
+        private Button btnSaveTournament;
+        private Button btnOpenTournament;
+        private Button btnResults;
+        private Button btnStandings;
+        private Button btnSchedule;
+        private Button btnBracket;
+        private Button btnTeamsPlayers;
+        private Button btnDashboard;
+        private Panel panelWorkspace;
+        private Label labelWorkspaceTitle;
     }
 }

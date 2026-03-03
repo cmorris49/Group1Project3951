@@ -8,8 +8,14 @@ namespace Group1Project
 {
     internal class Division
     {
-        public Guid id { get; set; }
-        public string name { get; set; }
+        public Division(string name)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+        }
+
+        public Guid Id { get; }
+        public string Name { get; private set; }
 
         public void RegisterTeam(Team team)
         {
