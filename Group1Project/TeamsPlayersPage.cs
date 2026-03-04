@@ -25,22 +25,93 @@ namespace Group1Project
     /// </summary>
     public partial class TeamsPlayersPage : UserControl
     {
+        private Tournament? currentTournament;
+
         public TeamsPlayersPage()
         {
             InitializeComponent();
+
+            dataViewTeams.SelectionChanged += DataViewTeams_SelectionChanged;
         }
 
         /// <summary>
-        /// Handles the Click event of the Add Team button by displaying a popup for adding a new team.
+        /// Loads tournament data into the page
         /// </summary>
-        /// <param name="sender">The source of the event, typically the Add Team button.</param>
-        /// <param name="e">An EventArgs object that contains the event data.</param>
-        private void buttonAddTeam_Click(object sender, EventArgs e)
+        internal void LoadTournament(Tournament tournament)
         {
-            addTeam addTeamForm = new addTeam();
-            addTeamForm.ShowDialog();
+            currentTournament = tournament;
+            RefreshTeams();
+        }
 
-            addTeamForm.Dispose();
+        /// <summary>
+        /// Refreshes the teams grid with current tournament data
+        /// </summary>
+        private void RefreshTeams()
+        {
+            dataViewTeams.Rows.Clear();
+
+            if (currentTournament == null)
+                return;
+
+            foreach (var division in currentTournament.Divisions)
+            {
+                foreach (var team in division.Teams)
+                {
+                    dataViewTeams.Rows.Add(
+                        team.Name,
+                        team.seed,
+                        team.Players.Count
+                    );
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles team selection and displays players for the selected team
+        /// </summary>
+        private void DataViewTeams_SelectionChanged(object sender, EventArgs e)
+        {
+            dataGridViewPlayers.Rows.Clear();
+
+            if (dataViewTeams.SelectedRows.Count == 0 || currentTournament == null)
+                return;
+
+            int selectedIndex = dataViewTeams.SelectedRows[0].Index;
+
+            Team? selectedTeam = null;
+            int currentIndex = 0;
+
+            foreach (var division in currentTournament.Divisions)
+            {
+                foreach (var team in division.Teams)
+                {
+                    if (currentIndex == selectedIndex)
+                    {
+                        selectedTeam = team;
+                        break;
+                    }
+                    currentIndex++;
+                }
+                if (selectedTeam != null)
+                    break;
+            }
+
+            if (selectedTeam != null)
+            {
+                foreach (var player in selectedTeam.Players)
+                {
+                    dataGridViewPlayers.Rows.Add(
+                        player.displayName,
+                        player.number
+                    );
+                }
+            }
+        }
+
+        private void buttonAddTeam_Click(object sender, EventArgs e)
+        { 
+            MessageBox.Show("Please use the Add Team button in the main toolbar.",
+                "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

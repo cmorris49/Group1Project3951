@@ -8,6 +8,8 @@ namespace Group1Project
 {
     internal class Division
     {
+        private List<Team> teams = new List<Team>();
+
         public Division(string name)
         {
             Id = Guid.NewGuid();
@@ -17,9 +19,17 @@ namespace Group1Project
         public Guid Id { get; }
         public string Name { get; private set; }
 
+        public IReadOnlyList<Team> Teams
+        {
+            get { return teams; }
+        }
+
         public void RegisterTeam(Team team)
         {
-            // Code to register a team in the division
+            if (!teams.Contains(team))
+            {
+                teams.Add(team);
+            }
         }
 
         public void UnregisterTeam(Guid teamId) {

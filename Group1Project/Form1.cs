@@ -41,7 +41,14 @@ namespace Group1Project
 
         private void btnTeamsPlayers_Click(object sender, EventArgs e)
         {
-            LoadPage(new TeamsPlayersPage());
+            var page = new TeamsPlayersPage();
+
+            if (currentTournament != null)
+            {
+                page.LoadTournament(currentTournament);
+            }
+
+            LoadPage(page);
             sslHint.Text = "Viewing: Teams & Players";
         }
 
@@ -89,10 +96,40 @@ namespace Group1Project
         /// <param name="e">An EventArgs object that contains the event data.</param>
         private void tsbAddTeam_Click(object sender, EventArgs e)
         {
-            addTeam addTeamForm = new addTeam();
-            addTeamForm.ShowDialog(this);
+            if (currentTournament == null)
+            {
+                MessageBox.Show("Please create a tournament first.", 
+                    "No Tournament", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                return;
+            }
 
-            addTeamForm.Dispose();
+            if (currentTournament.Divisions.Count == 0)
+            {
+                MessageBox.Show("Please create a division first.", 
+                    "No Division", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            Division selectedDivision = currentTournament.Divisions[0];
+
+            using var addTeamForm = new addTeam(selectedDivision);
+
+            if (addTeamForm.ShowDialog(this) == DialogResult.OK && 
+                addTeamForm.CreatedTeam != null)
+            {
+                if (panelWorkspace.Controls.Count > 0 && 
+                    panelWorkspace.Controls[0] is TeamsPlayersPage teamsPage)
+                {
+                    teamsPage.LoadTournament(currentTournament);
+                }
+
+                MessageBox.Show($"Team '{addTeamForm.CreatedTeam.Name}' added successfully!",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
     }
 }

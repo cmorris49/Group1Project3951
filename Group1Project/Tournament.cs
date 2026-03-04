@@ -20,6 +20,10 @@ namespace Group1Project
             this.StartDate = startDate;
             this.Location = location?.Trim() ?? "";
             this.divisions = new List<Division>();
+
+            // NOTE: This is a temporary division. This will go when we can add/remove devisions. 
+            var defaultDivision = new Division("Main Division");
+            divisions.Add(defaultDivision);
         }
         public Guid Id { get; set; }
 
