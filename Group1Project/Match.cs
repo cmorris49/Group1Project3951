@@ -15,24 +15,6 @@ namespace Group1Project
 {
     public class Match
     {
-        // Unique identifier for the match.
-        public Guid Id { get; private set; }
-
-        // Team A involved in the match. Cannot be null.
-        public Team TeamA { get; private set; }
-
-        // Team B involved in the match. Cannot be null.
-        public Team TeamB { get; private set; }
-
-        // If you don't schedule, keep it nullable.
-        public DateTime? ScheduledStart { get; private set; }
-
-        // Match status: Unscheduled, Scheduled, Complete
-        public MatchStatus Status { get; private set; }
-
-        // Score is null until set. Once set, it cannot be modified.
-        public ScoreEntry? Score { get; private set; }
-
         /// <summary>
         /// Match constructor (initially scheduled).
         /// </summary>
@@ -56,6 +38,24 @@ namespace Group1Project
             ScheduledStart = null;
             Status = MatchStatus.Unscheduled;
         }
+
+        // Unique identifier for the match.
+        public Guid Id { get; private set; }
+
+        // Team A involved in the match. Cannot be null.
+        public Team TeamA { get; private set; }
+
+        // Team B involved in the match. Cannot be null.
+        public Team TeamB { get; private set; }
+
+        // If you don't schedule, keep it nullable.
+        public DateTime? ScheduledStart { get; private set; }
+
+        // Match status: Unscheduled, Scheduled, Complete
+        public MatchStatus Status { get; private set; }
+
+        // Score is null until set. Once set, it cannot be modified.
+        public ScoreEntry? Score { get; private set; }
 
         /// <summary>
         /// 

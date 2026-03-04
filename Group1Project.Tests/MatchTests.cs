@@ -7,10 +7,9 @@ namespace Group1Project.Tests
     [TestClass]
     public class MatchTests
     {
-        // Helper to create teams (adjust if your Team constructor differs)
+        // Helper to create teams
         private Team CreateTeam(string name)
         {
-            // If your Team class uses a different constructor, change here only.
             return new Team(name);
         }
 

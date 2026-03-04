@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 /// <summary>
-/// Group 1 Project - Player Class
+/// Group 1 Project - Schedule Class
 /// Author: Cameron, Jonathan 
 /// Date: March 4, 2026; Revision: 1.0
 /// Source: 
