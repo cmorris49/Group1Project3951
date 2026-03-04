@@ -8,17 +8,6 @@ namespace Group1Project
 {
     public class Match
     {
-        public Guid Id { get; private set; }
-        public Team TeamA { get; private set; }
-        public Team TeamB { get; private set; }
-
-        // If you don't schedule, keep it nullable.
-        public DateTime? ScheduledStart { get; private set; }
-
-        public MatchStatus Status { get; private set; }
-
-        public ScoreEntry? Score { get; private set; }
-
         /// <summary>
         /// Match constructor (initially scheduled).
         /// </summary>
@@ -42,6 +31,16 @@ namespace Group1Project
             ScheduledStart = null;
             Status = MatchStatus.Unscheduled;
         }
+
+        public Guid Id { get; private set; }
+        public Team TeamA { get; private set; }
+        public Team TeamB { get; private set; }
+
+        public DateTime? ScheduledStart { get; private set; }
+
+        public MatchStatus Status { get; private set; }
+
+        public ScoreEntry? Score { get; private set; }
 
         public void Schedule(DateTime matchDate)
         {

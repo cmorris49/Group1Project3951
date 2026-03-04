@@ -36,10 +36,13 @@
             cardNextMatch = new Panel();
             labelCardNextMatchTitle = new Label();
             cardMatches = new Panel();
+            lblMatchesCount = new Label();
             labelCardMatchesTitle = new Label();
             cardPlayers = new Panel();
+            lblPlayersCount = new Label();
             labelCardPlayersTitle = new Label();
             cardTeams = new Panel();
+            lblTeamsCount = new Label();
             labelCardTeamsTitle = new Label();
             splitDashBottom = new SplitContainer();
             listBox1 = new ListBox();
@@ -153,6 +156,7 @@
             // 
             cardMatches.BackColor = SystemColors.Window;
             cardMatches.BorderStyle = BorderStyle.FixedSingle;
+            cardMatches.Controls.Add(lblMatchesCount);
             cardMatches.Controls.Add(labelCardMatchesTitle);
             cardMatches.Dock = DockStyle.Fill;
             cardMatches.Location = new Point(646, 20);
@@ -160,6 +164,15 @@
             cardMatches.Name = "cardMatches";
             cardMatches.Size = new Size(293, 134);
             cardMatches.TabIndex = 2;
+            // 
+            // lblMatchesCount
+            // 
+            lblMatchesCount.AutoSize = true;
+            lblMatchesCount.Location = new Point(99, 53);
+            lblMatchesCount.Name = "lblMatchesCount";
+            lblMatchesCount.Size = new Size(78, 32);
+            lblMatchesCount.TabIndex = 2;
+            lblMatchesCount.Text = "label3";
             // 
             // labelCardMatchesTitle
             // 
@@ -175,6 +188,7 @@
             // 
             cardPlayers.BackColor = SystemColors.Window;
             cardPlayers.BorderStyle = BorderStyle.FixedSingle;
+            cardPlayers.Controls.Add(lblPlayersCount);
             cardPlayers.Controls.Add(labelCardPlayersTitle);
             cardPlayers.Dock = DockStyle.Fill;
             cardPlayers.Location = new Point(333, 20);
@@ -182,6 +196,15 @@
             cardPlayers.Name = "cardPlayers";
             cardPlayers.Size = new Size(293, 134);
             cardPlayers.TabIndex = 1;
+            // 
+            // lblPlayersCount
+            // 
+            lblPlayersCount.AutoSize = true;
+            lblPlayersCount.Location = new Point(105, 53);
+            lblPlayersCount.Name = "lblPlayersCount";
+            lblPlayersCount.Size = new Size(78, 32);
+            lblPlayersCount.TabIndex = 2;
+            lblPlayersCount.Text = "label2";
             // 
             // labelCardPlayersTitle
             // 
@@ -197,6 +220,7 @@
             // 
             cardTeams.BackColor = SystemColors.Window;
             cardTeams.BorderStyle = BorderStyle.FixedSingle;
+            cardTeams.Controls.Add(lblTeamsCount);
             cardTeams.Controls.Add(labelCardTeamsTitle);
             cardTeams.Dock = DockStyle.Fill;
             cardTeams.Location = new Point(20, 20);
@@ -204,6 +228,15 @@
             cardTeams.Name = "cardTeams";
             cardTeams.Size = new Size(293, 134);
             cardTeams.TabIndex = 0;
+            // 
+            // lblTeamsCount
+            // 
+            lblTeamsCount.AutoSize = true;
+            lblTeamsCount.Location = new Point(111, 53);
+            lblTeamsCount.Name = "lblTeamsCount";
+            lblTeamsCount.Size = new Size(78, 32);
+            lblTeamsCount.TabIndex = 1;
+            lblTeamsCount.Text = "label1";
             // 
             // labelCardTeamsTitle
             // 
@@ -326,5 +359,8 @@
         private Label labelRecent;
         private Label labelUpcomingEvents;
         private FlowLayoutPanel flowLayoutPanel1;
+        private Label lblMatchesCount;
+        private Label lblPlayersCount;
+        private Label lblTeamsCount;
     }
 }
