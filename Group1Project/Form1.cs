@@ -2,9 +2,7 @@ using System.Net.NetworkInformation;
 
 /// <summary>
 /// Group 1 Project - Main Form
-/// Author: Cameron
-///         Jun
-///         Jonathan 
+/// Author: Cameron, Jun, Jonathan 
 /// Date: March 2, 2026; Revision: 1.0
 /// Source: 
 ///     docment on C# at https://www.w3schools.com/cs/index.php
@@ -12,20 +10,42 @@ using System.Net.NetworkInformation;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the main form of the application, providing a user interface for managing tournaments, teams, and
+    /// related activities.
+    /// </summary>
     public partial class Form1 : Form
     {
+        /// <summary>
+        /// Gets or sets the current tournament instance being managed.
+        /// </summary>
+        /// <note>
+        /// This property may be null if no tournament is currently active.
+        /// </note>
         private Tournament? currentTournament;
+
+        /// <summary>
+        /// Initializes a new instance of the Form1 class and sets up the user interface components.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Updates the workspace title and displays the current page title in the status label.
+        /// </summary>
+        /// <param name="title">The title to display in the workspace and status label.</param>
         private void ShowPage(string title)
         {
             labelWorkspaceTitle.Text = title;
             sslHint.Text = $"Viewing: {title}";
         }
 
+        /// <summary>
+        /// Replaces the current content of the workspace panel with the specified user control.
+        /// </summary>
+        /// <param name="page">The user control to display in the workspace panel. This control will be docked to fill the available space.</param>
         private void LoadPage(UserControl page)
         {
             panelWorkspace.Controls.Clear();
@@ -33,12 +53,24 @@ namespace Group1Project
             panelWorkspace.Controls.Add(page);
         }
 
+        /// <summary>
+        /// Handles the Click event of the Dashboard button to display the dashboard page and update the user interface
+        /// accordingly.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Dashboard button that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnDashboard_Click(object sender, EventArgs e)
         {
             LoadPage(new DashboardPage());
             sslHint.Text = "Viewing: Dashboard";
         }
 
+        /// <summary>
+        /// Handles the click event for the Teams and Players button, displaying the TeamsPlayersPage and loading current
+        /// tournament information if available.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnTeamsPlayers_Click(object sender, EventArgs e)
         {
             var page = new TeamsPlayersPage();
@@ -52,31 +84,64 @@ namespace Group1Project
             sslHint.Text = "Viewing: Teams & Players";
         }
 
+        /// <summary>
+        /// Handles the Click event of the Bracket button by displaying the Bracket page and updating the user interface
+        /// to reflect the current view.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Bracket button that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnBracket_Click(object sender, EventArgs e)
         {
             LoadPage(new BracketPage());
             sslHint.Text = "Viewing: Bracket";
         }
 
+        /// <summary>
+        /// Handles the Click event of the Schedule button and navigates to the Schedule page.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Schedule button.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnSchedule_Click(object sender, EventArgs e)
         {
             ShowPage("Schedule");
         }
 
+        /// <summary>
+        /// Handles the Click event of the Standings button and displays the Standings page.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Standings button.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnStandings_Click(object sender, EventArgs e)
         {
             ShowPage("Standings");
         }
 
+        /// <summary>
+        /// Handles the Click event of the Results button and displays the Results page.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Results button.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnResults_Click(object sender, EventArgs e)
         {
             ShowPage("Results");
         }
 
+        /// <summary>
+        /// Handles the Click event of the 'New Tournament' menu item to initiate the process of creating a new
+        /// tournament.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the menu item that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void newTournamentToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
         }
+
+        /// <summary>
+        /// Handles the Click event of the 'New Tournament' button to prompt the user to create a new tournament.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the button that was clicked.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnNewTournament_Click(object sender, EventArgs e)
         {
             using var dlg = new NewTournamentForm();

@@ -1,4 +1,13 @@
-﻿namespace Group1Project
+﻿/// <summary>
+/// Group 1 Project - TeamPlayerPage Designer class
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 4, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=visualstudio
+///     DataGridView info https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview?view=windowsdesktop-10.0
+/// </summary>
+namespace Group1Project
 {
     partial class TeamsPlayersPage
     {

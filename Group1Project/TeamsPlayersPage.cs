@@ -10,9 +10,7 @@ using System.Windows.Forms;
 
 /// <summary>
 /// Group 1 Project - TeamsPlayersPage UserControl
-/// Author: Cameron
-///         Jun
-///         Jonathan 
+/// Author: Cameron, Jun, Jonathan 
 /// Date: March 2, 2026; Revision: 1.0
 /// Source: 
 ///     docment on C# at https://www.w3schools.com/cs/index.php
@@ -25,8 +23,15 @@ namespace Group1Project
     /// </summary>
     public partial class TeamsPlayersPage : UserControl
     {
+        /// <summary>
+        /// Property to hold the current tournament data being displayed and managed by this page. It may be null if no tournament is currently loaded.
+        /// </summary>
         private Tournament? currentTournament;
 
+        /// <summary>
+        /// the initializes a new instance of the TeamsPlayersPage class and sets up the user interface components,
+        /// including event handlers for team selection in the teams data grid view.
+        /// </summary>
         public TeamsPlayersPage()
         {
             InitializeComponent();
@@ -108,6 +113,12 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// The event handler for the "Add Team" button click event. It displays an informational message prompting the user to use the main toolbar for adding teams,
+        /// rather than allowing team addition directly from this page.
+        /// </summary>
+        /// <param name="sender">The source of event, typically the addteam button</param>
+        /// <param name="e"> An EventArgs instance containing the event data.</param>
         private void buttonAddTeam_Click(object sender, EventArgs e)
         { 
             MessageBox.Show("Please use the Add Team button in the main toolbar.",

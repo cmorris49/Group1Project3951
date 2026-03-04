@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
 
 /// <summary>
-/// Group 1 Project - addTeam Form
-/// Author: Jonathan 
+/// Group 1 Project - addTeam Form designer
+/// Author: Jonathan,Cameron 
 /// Date: March 2, 2026; Revision: 1.0
 /// Source: 
 ///     docment on C# at https://www.w3schools.com/cs/index.php

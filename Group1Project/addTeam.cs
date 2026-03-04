@@ -29,8 +29,14 @@ namespace Group1Project
         /// </summary>
         public Team? CreatedTeam { get; private set; }
 
+        /// <summary>
+        /// A temporary list holding the players that will be added to the team upon confirmation.
+        /// </summary>
         private List<Player> players = new List<Player>();
 
+        /// <summary>
+        /// The division to which the newly created team will be registered.
+        /// </summary>
         private Division division;
 
         /// <summary>
@@ -86,6 +92,11 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the Add Player button. Validates input and adds a new player to the temporary list and UI.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Add Player button.</param>
+        /// <param name="e">An EventArgs instance containing the event data.</param>
         private void btnAddPlayer_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtPlayerName.Text))
@@ -103,6 +114,11 @@ namespace Group1Project
             numPlayerNumber.Value = 0;
         }
 
+        /// <summary>
+        /// Handles the Click event of the Remove Player button. Removes the currently selected player from the temporary list and UI.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Remove Player button.</param>
+        /// <param name="e">An EventArgs instance containing the event data.</param>
         private void btnRemovePlayer_Click(object sender, EventArgs e)
         {
             if (lstPlayers.SelectedIndex >= 0)

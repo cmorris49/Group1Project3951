@@ -1,4 +1,12 @@
-﻿namespace Group1Project
+﻿/// <summary>
+/// Group 1 Project - Main Form designer
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 4, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=visualstudio
+/// </summary>
+namespace Group1Project
 {
     partial class Form1
     {

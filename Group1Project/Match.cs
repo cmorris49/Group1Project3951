@@ -4,19 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/// <summary>
+/// Group 1 Project - Match Class
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 4, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+/// </summary>
 namespace Group1Project
 {
     public class Match
     {
+        // Unique identifier for the match.
         public Guid Id { get; private set; }
+
+        // Team A involved in the match. Cannot be null.
         public Team TeamA { get; private set; }
+
+        // Team B involved in the match. Cannot be null.
         public Team TeamB { get; private set; }
 
         // If you don't schedule, keep it nullable.
         public DateTime? ScheduledStart { get; private set; }
 
+        // Match status: Unscheduled, Scheduled, Complete
         public MatchStatus Status { get; private set; }
 
+        // Score is null until set. Once set, it cannot be modified.
         public ScoreEntry? Score { get; private set; }
 
         /// <summary>
@@ -43,6 +57,10 @@ namespace Group1Project
             Status = MatchStatus.Unscheduled;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="matchDate"></param>
         public void Schedule(DateTime matchDate)
         {
             ScheduledStart = matchDate;
@@ -55,6 +73,9 @@ namespace Group1Project
         /// - Match must be scheduled first.
         /// - After setting score, Status becomes Complete.
         /// </summary>
+        /// <param name="scoreA">Score for Team A. Must be non-negative.</param>
+        /// <param name="scoreB">Score for Team B. Must be non-negative.</param>
+        /// <exception cref="InvalidOperationException">Thrown if match is unscheduled.</exception>
         public void SetScore(int scoreA, int scoreB)
         {
             if (Status == MatchStatus.Unscheduled)
@@ -69,6 +90,7 @@ namespace Group1Project
         /// - If score not set => null
         /// - If tie => null
         /// </summary>
+        /// <returns>The winning team, or null if there is no winner.</returns>
         public Team? GetWinner()
         {
             if (Score is null) return null;
@@ -79,6 +101,10 @@ namespace Group1Project
             return null; // tie
         }
 
+        /// <summary>
+        /// checks if the match status is complete.
+        /// </summary>
+        /// <returns>True if the match is complete</returns>
         public bool IsComplete() => Status == MatchStatus.Complete;
     }
 }
