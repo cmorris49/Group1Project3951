@@ -38,8 +38,14 @@ namespace Group1Project
         /// <exception cref="ArgumentOutOfRangeException"> thrown when a negative score is given</exception>
         public ScoreEntry(int scoreA, int scoreB)
         {
-            if (scoreA < 0) throw new ArgumentOutOfRangeException(nameof(scoreA), "ScoreA cannot be negative.");
-            if (scoreB < 0) throw new ArgumentOutOfRangeException(nameof(scoreB), "ScoreB cannot be negative.");
+            if (scoreA < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(scoreA), "ScoreA cannot be negative.");
+            }
+            if (scoreB < 0) 
+            { 
+                throw new ArgumentOutOfRangeException(nameof(scoreB), "ScoreB cannot be negative.");
+            }
 
             ScoreA = scoreA;
             ScoreB = scoreB;

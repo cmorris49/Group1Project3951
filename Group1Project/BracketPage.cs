@@ -26,19 +26,30 @@ namespace Group1Project
         private const int ROUND_SPACING = 200;
         private const int MATCH_VERTICAL_SPACING = 20;
 
+        /// <summary>
+        /// Tournament object that holds the current tournament data, including the bracket and matches.
+        /// This is used to populate both the DataGridView and the visual bracket panel. It is nullable to allow for the case where no tournament has been loaded or generated yet.
+        /// </summary>
         private Tournament? currentTournament;
+
+        /// <summary>
+        /// BracketPage constructor initializes the user control, sets up event handlers for the view selection and resizing, and defaults to showing the bracket view.
+        /// It also initializes the matches grid columns if they haven't been set up yet.
+        /// </summary>
         public BracketPage()
         {
             InitializeComponent();
 
             InitializeMatchesGrid();
 
+            // Set up event handler for view selection changes
             comboBoxView.SelectedIndexChanged += (s, e) =>
             {
                 var view = comboBoxView.SelectedItem?.ToString() ?? "Matches";
                 ShowView(view);
             };
 
+            // Set up event handler for resizing the bracket panel to redraw the bracket tree when the size changes
             panelBracketContainer.Resize += (s, e) =>
             {
                 if (currentTournament?.Bracket != null && panelBracketContainer.Visible)
@@ -48,8 +59,9 @@ namespace Group1Project
             };
 
             if (comboBoxView.Items.Count > 0)
+            { 
                 comboBoxView.SelectedIndex = 0;
-
+            }
             ShowView("Bracket");
         }
 
@@ -81,12 +93,22 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Loads the provided Tournament object into the BracketPage, updating the current tournament reference and refreshing the UI to display the new tournament data. 
+        /// This includes populating the matches grid and redrawing the visual bracket tree based on the matches in the tournament's bracket.
+        /// </summary>
+        /// <param name="tournament">
+        ///     The Tournament object containing the bracket and matches to be displayed. This method updates the current tournament reference and refreshes the UI to show the new tournament data.
+        /// </param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
             RefreshBracket();
         }
 
+        /// <summary>
+        /// Refreshes the bracket display by clearing existing data and repopulating the matches grid and visual bracket panel based on the current tournament's bracket data.
+        /// </summary>
         private void RefreshBracket()
         {
             dataGridViewStageMatches.Rows.Clear();
@@ -114,6 +136,11 @@ namespace Group1Project
             DrawBracketTree();
         }
 
+        /// <summary>
+        /// Draws the visual representation of the tournament bracket in the panelBracketContainer. 
+        /// It creates a custom drawing panel where match boxes are displayed for each match in the current tournament's bracket, and connecting lines are drawn to represent the progression of teams through the rounds. If there are no matches to display, it shows a message indicating that there are no matches available. 
+        /// The method also handles resizing of the panel to ensure the bracket is redrawn appropriately when the size changes.
+        /// </summary>
         private void DrawBracketTree()
         {
             panelBracketContainer.Controls.Clear();
@@ -161,35 +188,59 @@ namespace Group1Project
             drawingPanel.Invalidate();
         }
 
+        /// <summary>
+        /// Custom paint event handler for the drawing panel that renders the visual bracket tree. 
+        /// It draws connecting lines between match boxes to represent the progression of teams through the rounds. 
+        /// The method checks if there is a valid tournament and bracket before attempting to draw, and it uses the Graphics object provided by the Paint event to render the lines on the panel.
+        /// </summary>
+        /// <param name="g">Graphics object used for drawing the bracket lines on the panel. This is provided by the Paint event of the drawing panel.</param>
         private void DrawBracketOnPanel(Graphics g)
         {
-            if (currentTournament?.Bracket == null)
+            if (currentTournament?.Bracket == null) 
+            { 
                 return;
+            }
 
             // Draw connecting lines between rounds
             DrawConnectingLines(g);
         }
+
+        /// <summary>
+        /// Draws match boxes for each match in the first round of the tournament bracket on the provided drawing panel.
+        /// </summary>
+        /// <param name="drawingPanel">
+        ///     Panel on which the match boxes will be drawn. 
+        ///     This panel is created in the DrawBracketTree method and is where the visual representation of the matches will be rendered.
+        /// </param>
         private void DrawMatchBoxes(Panel drawingPanel)
         {
             if (currentTournament?.Bracket == null)
+            {
                 return;
+            }
 
             int round = 1;
             var matchesInRound = GetMatchesForRound(round);
             int matchCount = matchesInRound.Count;
 
-            if (matchCount == 0) return;
+            if (matchCount == 0) 
+            { 
+                return; 
+            }
 
+            // Calculate vertical spacing to distribute match boxes evenly within the available height of the drawing panel
             int availableHeight = drawingPanel.Height - 100;
             int totalMatchHeight = matchCount * MATCH_BOX_HEIGHT;
             int totalSpacingNeeded = availableHeight - totalMatchHeight;
             int verticalGap = MATCH_BOX_HEIGHT + (totalSpacingNeeded / Math.Max(1, matchCount));
 
+            // Ensure a minimum vertical gap to prevent overlap of match boxes
             verticalGap = Math.Max(verticalGap, MATCH_BOX_HEIGHT + 20);
 
             int totalRoundHeight = matchCount * verticalGap;
             int startY = Math.Max(50, (drawingPanel.Height - totalRoundHeight) / 2);
 
+            // Draw match boxes for the first round
             for (int i = 0; i < matchCount; i++)
             {
                 var match = matchesInRound[i];
@@ -202,10 +253,24 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Creates a GroupBox control representing a match in the tournament bracket.
+        /// </summary>
+        /// <param name="match">Match object containing the details of the match, including the teams involved and the match status. This information is used to populate the content of the match box.</param>
+        /// <param name="x">Pixel X coordinate for the location of the match box on the drawing panel. This determines the horizontal position of the box in the bracket layout.</param>
+        /// <param name="y">Pixel Y coordinate for the location of the match box on the drawing panel. This determines the vertical position of the box in the bracket layout.</param>
+        /// <param name="round">Numeric identifier for the round of the tournament that this match belongs to. This is used to label the match box with the appropriate round information.</param>
+        /// <param name="matchIndex">Index of the match within its round, used for labeling purposes to differentiate between multiple matches in the same round. This helps in identifying the match as "R1-1", "R1-2", etc. for the first round.</param>
+        /// <returns>
+        ///     GroupBox control populated with the match information, styled according to the match status (e.g., completed matches highlighted in green, bye matches highlighted in yellow). 
+        ///     This control is added to the drawing panel to visually represent the match in the bracket.
+        /// </returns>
         private GroupBox CreateMatchBox(Match match, int x, int y, int round, int matchIndex)
         {
+            // Determine if the match is a bye (where both teams are the same or one team is null), which indicates that one team automatically advances to the next round without playing a match.
             bool isBye = match.TeamA == match.TeamB;
 
+            // Create a GroupBox to represent the match, with appropriate styling based on whether it's a bye or a regular match.
             GroupBox box = new GroupBox
             {
                 Location = new Point(x, y),
@@ -214,6 +279,7 @@ namespace Group1Project
                 Padding = new Padding(5)
             };
 
+            // If it's a bye match, display a special message and style the box differently. Otherwise, display the team names and highlight the winner if the match is complete.
             if (isBye)
             {
                 Label byeLabel = new Label
@@ -230,6 +296,7 @@ namespace Group1Project
             }
             else
             {
+                // Display team names and match status
                 Label teamALabel = new Label
                 {
                     Text = match.TeamA?.Name ?? "TBD",
@@ -249,6 +316,7 @@ namespace Group1Project
                 box.Controls.Add(teamALabel);
                 box.Controls.Add(teamBLabel);
 
+                // If the match is complete, highlight the winner and change the background color of the box to indicate completion.
                 if (match.IsComplete())
                 {
                     var winner = match.GetWinner();
@@ -267,17 +335,32 @@ namespace Group1Project
             return box;
         }
 
+        /// <summary>
+        /// Draws connecting lines between match boxes on the provided Graphics object to visually represent the progression of teams through the rounds in the tournament bracket.
+        /// </summary>
+        /// <param name="g">
+        ///     Graphics object used for drawing the connecting lines on the panel.
+        ///     This is provided by the Paint event of the drawing panel and allows for custom rendering of the bracket connections.
+        /// </param>
         private void DrawConnectingLines(Graphics g)
         {
             if (currentTournament?.Bracket == null)
+            {
                 return;
+            }
 
+            // For simplicity, this example only draws lines for the first round of matches.
+            // In a complete implementation, you would need to recursively draw lines for subsequent rounds based on the structure of the bracket and the matches that have been completed.
             int round = 1;
             var currentRoundMatches = GetMatchesForRound(round);
             int matchCount = currentRoundMatches.Count;
 
-            if (matchCount < 2) return;
+            if (matchCount < 2)
+            {
+                return;
+            }
 
+            // Calculate vertical spacing to position the connecting lines appropriately between match boxes
             Pen linePen = new Pen(Color.Black, 2);
 
             int availableHeight = (int)g.VisibleClipBounds.Height - 100;
@@ -290,6 +373,9 @@ namespace Group1Project
             int totalRoundHeight = matchCount * verticalGap;
             int startY = Math.Max(50, ((int)g.VisibleClipBounds.Height - totalRoundHeight) / 2);
 
+            // Draw lines connecting pairs of matches in the first round to the next round.
+            // This is a simplified example and assumes a single-elimination bracket where each pair of matches feeds into one match in the next round.
+            // In a complete implementation, you would need to handle more complex bracket structures and multiple rounds.
             for (int i = 0; i < matchCount; i += 2)
             {
                 if (i + 1 >= matchCount) break;
@@ -310,17 +396,31 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Gets the list of matches for a specific round number from the current tournament's bracket.
+        /// </summary>
+        /// <param name="roundNumber">Integer representing the round number for which to retrieve matches. Round numbers typically start at 1 for the first round of the tournament.</param>
+        /// <returns>LIst of Match objects that belong to the specified round. If there are no matches for the given round or if the tournament/bracket is not available, it returns an empty list.</returns>
         private List<Match> GetMatchesForRound(int roundNumber)
         {
             if (currentTournament?.Bracket == null)
+            {
                 return new List<Match>();
+            }
 
             if (roundNumber == 1)
+            {
                 return currentTournament.Bracket.Matches.ToList();
+            }
 
             return new List<Match>();
         }
 
+        /// <summary>
+        /// Creates the columns for the matches DataGridView if they haven't been created yet.
+        /// This method checks if the columns already exist to avoid adding duplicate columns, 
+        /// it also sets up the necessary columns to display team names, match status, and scores for the matches in the tournament bracket.
+        /// </summary>
         private void InitializeMatchesGrid()
         {
             // Only add columns if they don't exist

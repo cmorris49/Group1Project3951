@@ -71,9 +71,10 @@ namespace Group1Project
                 if (player.id == playerId)
                 {
                     Players.Remove(player);
-                    break;
+                    return;
                 }
             }
+            MessageBox.Show("This Player doesn't exist.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
     }
 }

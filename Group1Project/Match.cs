@@ -79,7 +79,9 @@ namespace Group1Project
         public void SetScore(int scoreA, int scoreB)
         {
             if (Status == MatchStatus.Unscheduled)
+            {
                 throw new InvalidOperationException("Cannot set score for an unscheduled match.");
+            }
 
             Score = new ScoreEntry(scoreA, scoreB);
             Status = MatchStatus.Complete;
@@ -93,10 +95,19 @@ namespace Group1Project
         /// <returns>The winning team, or null if there is no winner.</returns>
         public Team? GetWinner()
         {
-            if (Score is null) return null;
+            if (Score is null)
+            {
+                return null;
+            }
 
-            if (Score.ScoreA > Score.ScoreB) return TeamA;
-            if (Score.ScoreB > Score.ScoreA) return TeamB;
+            if (Score.ScoreA > Score.ScoreB)
+            {
+                return TeamA;
+            }
+            if (Score.ScoreB > Score.ScoreA)
+            {
+                return TeamB;
+            }
 
             return null; // tie
         }

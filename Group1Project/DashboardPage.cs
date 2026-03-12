@@ -30,12 +30,19 @@ namespace Group1Project
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tournament"></param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
             RefreshDashboard();
         }
 
+        /// <summary>
+        /// Refreshes the dashboard by updating the displayed statistics for total teams, total players, and total matches based on the current tournament data.
+        /// </summary>
         private void RefreshDashboard()
         {
             if (currentTournament == null)
@@ -55,11 +62,19 @@ namespace Group1Project
             SetStatistic(lblMatchesCount, totalMatches.ToString());
         }
 
+        /// <summary>
+        /// Gets the total number of teams in the current tournament by checking if the tournament is not null and counting all teams in each division of the tournament.
+        /// </summary>
+        /// <returns></returns>
         private int GetTotalTeams()
         {
-            if (currentTournament == null) return 0;
+            if (currentTournament == null)
+            {
+                return 0;
+            }
 
             int count = 0;
+            
             foreach (var division in currentTournament.Divisions)
             {
                 count += division.Teams.Count;
@@ -67,9 +82,16 @@ namespace Group1Project
             return count;
         }
 
+        /// <summary>
+        /// Gets the total number of players in the current tournament by checking if the tournament are not null and count all players in each division in the tournament.
+        /// </summary>
+        /// <returns>Count of players in the tournament. If the tournament is null, it returns 0 to indicate that there are no players to count.</returns>
         private int GetTotalPlayers()
         {
-            if (currentTournament == null) return 0;
+            if (currentTournament == null)
+            {
+                return 0; 
+            }
 
             int count = 0;
             foreach (var division in currentTournament.Divisions)
@@ -82,12 +104,25 @@ namespace Group1Project
             return count;
         }
 
+        /// <summary>
+        /// Gets the total number of matches in the current tournament by checking if the tournament and its bracket are not null, and then returning the count of matches in the bracket. 
+        /// If either the tournament or the bracket is null, it returns 0 to indicate that there are no matches to count.
+        /// </summary>
+        /// <returns></returns>
         private int GetTotalMatches()
         {
-            if (currentTournament?.Bracket == null) return 0;
+            if (currentTournament?.Bracket == null)
+            {   
+                return 0; 
+            }
             return currentTournament.Bracket.Matches.Count;
         }
 
+        /// <summary>
+        /// Sets the text of a given label to the specified value, ensuring that the label is not null before attempting to update its text property.
+        /// </summary>
+        /// <param name="label">Control label whose text property is to be updated. This parameter must not be null, as the method checks for null before attempting to set the text.</param>
+        /// <param name="value">Data value to be displayed on the label. This parameter is expected to be a string representation of the statistic being displayed (e.g., total teams, total players, total matches).</param>
         private void SetStatistic(Label label, string value)
         {
             if (label != null)
