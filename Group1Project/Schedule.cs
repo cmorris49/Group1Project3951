@@ -26,6 +26,10 @@ namespace Group1Project
         public void AddMatch(Match match)
         {
             // Code to add a match to the schedule
+            if (match == null)
+            {
+                throw new ArgumentNullException(nameof(match), "Match Doesn't exist.");
+            }
             matches.Add(match);
         }
     }

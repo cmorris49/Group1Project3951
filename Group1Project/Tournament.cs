@@ -44,7 +44,9 @@ namespace Group1Project
         public Tournament(string name, DateTime startDate, string location)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentException("Tournament name is required.", nameof(name));
+            }
 
             this.Id = Guid.NewGuid();
             this.Name = name.Trim();
@@ -112,12 +114,16 @@ namespace Group1Project
         public Division CreateDivision(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentException("Division name is required.", nameof(name));
-
+            }
+                
             var trimmed = name.Trim();
 
             if (divisions.Any(d => string.Equals(d.Name, trimmed, StringComparison.OrdinalIgnoreCase)))
+            {
                 throw new InvalidOperationException("A division with that name already exists.");
+            }
 
             var division = new Division(trimmed);
             divisions.Add(division);
@@ -133,7 +139,9 @@ namespace Group1Project
         {
             var index = divisions.FindIndex(d => d.Id == divisionId);
             if (index < 0)
+            {
                 throw new InvalidOperationException("Division not found.");
+            }
 
             divisions.RemoveAt(index);
         }
@@ -155,7 +163,9 @@ namespace Group1Project
             }
 
             if (allTeams.Count < 2)
+            {
                 throw new InvalidOperationException("Need at least 2 teams to generate a bracket.");
+            }
 
             switch (BracketType)
             {
@@ -173,11 +183,14 @@ namespace Group1Project
 
             int bracketSize = 1;
             while (bracketSize < teams.Count)
+            {
                 bracketSize *= 2;
+            }
 
             int rounds = (int)Math.Log2(bracketSize);
             bracket.SetTotalRounds(rounds);
 
+            // Sort teams by seed (if provided) and then alphabetically by name
             var seededTeams = teams
                 .OrderBy(t => t.seed == 0 ? int.MaxValue : t.seed)
                 .ThenBy(t => t.Name)

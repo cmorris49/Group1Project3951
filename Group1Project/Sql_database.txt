@@ -1,0 +1,90 @@
+DROP DATABASE IF EXISTS tournament_manager;
+CREATE DATABASE tournament_manager;
+USE tournament_manager;
+
+CREATE TABLE Tournament (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    Name VARCHAR(255) NOT NULL,
+    Location VARCHAR(255) NULL,
+    StartDate DATETIME NOT NULL,
+    BracketType VARCHAR(50) NOT NULL DEFAULT 'SingleElimination'
+);
+
+CREATE TABLE Division (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    TournamentId CHAR(36) NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    CONSTRAINT FK_Division_Tournament
+        FOREIGN KEY (TournamentId)
+        REFERENCES Tournament(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Team (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    DivisionId CHAR(36) NOT NULL,
+    Name VARCHAR(100) NOT NULL,
+    Seed INT NOT NULL DEFAULT 0,
+    CONSTRAINT FK_Team_Division
+        FOREIGN KEY (DivisionId)
+        REFERENCES Division(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Player (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    TeamId CHAR(36) NOT NULL,
+    DisplayName VARCHAR(100) NOT NULL,
+    Number INT NOT NULL,
+    CONSTRAINT FK_Player_Team
+        FOREIGN KEY (TeamId)
+        REFERENCES Team(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Bracket (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    TournamentId CHAR(36) NOT NULL UNIQUE,
+    BracketType VARCHAR(50) NOT NULL,
+    TotalRounds INT NOT NULL DEFAULT 0,
+    CONSTRAINT FK_Bracket_Tournament
+        FOREIGN KEY (TournamentId)
+        REFERENCES Tournament(Id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE Matches (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    BracketId CHAR(36) NOT NULL,
+    TeamAId CHAR(36) NULL,
+    TeamBId CHAR(36) NULL,
+    ScheduledStart DATETIME NULL,
+    Status VARCHAR(50) NOT NULL DEFAULT 'Unscheduled',
+    ScoreA INT NULL,
+    ScoreB INT NULL,
+    ScoreRecordedAt DATETIME NULL,
+
+    CONSTRAINT FK_Matches_Bracket
+        FOREIGN KEY (BracketId)
+        REFERENCES Bracket(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_Matches_TeamA
+        FOREIGN KEY (TeamAId)
+        REFERENCES Team(Id),
+
+    CONSTRAINT FK_Matches_TeamB
+        FOREIGN KEY (TeamBId)
+        REFERENCES Team(Id),
+
+    CONSTRAINT CHK_ScoreA_Positive
+        CHECK (ScoreA IS NULL OR ScoreA >= 0),
+
+    CONSTRAINT CHK_ScoreB_Positive
+        CHECK (ScoreB IS NULL OR ScoreB >= 0)
+);
+
+CREATE INDEX IX_Division_TournamentId ON Division(TournamentId);
+CREATE INDEX IX_Team_DivisionId ON Team(DivisionId);
+CREATE INDEX IX_Player_TeamId ON Player(TeamId);
+CREATE INDEX IX_Matches_BracketId ON Matches(BracketId);

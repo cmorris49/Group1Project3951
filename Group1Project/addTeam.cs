@@ -45,7 +45,9 @@ namespace Group1Project
         internal addTeam(Division division)
         {
             if (division == null)
+            {
                 throw new ArgumentNullException(nameof(division));
+            }
 
             this.division = division;
             InitializeComponent();

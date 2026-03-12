@@ -61,7 +61,9 @@ namespace Group1Project
         public void SetTotalRounds(int rounds)
         {
             if (rounds < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(rounds), "Total rounds must be a non-negative integer.");
+            }
             TotalRounds = rounds;
         }
 
@@ -73,8 +75,9 @@ namespace Group1Project
         public void AddMatch(Match match)
         {
             if (match == null)
+            {
                 throw new ArgumentNullException(nameof(match));
-
+            }
             Matches.Add(match);
         }
 
