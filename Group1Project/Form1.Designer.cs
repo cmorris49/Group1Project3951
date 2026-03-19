@@ -98,8 +98,7 @@ namespace Group1Project
             menuMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, newToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
             menuMain.Location = new Point(0, 0);
             menuMain.Name = "menuMain";
-            menuMain.Padding = new Padding(3, 1, 0, 1);
-            menuMain.Size = new Size(828, 24);
+            menuMain.Size = new Size(1538, 42);
             menuMain.TabIndex = 1;
             menuMain.Text = "menuStrip1";
             // 
@@ -139,7 +138,7 @@ namespace Group1Project
             // 
             newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dashboardToolStripMenuItem, teamsPlayersToolStripMenuItem, bracketsToolStripMenuItem, scheduleToolStripMenuItem, standingsToolStripMenuItem, resultsToolStripMenuItem });
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(50, 22);
+            newToolStripMenuItem.Size = new Size(89, 38);
             newToolStripMenuItem.Text = "New ";
             // 
             // dashboardToolStripMenuItem
@@ -182,7 +181,7 @@ namespace Group1Project
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateBracketToolStripMenuItem, autoScheduleToolStripMenuItem, recalculateStandingsToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(51, 22);
+            toolsToolStripMenuItem.Size = new Size(89, 38);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // generateBracketToolStripMenuItem
@@ -207,7 +206,7 @@ namespace Group1Project
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(47, 22);
+            helpToolStripMenuItem.Size = new Size(84, 38);
             helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -221,7 +220,7 @@ namespace Group1Project
             toolMain.GripStyle = ToolStripGripStyle.Hidden;
             toolMain.ImageScalingSize = new Size(32, 32);
             toolMain.Items.AddRange(new ToolStripItem[] { tsbSave, tsbAddTeam, tsbGenerateBracket, tsbAutoSchedule, tsbEnterResult });
-            toolMain.Location = new Point(0, 24);
+            toolMain.Location = new Point(0, 42);
             toolMain.Name = "toolMain";
             toolMain.Padding = new Padding(0, 0, 2, 0);
             toolMain.Size = new Size(828, 39);
@@ -297,8 +296,8 @@ namespace Group1Project
             // 
             splitMain.Dock = DockStyle.Fill;
             splitMain.FixedPanel = FixedPanel.Panel1;
-            splitMain.Location = new Point(0, 63);
-            splitMain.Margin = new Padding(2);
+            splitMain.Location = new Point(0, 84);
+            splitMain.Margin = new Padding(4);
             splitMain.Name = "splitMain";
             // 
             // splitMain.Panel1
@@ -310,8 +309,9 @@ namespace Group1Project
             // splitMain.Panel2
             // 
             splitMain.Panel2.Controls.Add(panelWorkspace);
-            splitMain.Size = new Size(828, 478);
-            splitMain.SplitterDistance = 260;
+            splitMain.Size = new Size(1538, 934);
+            splitMain.SplitterDistance = 483;
+            splitMain.SplitterWidth = 7;
             splitMain.TabIndex = 4;
             // 
             // panelNav
@@ -326,8 +326,8 @@ namespace Group1Project
             panelNav.Location = new Point(0, 81);
             panelNav.Margin = new Padding(2);
             panelNav.Name = "panelNav";
-            panelNav.Padding = new Padding(4);
-            panelNav.Size = new Size(260, 397);
+            panelNav.Padding = new Padding(7, 8, 7, 8);
+            panelNav.Size = new Size(483, 782);
             panelNav.TabIndex = 1;
             // 
             // btnResults
@@ -479,7 +479,7 @@ namespace Group1Project
             panelWorkspace.Location = new Point(0, 0);
             panelWorkspace.Margin = new Padding(2);
             panelWorkspace.Name = "panelWorkspace";
-            panelWorkspace.Size = new Size(564, 478);
+            panelWorkspace.Size = new Size(1048, 934);
             panelWorkspace.TabIndex = 0;
             // 
             // labelWorkspaceTitle
