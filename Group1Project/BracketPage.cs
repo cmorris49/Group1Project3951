@@ -275,12 +275,10 @@ namespace Group1Project
 
                 int x2 = bottomCenterRight.X;
                 int y2 = bottomCenterRight.Y;
-            }
 
                 int midX = x1 + 50;
                 int outX = midX + 50;
                 int midY = (y1 + y2) / 2;
-            }
 
                 g.DrawLine(linePen, x1, y1, midX, y1);
                 g.DrawLine(linePen, x2, y2, midX, y2);
