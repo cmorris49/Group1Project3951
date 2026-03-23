@@ -26,6 +26,10 @@ namespace Group1Project
         private const int ROUND_SPACING = 200;
         private const int MATCH_VERTICAL_SPACING = 20;
 
+        /// <summary>
+        /// Tournament object that holds the current tournament data, including the bracket and matches.
+        /// This is used to populate both the DataGridView and the visual bracket panel. It is nullable to allow for the case where no tournament has been loaded or generated yet.
+        /// </summary>
         private Tournament? currentTournament;
 
         private readonly ApiClient _apiClient = new ApiClient();
@@ -44,6 +48,7 @@ namespace Group1Project
 
             InitializeMatchesGrid();
 
+            // Set up event handler for view selection changes
             comboBoxView.SelectedIndexChanged += (s, e) =>
             {
                 var view = comboBoxView.SelectedItem?.ToString() ?? "Matches";
@@ -61,8 +66,9 @@ namespace Group1Project
             };
 
             if (comboBoxView.Items.Count > 0)
+            { 
                 comboBoxView.SelectedIndex = 0;
-
+            }
             ShowView("Bracket");
         }
 
@@ -168,6 +174,7 @@ namespace Group1Project
             int totalRoundHeight = matchCount * verticalGap;
             int startY = Math.Max(50, (panelBracketContainer.Height - totalRoundHeight) / 2);
 
+            // Draw match boxes for the first round
             for (int i = 0; i < matchCount; i++)
             {
                 var match = _apiMatches[i];
@@ -268,10 +275,12 @@ namespace Group1Project
 
                 int x2 = bottomCenterRight.X;
                 int y2 = bottomCenterRight.Y;
+            }
 
                 int midX = x1 + 50;
                 int outX = midX + 50;
                 int midY = (y1 + y2) / 2;
+            }
 
                 g.DrawLine(linePen, x1, y1, midX, y1);
                 g.DrawLine(linePen, x2, y2, midX, y2);

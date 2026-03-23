@@ -184,7 +184,7 @@ namespace Group1Project
             lblMatchesCount.AutoSize = true;
             lblMatchesCount.Location = new Point(99, 53);
             lblMatchesCount.Name = "lblMatchesCount";
-            lblMatchesCount.Size = new Size(78, 32);
+            lblMatchesCount.Size = new Size(43, 17);
             lblMatchesCount.TabIndex = 2;
             lblMatchesCount.Text = "label3";
             // 
@@ -217,7 +217,7 @@ namespace Group1Project
             lblPlayersCount.AutoSize = true;
             lblPlayersCount.Location = new Point(105, 53);
             lblPlayersCount.Name = "lblPlayersCount";
-            lblPlayersCount.Size = new Size(78, 32);
+            lblPlayersCount.Size = new Size(43, 17);
             lblPlayersCount.TabIndex = 2;
             lblPlayersCount.Text = "label2";
             // 
@@ -250,7 +250,7 @@ namespace Group1Project
             lblTeamsCount.AutoSize = true;
             lblTeamsCount.Location = new Point(111, 53);
             lblTeamsCount.Name = "lblTeamsCount";
-            lblTeamsCount.Size = new Size(78, 32);
+            lblTeamsCount.Size = new Size(43, 17);
             lblTeamsCount.TabIndex = 1;
             lblTeamsCount.Text = "label1";
             // 

@@ -222,6 +222,11 @@ namespace Group1Project
             UpdateStatusBar();
         }
 
+        /// <summary>
+        /// Goes to the Teams & Players page when the corresponding button is clicked, loading the current tournament data into the page and updating the user interface to reflect the change in view.
+        /// </summary>
+        /// <param name="sender">Source of the event, typically the Teams & Players button that was clicked.</param>
+        /// <param name="e">The EventArgs instance containing the event data for the Click event.</param>
         private void btnTeamsPlayers_Click(object sender, EventArgs e)
         {
             var page = new TeamsPlayersPage();
@@ -347,7 +352,10 @@ namespace Group1Project
         {
             if (currentTournament == null)
             {
-                MessageBox.Show("Please create a tournament first.", "No Tournament", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please create a tournament first.",
+                    "No Tournament",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 

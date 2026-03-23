@@ -103,6 +103,11 @@ namespace Group1Project
         //    return currentTournament.Bracket.Matches.Count;
         //}
 
+        /// <summary>
+        /// Sets the text of a given label to the specified value, ensuring that the label is not null before attempting to update its text property.
+        /// </summary>
+        /// <param name="label">Control label whose text property is to be updated. This parameter must not be null, as the method checks for null before attempting to set the text.</param>
+        /// <param name="value">Data value to be displayed on the label. This parameter is expected to be a string representation of the statistic being displayed (e.g., total teams, total players, total matches).</param>
         private void SetStatistic(Label label, string value)
         {
             if (label != null)
