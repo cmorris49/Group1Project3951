@@ -28,6 +28,8 @@ namespace Group1Project
         /// </summary>
         private List<Tournament> tournaments = new List<Tournament>();
 
+        private readonly ApiClient _apiClient = new ApiClient();
+
         /// <summary>
         /// Form1 constructor initializes the main form and sets up the user interface components. 
         /// It also includes testing code to create a sample tournament with dummy data for populating the UI during development.
@@ -37,15 +39,32 @@ namespace Group1Project
             InitializeComponent();
 
             // For testing purposes, we can create a sample tournament with dummy data to populate the UI.
-            var testTournament = Tournament.CreateTestTournament();
-            tournaments.Add(testTournament);
-
-            currentTournament = testTournament;
+            //var testTournament = Tournament.CreateTestTournament();
+            //tournaments.Add(testTournament);
+            //currentTournament = testTournament;
             // End of testing code - remove when done
 
-            RefreshTournamentList();
+            this.Load += Form1_Load;
+        }
 
-            lblTournament.Text = $"Tournament: {currentTournament.Name}";
+        /// <summary>
+        /// Loads tournaments from the API when the main form finishes loading and initializes the current selection.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for form load.</param>
+        private async void Form1_Load(object? sender, EventArgs e)
+        {
+            var loaded = await _apiClient.GetTournamentsAsync();
+            tournaments = loaded ?? new List<Tournament>();
+
+            currentTournament = tournaments.Count > 0 ? tournaments[0] : null;
+
+            RefreshTournamentList();
+            lblTournament.Text = currentTournament != null
+                ? $"Tournament: {currentTournament.Name}"
+                : "Tournament: (none)";
+
+            UpdateStatusBar();
         }
 
         /// <summary>
@@ -303,7 +322,7 @@ namespace Group1Project
 
             Division selectedDivision = currentTournament.Divisions[0];
 
-            using var addTeamForm = new addTeam(selectedDivision);
+            using var addTeamForm = new addTeam(selectedDivision, currentTournament.Id);
 
             if (addTeamForm.ShowDialog(this) == DialogResult.OK &&
                 addTeamForm.CreatedTeam != null)
@@ -319,7 +338,12 @@ namespace Group1Project
             }
         }
 
-        private void tsbGenerateBracket_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Requests bracket generation through the API for the currently selected tournament.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the toolbar click.</param>
+        private async void tsbGenerateBracket_Click(object sender, EventArgs e)
         {
             if (currentTournament == null)
             {
@@ -327,15 +351,16 @@ namespace Group1Project
                 return;
             }
 
-            try
+            bool ok = await _apiClient.GenerateBracketAsync(currentTournament.Id);
+
+            if (ok)
             {
-                currentTournament.GenerateBracket();
                 MessageBox.Show("Bracket generated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 btnBracket_Click(sender, e);
             }
-            catch (InvalidOperationException ex)
+            else
             {
-                MessageBox.Show(ex.Message, "Cannot Generate Bracket", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Could not generate bracket in database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

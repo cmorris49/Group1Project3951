@@ -22,6 +22,8 @@ namespace Group1Project
     {
         private Tournament? currentTournament;
 
+        private readonly ApiClient _apiClient = new ApiClient();
+
         /// <summary>
         /// The DashboardPage class represents a user control that serves as the main dashboard for the tournament management application.
         /// </summary>
@@ -30,13 +32,21 @@ namespace Group1Project
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Loads the selected tournament context into the dashboard and refreshes database-backed metrics.
+        /// </summary>
+        /// <param name="tournament">The tournament to display.</param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
-            RefreshDashboard();
+            _ = RefreshDashboardAsync();
         }
 
-        private void RefreshDashboard()
+        /// <summary>
+        /// Fetches and displays dashboard statistics from the API for the currently loaded tournament.
+        /// </summary>
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
+        private async Task RefreshDashboardAsync()
         {
             if (currentTournament == null)
             {
@@ -46,47 +56,52 @@ namespace Group1Project
                 return;
             }
 
-            int totalTeams = GetTotalTeams();
-            int totalPlayers = GetTotalPlayers();
-            int totalMatches = GetTotalMatches();
-
-            SetStatistic(lblTeamsCount, totalTeams.ToString());
-            SetStatistic(lblPlayersCount, totalPlayers.ToString());
-            SetStatistic(lblMatchesCount, totalMatches.ToString());
-        }
-
-        private int GetTotalTeams()
-        {
-            if (currentTournament == null) return 0;
-
-            int count = 0;
-            foreach (var division in currentTournament.Divisions)
+            var stats = await _apiClient.GetDashboardStatsAsync(currentTournament.Id);
+            if (stats == null)
             {
-                count += division.Teams.Count;
+                SetStatistic(lblTeamsCount, "0");
+                SetStatistic(lblPlayersCount, "0");
+                SetStatistic(lblMatchesCount, "0");
+                return;
             }
-            return count;
+
+            SetStatistic(lblTeamsCount, stats.Teams.ToString());
+            SetStatistic(lblPlayersCount, stats.Players.ToString());
+            SetStatistic(lblMatchesCount, stats.Matches.ToString());
         }
 
-        private int GetTotalPlayers()
-        {
-            if (currentTournament == null) return 0;
+        //private int GetTotalTeams()
+        //{
+        //    if (currentTournament == null) return 0;
 
-            int count = 0;
-            foreach (var division in currentTournament.Divisions)
-            {
-                foreach (var team in division.Teams)
-                {
-                    count += team.Players.Count;
-                }
-            }
-            return count;
-        }
+        //    int count = 0;
+        //    foreach (var division in currentTournament.Divisions)
+        //    {
+        //        count += division.Teams.Count;
+        //    }
+        //    return count;
+        //}
 
-        private int GetTotalMatches()
-        {
-            if (currentTournament?.Bracket == null) return 0;
-            return currentTournament.Bracket.Matches.Count;
-        }
+        //private int GetTotalPlayers()
+        //{
+        //    if (currentTournament == null) return 0;
+
+        //    int count = 0;
+        //    foreach (var division in currentTournament.Divisions)
+        //    {
+        //        foreach (var team in division.Teams)
+        //        {
+        //            count += team.Players.Count;
+        //        }
+        //    }
+        //    return count;
+        //}
+
+        //private int GetTotalMatches()
+        //{
+        //    if (currentTournament?.Bracket == null) return 0;
+        //    return currentTournament.Bracket.Matches.Count;
+        //}
 
         private void SetStatistic(Label label, string value)
         {

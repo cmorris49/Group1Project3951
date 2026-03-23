@@ -18,7 +18,7 @@ namespace Group1Project
         /// <summary>
         /// Gets or sets the collection of teams associated with the current context.
         /// </summary>
-        public List<Team> teams { get; set; }
+        public List<Team> teams { get; set; } = new List<Team>();
 
         /// <summary>
         /// Recalculates the team's standings by aggregating points from the specified matches.

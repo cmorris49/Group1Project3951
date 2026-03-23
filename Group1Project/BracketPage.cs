@@ -27,6 +27,17 @@ namespace Group1Project
         private const int MATCH_VERTICAL_SPACING = 20;
 
         private Tournament? currentTournament;
+
+        private readonly ApiClient _apiClient = new ApiClient();
+
+        private List<ApiClient.MatchReadDto> _apiMatches = new List<ApiClient.MatchReadDto>();
+
+        private readonly List<GroupBox> _renderedMatchBoxes = new List<GroupBox>();
+
+        /// <summary>
+        /// Initializes a new instance of the BracketPage user control, configures UI defaults,
+        /// and wires event handlers for view switching, panel painting, and resize redraw behavior.
+        /// </summary>
         public BracketPage()
         {
             InitializeComponent();
@@ -39,11 +50,13 @@ namespace Group1Project
                 ShowView(view);
             };
 
+            panelBracketContainer.Paint += PanelBracketContainer_Paint;
+
             panelBracketContainer.Resize += (s, e) =>
             {
-                if (currentTournament?.Bracket != null && panelBracketContainer.Visible)
+                if (_apiMatches.Count > 0 && panelBracketContainer.Visible)
                 {
-                    DrawBracketTree();
+                    DrawBracketTreeFromApiMatches();
                 }
             };
 
@@ -51,6 +64,16 @@ namespace Group1Project
                 comboBoxView.SelectedIndex = 0;
 
             ShowView("Bracket");
+        }
+
+        /// <summary>
+        /// Loads the selected tournament context into the bracket page and triggers an API-backed refresh.
+        /// </summary>
+        /// <param name="tournament">The tournament to display.</param>
+        internal void LoadTournament(Tournament tournament)
+        {
+            currentTournament = tournament;
+            _ = RefreshBracketAsync();
         }
 
         /// <summary>
@@ -81,44 +104,46 @@ namespace Group1Project
             }
         }
 
-        internal void LoadTournament(Tournament tournament)
-        {
-            currentTournament = tournament;
-            RefreshBracket();
-        }
-
-        private void RefreshBracket()
+        /// <summary>
+        /// Fetches persisted matches for the current tournament and updates both grid and bracket views.
+        /// </summary>
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
+        private async Task RefreshBracketAsync()
         {
             dataGridViewStageMatches.Rows.Clear();
             panelBracketContainer.Controls.Clear();
 
-            if (currentTournament?.Bracket == null)
-            {
-                MessageBox.Show("No bracket generated yet. Please generate a bracket first.",
-                    "No Bracket", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (currentTournament == null)
                 return;
-            }
 
-            // Display matches in the grid view
-            foreach (var match in currentTournament.Bracket.Matches)
+            _apiMatches = await _apiClient.GetMatchesForTournamentAsync(currentTournament.Id)
+                ?? new List<ApiClient.MatchReadDto>();
+
+            foreach (var match in _apiMatches)
             {
+                var scoreText = (match.ScoreA.HasValue && match.ScoreB.HasValue)
+                    ? $"{match.ScoreA.Value} - {match.ScoreB.Value}"
+                    : "-";
+
                 dataGridViewStageMatches.Rows.Add(
-                    match.TeamA?.Name ?? "TBD",
-                    match.TeamB?.Name ?? "TBD",
-                    match.Status.ToString(),
-                    match.Score != null ? $"{match.Score.ScoreA} - {match.Score.ScoreB}" : "-"
-                );
+                    match.TeamAName ?? "TBD",
+                    match.TeamBName ?? "TBD",
+                    match.Status,
+                    scoreText);
             }
 
-            // Draw visual bracket tree
-            DrawBracketTree();
+            DrawBracketTreeFromApiMatches();
         }
 
-        private void DrawBracketTree()
+        /// <summary>
+        /// Renders a bracket-style visual layout from API match DTOs currently loaded in memory.
+        /// </summary>
+        private void DrawBracketTreeFromApiMatches()
         {
             panelBracketContainer.Controls.Clear();
+            _renderedMatchBoxes.Clear();
 
-            if (currentTournament?.Bracket == null || currentTournament.Bracket.Matches.Count == 0)
+            if (_apiMatches.Count == 0)
             {
                 Label noMatches = new Label
                 {
@@ -133,106 +158,31 @@ namespace Group1Project
 
             panelBracketContainer.AutoScroll = true;
 
-            int totalRounds = 1;
-            int firstRoundMatches = currentTournament.Bracket.Matches.Count;
-
-            int availableWidth = panelBracketContainer.Width;
-            int availableHeight = panelBracketContainer.Height;
-
-            int minWidth = (totalRounds * ROUND_SPACING) + ROUND_SPACING + 100;
-
-            int totalWidth = Math.Max(minWidth, availableWidth);
-            int totalHeight = availableHeight; 
-
-            Panel drawingPanel = new Panel
-            {
-                Width = totalWidth,
-                Height = totalHeight,
-                Location = new Point(0, 0),
-                BackColor = Color.White
-            };
-
-            drawingPanel.Paint += (s, e) => DrawBracketOnPanel(e.Graphics);
-
-            panelBracketContainer.Controls.Add(drawingPanel);
-
-            DrawMatchBoxes(drawingPanel);
-
-            drawingPanel.Invalidate();
-        }
-
-        private void DrawBracketOnPanel(Graphics g)
-        {
-            if (currentTournament?.Bracket == null)
-                return;
-
-            // Draw connecting lines between rounds
-            DrawConnectingLines(g);
-        }
-        private void DrawMatchBoxes(Panel drawingPanel)
-        {
-            if (currentTournament?.Bracket == null)
-                return;
-
-            int round = 1;
-            var matchesInRound = GetMatchesForRound(round);
-            int matchCount = matchesInRound.Count;
-
-            if (matchCount == 0) return;
-
-            int availableHeight = drawingPanel.Height - 100;
+            int matchCount = _apiMatches.Count;
+            int availableHeight = panelBracketContainer.Height - 100;
             int totalMatchHeight = matchCount * MATCH_BOX_HEIGHT;
             int totalSpacingNeeded = availableHeight - totalMatchHeight;
             int verticalGap = MATCH_BOX_HEIGHT + (totalSpacingNeeded / Math.Max(1, matchCount));
-
             verticalGap = Math.Max(verticalGap, MATCH_BOX_HEIGHT + 20);
 
             int totalRoundHeight = matchCount * verticalGap;
-            int startY = Math.Max(50, (drawingPanel.Height - totalRoundHeight) / 2);
+            int startY = Math.Max(50, (panelBracketContainer.Height - totalRoundHeight) / 2);
 
             for (int i = 0; i < matchCount; i++)
             {
-                var match = matchesInRound[i];
+                var match = _apiMatches[i];
 
-                int x = 50;
-                int y = startY + (i * verticalGap);
-
-                GroupBox matchBox = CreateMatchBox(match, x, y, round, i);
-                drawingPanel.Controls.Add(matchBox);
-            }
-        }
-
-        private GroupBox CreateMatchBox(Match match, int x, int y, int round, int matchIndex)
-        {
-            bool isBye = match.TeamA == match.TeamB;
-
-            GroupBox box = new GroupBox
-            {
-                Location = new Point(x, y),
-                Size = new Size(MATCH_BOX_WIDTH, MATCH_BOX_HEIGHT),
-                Text = isBye ? $"R{round}-BYE" : $"R{round}-{matchIndex + 1}",
-                Padding = new Padding(5)
-            };
-
-            if (isBye)
-            {
-                Label byeLabel = new Label
+                GroupBox box = new GroupBox
                 {
-                    Text = $"{match.TeamA?.Name ?? "TBD"}\n(BYE - Auto Advance)",
-                    Location = new Point(10, 50), 
-                    AutoSize = false,
-                    Width = MATCH_BOX_WIDTH - 20,
-                    Height = MATCH_BOX_HEIGHT - 60,
-                    TextAlign = ContentAlignment.MiddleCenter
+                    Location = new Point(50, startY + (i * verticalGap)),
+                    Size = new Size(MATCH_BOX_WIDTH, MATCH_BOX_HEIGHT),
+                    Text = $"R1-{i + 1}",
+                    Padding = new Padding(5)
                 };
-                box.Controls.Add(byeLabel);
-                box.BackColor = Color.LightYellow;
-            }
-            else
-            {
+
                 Label teamALabel = new Label
                 {
-                    Text = match.TeamA?.Name ?? "TBD",
+                    Text = match.TeamAName ?? "TBD",
                     Location = new Point(10, 45),
                     AutoSize = true,
                     Font = new Font("Segoe UI", 9F)
@@ -240,87 +190,100 @@ namespace Group1Project
 
                 Label teamBLabel = new Label
                 {
-                    Text = match.TeamB?.Name ?? "TBD",
+                    Text = match.TeamBName ?? "TBD",
                     Location = new Point(10, 85),
                     AutoSize = true,
                     Font = new Font("Segoe UI", 9F)
                 };
 
-                box.Controls.Add(teamALabel);
-                box.Controls.Add(teamBLabel);
-
-                if (match.IsComplete())
+                if (string.Equals(match.Status, "Complete", StringComparison.OrdinalIgnoreCase))
                 {
-                    var winner = match.GetWinner();
-                    if (winner != null)
+                    if (match.ScoreA.HasValue && match.ScoreB.HasValue)
                     {
-                        if (winner == match.TeamA)
+                        if (match.ScoreA.Value > match.ScoreB.Value)
                             teamALabel.Font = new Font(teamALabel.Font, FontStyle.Bold);
-                        else if (winner == match.TeamB)
+                        else if (match.ScoreB.Value > match.ScoreA.Value)
                             teamBLabel.Font = new Font(teamBLabel.Font, FontStyle.Bold);
                     }
 
                     box.BackColor = Color.LightGreen;
                 }
-            }
 
-            return box;
+                box.Controls.Add(teamALabel);
+                box.Controls.Add(teamBLabel);
+                panelBracketContainer.Controls.Add(box);
+                _renderedMatchBoxes.Add(box);
+            }
+            panelBracketContainer.Invalidate();
         }
 
-        private void DrawConnectingLines(Graphics g)
+        /// <summary>
+        /// Paint handler for bracket connector lines based on rendered match box positions.
+        /// </summary>
+        /// <param name="sender">The source panel.</param>
+        /// <param name="e">Paint event data.</param>
+        private void PanelBracketContainer_Paint(object? sender, PaintEventArgs e)
         {
-            if (currentTournament?.Bracket == null)
-                return;
-
-            int round = 1;
-            var currentRoundMatches = GetMatchesForRound(round);
-            int matchCount = currentRoundMatches.Count;
-
-            if (matchCount < 2) return;
-
-            Pen linePen = new Pen(Color.Black, 2);
-
-            int availableHeight = (int)g.VisibleClipBounds.Height - 100;
-            int totalMatchHeight = matchCount * MATCH_BOX_HEIGHT;
-            int totalSpacingNeeded = availableHeight - totalMatchHeight;
-            int verticalGap = MATCH_BOX_HEIGHT + (totalSpacingNeeded / Math.Max(1, matchCount));
-
-            verticalGap = Math.Max(verticalGap, MATCH_BOX_HEIGHT + 20);
-
-            int totalRoundHeight = matchCount * verticalGap;
-            int startY = Math.Max(50, ((int)g.VisibleClipBounds.Height - totalRoundHeight) / 2);
-
-            for (int i = 0; i < matchCount; i += 2)
+            if (!panelBracketContainer.Visible || _renderedMatchBoxes.Count < 2)
             {
-                if (i + 1 >= matchCount) break;
+                return;
+            }
 
-                int x1 = 50 + MATCH_BOX_WIDTH;
-                int y1 = startY + (i * verticalGap) + MATCH_BOX_HEIGHT / 2;
+            DrawConnectingLinesFromRenderedBoxes(e.Graphics);
+        }
 
-                int x2 = 50 + MATCH_BOX_WIDTH;
-                int y2 = startY + ((i + 1) * verticalGap) + MATCH_BOX_HEIGHT / 2;
+        /// <summary>
+        /// Draws connector lines between adjacent rendered match boxes.
+        /// </summary>
+        /// <param name="g">Graphics surface for drawing lines.</param>
+        private void DrawConnectingLinesFromRenderedBoxes(Graphics g)
+        {
+            if (_renderedMatchBoxes.Count < 2)
+            {
+                return;
+            }
 
-                int x3 = 50 + MATCH_BOX_WIDTH + 100;
-                int y3 = (y1 + y2) / 2;
+            using Pen linePen = new Pen(Color.Black, 2);
 
-                g.DrawLine(linePen, x1, y1, x1 + 50, y1);
-                g.DrawLine(linePen, x2, y2, x2 + 50, y2);
-                g.DrawLine(linePen, x1 + 50, y1, x1 + 50, y2);
-                g.DrawLine(linePen, x1 + 50, y3, x3, y3);
+            // Keep original insertion order so pairing stays consistent
+            for (int i = 0; i < _renderedMatchBoxes.Count; i += 2)
+            {
+                if (i + 1 >= _renderedMatchBoxes.Count)
+                {
+                    break;
+                }
+
+                GroupBox topBox = _renderedMatchBoxes[i];
+                GroupBox bottomBox = _renderedMatchBoxes[i + 1];
+
+                // Convert box points to panel client coordinates (handles autoscroll correctly)
+                Point topCenterRight = panelBracketContainer.PointToClient(
+                    topBox.PointToScreen(new Point(topBox.Width, topBox.Height / 2)));
+
+                Point bottomCenterRight = panelBracketContainer.PointToClient(
+                    bottomBox.PointToScreen(new Point(bottomBox.Width, bottomBox.Height / 2)));
+
+                int x1 = topCenterRight.X;
+                int y1 = topCenterRight.Y;
+
+                int x2 = bottomCenterRight.X;
+                int y2 = bottomCenterRight.Y;
+
+                int midX = x1 + 50;
+                int outX = midX + 50;
+                int midY = (y1 + y2) / 2;
+
+                g.DrawLine(linePen, x1, y1, midX, y1);
+                g.DrawLine(linePen, x2, y2, midX, y2);
+                g.DrawLine(linePen, midX, y1, midX, y2);
+                g.DrawLine(linePen, midX, midY, outX, midY);
             }
         }
 
-        private List<Match> GetMatchesForRound(int roundNumber)
-        {
-            if (currentTournament?.Bracket == null)
-                return new List<Match>();
-
-            if (roundNumber == 1)
-                return currentTournament.Bracket.Matches.ToList();
-
-            return new List<Match>();
-        }
-
+        /// <summary>
+        /// Initializes the stage matches grid columns if they have not already been added.
+        /// This prevents duplicate columns when the control is reloaded.
+        /// </summary>
         private void InitializeMatchesGrid()
         {
             // Only add columns if they don't exist

@@ -56,6 +56,7 @@ namespace Group1Project
 
             // NOTE: This is a temporary division. This will go when we can add/remove devisions. 
             var defaultDivision = new Division("Main Division");
+            defaultDivision.TournamentId = this.Id;
             divisions.Add(defaultDivision);
         }
 
@@ -126,6 +127,7 @@ namespace Group1Project
             }
 
             var division = new Division(trimmed);
+            division.TournamentId = this.Id;
             divisions.Add(division);
             return division;
         }
@@ -192,7 +194,7 @@ namespace Group1Project
 
             // Sort teams by seed (if provided) and then alphabetically by name
             var seededTeams = teams
-                .OrderBy(t => t.seed == 0 ? int.MaxValue : t.seed)
+                .OrderBy(t => t.Seed == 0 ? int.MaxValue : t.Seed)
                 .ThenBy(t => t.Name)
                 .ToList();
 
@@ -220,7 +222,7 @@ namespace Group1Project
             for (int teamIndex = 0; teamIndex < 8; teamIndex++)
             {
                 var team = new Team(teamNames[teamIndex]);
-                team.seed = teamIndex + 1;
+                team.Seed = teamIndex + 1;
 
                 for (int playerIndex = 1; playerIndex <= 5; playerIndex++)
                 {

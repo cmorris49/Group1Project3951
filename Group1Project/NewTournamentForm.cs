@@ -26,6 +26,9 @@ namespace Group1Project
         /// </summary>
         internal Tournament? CreatedTournament { get; private set; }
 
+        // The ApiClient to talk to the database
+        private readonly ApiClient _apiClient = new ApiClient();
+
         /// <summary>
         /// Initializes a new instance of the NewTournamentForm class and sets up the user interface components, including event handlers for form controls.
         /// </summary>
@@ -33,6 +36,7 @@ namespace Group1Project
         {
             InitializeComponent();
             dateTimePickerStartDate.Value = DateTime.Today;
+            buttonCreate.DialogResult = DialogResult.None;
             buttonCreate.Click += BtnOk_Click;
         }
 
@@ -43,7 +47,7 @@ namespace Group1Project
         /// </summary>
         /// <param name="sender">The source of the event, typically when the create button</param>
         /// <param name="e"> An EventArgs instance containing the event data.</param>
-        private void BtnOk_Click(object? sender, EventArgs e)
+        private async void BtnOk_Click(object? sender, EventArgs e)
         {
             var name = textTournamentName.Text.Trim();
             var location = textLocation.Text.Trim();
@@ -52,11 +56,26 @@ namespace Group1Project
             if (string.IsNullOrWhiteSpace(name))
             {
                 MessageBox.Show("Please enter a tournament name.");
-                DialogResult = DialogResult.None;
                 return;
             }
 
+            // Create the object in memory
             CreatedTournament = new Tournament(name, startDate, location);
+
+            // save to database
+            bool isSaved = await _apiClient.CreateTournamentAsync(CreatedTournament);
+
+            if (isSaved)
+            {
+                // Close the form and report success
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            { 
+                CreatedTournament = null;
+                MessageBox.Show("Failed to save the tournament to the database. Is the API running?", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

@@ -37,6 +37,11 @@ namespace Group1Project
         public Guid Id { get; }
 
         /// <summary>
+        /// Gets or sets the unique identifier of the tournament this division belongs to.
+        /// </summary>
+        public Guid TournamentId { get; set; }
+
+        /// <summary>
         /// get the name of the division and cannot be modified after initialization.
         /// </summary>
         public string Name { get; private set; }

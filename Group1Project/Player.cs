@@ -18,7 +18,9 @@ namespace Group1Project
         /// <summary>
         /// gets or sets the unique identifier for the player.
         /// </summary>
-        public Guid id { get; set; }
+        public Guid Id { get; set; }
+
+        public Guid TeamId { get; set; }
 
         /// <summary>
         /// gets or sets the display name of the player.
@@ -35,6 +37,7 @@ namespace Group1Project
         /// <param name="name">Player's name</param>
         /// <param name="number">Player's number</param>
         public Player(string name, int number) {
+            this.Id = Guid.NewGuid();
             this.displayName = name;
             this.number = number;
         }

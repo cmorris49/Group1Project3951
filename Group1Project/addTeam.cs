@@ -39,10 +39,15 @@ namespace Group1Project
         /// </summary>
         private Division division;
 
+        private readonly Guid _tournamentId;
+
+        // The ApiClient to talk to the database
+        private readonly ApiClient _apiClient = new ApiClient();
+
         /// <summary>
         /// Initializes a new instance of the addTeam class and sets up the user interface components.
         /// </summary>
-        internal addTeam(Division division)
+        internal addTeam(Division division, Guid tournamentId)
         {
             if (division == null)
             {
@@ -50,6 +55,7 @@ namespace Group1Project
             }
 
             this.division = division;
+            _tournamentId = tournamentId;
             InitializeComponent();
         }
 
@@ -70,22 +76,35 @@ namespace Group1Project
         /// </summary>
         /// <param name="sender">The source of the event, typically the Confirm button that was clicked.</param>
         /// <param name="e">An EventArgs instance containing the event data.</param>
-        private void btnConfirm_Click(object sender, EventArgs e)
+        private async void btnConfirm_Click(object sender, EventArgs e)
         {
             if (CreatedTeam == null && !string.IsNullOrWhiteSpace(teamNameTextBox.Text))
             {
                 CreatedTeam = new Team(teamNameTextBox.Text.Trim());
 
-                // It is optional to add players to the team here.
+                // Link the team to the division before sending to the API
+                CreatedTeam.DivisionId = division.Id;
+
+                // Add players to the team memory
                 foreach (Player player in players)
                 {
+                    player.TeamId = CreatedTeam.Id;
                     CreatedTeam.AddPlayer(player);
                 }
 
-                division.RegisterTeam(CreatedTeam);
+                // save to database
+                bool isSaved = await _apiClient.CreateTeamForTournamentAsync(_tournamentId, CreatedTeam);
 
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                if (isSaved)
+                {
+                    division.RegisterTeam(CreatedTeam);
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to save team to the database. Is the API running?", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {

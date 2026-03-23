@@ -31,11 +31,12 @@ namespace Group1Project
         /// </summary>
         public List<Player> Players { get; set; }
 
+        public Guid DivisionId { get; set; }
 
         /// <summary>
         /// Gets or sets the seed value used for random number generation.
         /// </summary>
-        public int seed { get; set; }
+        public int Seed { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the Team class with the specified team name.
@@ -68,7 +69,7 @@ namespace Group1Project
         {
             foreach (Player player in Players)
             {
-                if (player.id == playerId)
+                if (player.Id == playerId)
                 {
                     Players.Remove(player);
                     return;

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Group1Project.ApiClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 /// <summary>
 /// Group 1 Project - TeamsPlayersPage UserControl
@@ -27,6 +29,8 @@ namespace Group1Project
         /// Property to hold the current tournament data being displayed and managed by this page. It may be null if no tournament is currently loaded.
         /// </summary>
         private Tournament? currentTournament;
+        private readonly ApiClient _apiClient = new ApiClient();
+        private List<ApiClient.TeamReadDto> loadedTeams = new List<ApiClient.TeamReadDto>();
 
         /// <summary>
         /// the initializes a new instance of the TeamsPlayersPage class and sets up the user interface components,
@@ -45,71 +49,46 @@ namespace Group1Project
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
-            RefreshTeams();
+            _ = RefreshTeamsAsync();
         }
 
         /// <summary>
-        /// Refreshes the teams grid with current tournament data
+        /// Fetches teams and players for the current tournament from the API and binds them to the grids.
         /// </summary>
-        private void RefreshTeams()
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
+        private async Task RefreshTeamsAsync()
         {
             dataViewTeams.Rows.Clear();
+            dataGridViewPlayers.Rows.Clear();
 
             if (currentTournament == null)
                 return;
 
-            foreach (var division in currentTournament.Divisions)
+            loadedTeams = await _apiClient.GetTeamsForTournamentAsync(currentTournament.Id) ?? new List<ApiClient.TeamReadDto>();
+
+            foreach (var team in loadedTeams)
             {
-                foreach (var team in division.Teams)
-                {
-                    dataViewTeams.Rows.Add(
-                        team.Name,
-                        team.seed,
-                        team.Players.Count
-                    );
-                }
+                dataViewTeams.Rows.Add(team.Name, team.Seed, team.Players.Count);
             }
         }
 
         /// <summary>
         /// Handles team selection and displays players for the selected team
         /// </summary>
-        private void DataViewTeams_SelectionChanged(object sender, EventArgs e)
+        private void DataViewTeams_SelectionChanged(object? sender, EventArgs e)
         {
             dataGridViewPlayers.Rows.Clear();
 
-            if (dataViewTeams.SelectedRows.Count == 0 || currentTournament == null)
+            if (dataViewTeams.SelectedRows.Count == 0)
                 return;
 
             int selectedIndex = dataViewTeams.SelectedRows[0].Index;
+            if (selectedIndex < 0 || selectedIndex >= loadedTeams.Count)
+                return;
 
-            Team? selectedTeam = null;
-            int currentIndex = 0;
-
-            foreach (var division in currentTournament.Divisions)
+            foreach (var player in loadedTeams[selectedIndex].Players)
             {
-                foreach (var team in division.Teams)
-                {
-                    if (currentIndex == selectedIndex)
-                    {
-                        selectedTeam = team;
-                        break;
-                    }
-                    currentIndex++;
-                }
-                if (selectedTeam != null)
-                    break;
-            }
-
-            if (selectedTeam != null)
-            {
-                foreach (var player in selectedTeam.Players)
-                {
-                    dataGridViewPlayers.Rows.Add(
-                        player.displayName,
-                        player.number
-                    );
-                }
+                dataGridViewPlayers.Rows.Add(player.DisplayName, player.Number);
             }
         }
 
