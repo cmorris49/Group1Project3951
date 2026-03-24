@@ -3,26 +3,47 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/// <summary>
+/// Group 1 Project - SchedulePage UserControl
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 24, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=vs-2022
+/// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the scheduling user interface for viewing and updating match start times.
+    /// </summary>
     public partial class SchedulePage : UserControl
     {
         private Tournament? currentTournament;
         private readonly ApiClient _apiClient = new ApiClient();
         private List<ApiClient.MatchReadDto> loadedMatches = new List<ApiClient.MatchReadDto>();
 
+        /// <summary>
+        /// Initializes a new instance of the schedule page and configures the schedule grid.
+        /// </summary>
         public SchedulePage()
         {
             InitializeComponent();
             InitializeScheduleGrid();
         }
 
+        /// <summary>
+        /// Loads the selected tournament context into the schedule page and refreshes schedule data.
+        /// </summary>
+        /// <param name="tournament">The tournament to display.</param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
             _ = RefreshScheduleAsync();
         }
 
+        /// <summary>
+        /// Configures the schedule grid columns and behavior.
+        /// </summary>
         private void InitializeScheduleGrid()
         {
             dataGridViewSchedule.AllowUserToAddRows = false;
@@ -42,6 +63,10 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Retrieves scheduled match data for the current tournament and populates the schedule grid.
+        /// </summary>
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
         private async Task RefreshScheduleAsync()
         {
             dataGridViewSchedule.Rows.Clear();
@@ -75,6 +100,10 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Applies the selected schedule date and time to the currently selected match.
+        /// </summary>
+        /// <returns>A task representing the asynchronous update operation.</returns>
         private async Task SetSelectedScheduleAsync()
         {
             if (dataGridViewSchedule.SelectedRows.Count == 0)
@@ -105,11 +134,21 @@ namespace Group1Project
             await RefreshScheduleAsync();
         }
 
+        /// <summary>
+        /// Handles the click event for setting a selected match schedule.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private async void buttonSetSchedule_Click(object sender, EventArgs e)
         {
             await SetSelectedScheduleAsync();
         }
 
+        /// <summary>
+        /// Handles the click event for refreshing schedule data.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private async void buttonRefresh_Click(object sender, EventArgs e)
         {
             await RefreshScheduleAsync();

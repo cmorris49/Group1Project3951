@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents standings logic and team ordering data derived from match outcomes.
+    /// </summary>
     internal class Standings
     {
         /// <summary>

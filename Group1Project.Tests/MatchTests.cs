@@ -2,17 +2,35 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
+/// <summary>
+/// Group 1 Project - MatchTests
+/// Author: Cameron, Jun, Jonathan
+/// Date: March 24, 2026; Revision: 1.0
+/// Source:
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     MSTest info https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest
+/// </summary>
 namespace Group1Project.Tests
 {
+    /// <summary>
+    /// Provides unit tests for Match scheduling, scoring, and winner resolution behavior.
+    /// </summary>
     [TestClass]
     public class MatchTests
     {
-        // Helper to create teams
+        /// <summary>
+        /// Creates a team instance for test setup.
+        /// </summary>
+        /// <param name="name">The team name.</param>
+        /// <returns>A team instance with the specified name.</returns>
         private Team CreateTeam(string name)
         {
             return new Team(name);
         }
 
+        /// <summary>
+        /// Verifies the scheduled constructor initializes identifier, scheduled start, and scheduled status.
+        /// </summary>
         [TestMethod]
         public void Constructor_ScheduledMatch_HasIdAndScheduledStatus()
         {
@@ -26,6 +44,9 @@ namespace Group1Project.Tests
             Assert.IsNotNull(m.ScheduledStart);
         }
 
+        /// <summary>
+        /// Verifies the unscheduled constructor initializes unscheduled status and null start time.
+        /// </summary>
         [TestMethod]
         public void Constructor_UnscheduledMatch_HasUnscheduledStatus()
         {
@@ -38,6 +59,9 @@ namespace Group1Project.Tests
             Assert.IsNull(m.ScheduledStart);
         }
 
+        /// <summary>
+        /// Verifies scheduling updates the match start date and sets status to scheduled.
+        /// </summary>
         [TestMethod]
         public void Schedule_SetsScheduledStart_AndStatusScheduled()
         {
@@ -52,6 +76,9 @@ namespace Group1Project.Tests
             Assert.AreEqual(date, m.ScheduledStart);
         }
 
+        /// <summary>
+        /// Verifies setting score on an unscheduled match throws an invalid operation exception.
+        /// </summary>
         [TestMethod]
         public void SetScore_WhenUnscheduled_Throws()
         {
@@ -70,6 +97,9 @@ namespace Group1Project.Tests
             }
         }
 
+        /// <summary>
+        /// Verifies negative Team A score throws an argument out of range exception.
+        /// </summary>
         [TestMethod]
         public void SetScore_NegativeScoreA_Throws()
         {
@@ -88,6 +118,9 @@ namespace Group1Project.Tests
             }
         }
 
+        /// <summary>
+        /// Verifies negative Team B score throws an argument out of range exception.
+        /// </summary>
         [TestMethod]
         public void SetScore_NegativeScoreB_Throws()
         {
@@ -106,6 +139,9 @@ namespace Group1Project.Tests
             }
         }
 
+        /// <summary>
+        /// Verifies valid score entry marks the match complete and returns the correct winner.
+        /// </summary>
         [TestMethod]
         public void SetScore_Valid_SetsCompleteAndWinner()
         {
@@ -121,6 +157,9 @@ namespace Group1Project.Tests
             Assert.AreSame(a, m.GetWinner());
         }
 
+        /// <summary>
+        /// Verifies winner resolution returns null when scores are tied.
+        /// </summary>
         [TestMethod]
         public void GetWinner_Tie_ReturnsNull()
         {
@@ -133,6 +172,9 @@ namespace Group1Project.Tests
             Assert.IsNull(m.GetWinner());
         }
 
+        /// <summary>
+        /// Verifies winner resolution returns null when no score has been recorded.
+        /// </summary>
         [TestMethod]
         public void GetWinner_WithoutScore_ReturnsNull()
         {

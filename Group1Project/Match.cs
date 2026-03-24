@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents a matchup between two teams, including schedule, status, and score information.
+    /// </summary>
     public class Match
     {
         /// <summary>

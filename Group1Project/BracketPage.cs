@@ -18,7 +18,9 @@ using System.Windows.Forms;
 /// </summary>
 namespace Group1Project
 {
-    
+    /// <summary>
+    /// Represents the bracket user interface for viewing tournament matches in grid and visual bracket formats.
+    /// </summary>
     public partial class BracketPage : UserControl
     {
         private const int MATCH_BOX_WIDTH = 150;
@@ -38,6 +40,10 @@ namespace Group1Project
 
         private readonly List<GroupBox> _renderedMatchBoxes = new List<GroupBox>();
 
+        private readonly Dictionary<(int Round, int Match), GroupBox> _matchBoxes = new Dictionary<(int Round, int Match), GroupBox>();
+
+        private readonly List<(GroupBox From, GroupBox To)> _connectorPairs = new List<(GroupBox From, GroupBox To)>();
+
         /// <summary>
         /// Initializes a new instance of the BracketPage user control, configures UI defaults,
         /// and wires event handlers for view switching, panel painting, and resize redraw behavior.
@@ -48,7 +54,6 @@ namespace Group1Project
 
             InitializeMatchesGrid();
 
-            // Set up event handler for view selection changes
             comboBoxView.SelectedIndexChanged += (s, e) =>
             {
                 var view = comboBoxView.SelectedItem?.ToString() ?? "Matches";
@@ -148,6 +153,8 @@ namespace Group1Project
         {
             panelBracketContainer.Controls.Clear();
             _renderedMatchBoxes.Clear();
+            _matchBoxes.Clear();
+            _connectorPairs.Clear();
 
             if (_apiMatches.Count == 0)
             {
@@ -164,64 +171,157 @@ namespace Group1Project
 
             panelBracketContainer.AutoScroll = true;
 
-            int matchCount = _apiMatches.Count;
-            int availableHeight = panelBracketContainer.Height - 100;
-            int totalMatchHeight = matchCount * MATCH_BOX_HEIGHT;
-            int totalSpacingNeeded = availableHeight - totalMatchHeight;
-            int verticalGap = MATCH_BOX_HEIGHT + (totalSpacingNeeded / Math.Max(1, matchCount));
-            verticalGap = Math.Max(verticalGap, MATCH_BOX_HEIGHT + 20);
+            var rounds = _apiMatches
+                .OrderBy(m => m.RoundNumber)
+                .ThenBy(m => m.MatchNumber)
+                .GroupBy(m => m.RoundNumber)
+                .OrderBy(g => g.Key)
+                .ToList();
 
-            int totalRoundHeight = matchCount * verticalGap;
+            int firstRoundCount = rounds.First().Count();
+            int verticalGap = MATCH_BOX_HEIGHT + MATCH_VERTICAL_SPACING;
+            int totalRoundHeight = firstRoundCount * verticalGap;
             int startY = Math.Max(50, (panelBracketContainer.Height - totalRoundHeight) / 2);
 
-            // Draw match boxes for the first round
-            for (int i = 0; i < matchCount; i++)
+            foreach (var roundGroup in rounds)
             {
-                var match = _apiMatches[i];
+                int roundNumber = roundGroup.Key;
+                int x = 50 + ((roundNumber - 1) * ROUND_SPACING);
 
-                GroupBox box = new GroupBox
-                {
-                    Location = new Point(50, startY + (i * verticalGap)),
-                    Size = new Size(MATCH_BOX_WIDTH, MATCH_BOX_HEIGHT),
-                    Text = $"R1-{i + 1}",
-                    Padding = new Padding(5)
-                };
+                var matchesInRound = roundGroup.OrderBy(m => m.MatchNumber).ToList();
 
-                Label teamALabel = new Label
+                for (int i = 0; i < matchesInRound.Count; i++)
                 {
-                    Text = match.TeamAName ?? "TBD",
-                    Location = new Point(10, 45),
-                    AutoSize = true,
-                    Font = new Font("Segoe UI", 9F)
-                };
+                    var match = matchesInRound[i];
+                    int y;
 
-                Label teamBLabel = new Label
-                {
-                    Text = match.TeamBName ?? "TBD",
-                    Location = new Point(10, 85),
-                    AutoSize = true,
-                    Font = new Font("Segoe UI", 9F)
-                };
-
-                if (string.Equals(match.Status, "Complete", StringComparison.OrdinalIgnoreCase))
-                {
-                    if (match.ScoreA.HasValue && match.ScoreB.HasValue)
+                    if (roundNumber == 1)
                     {
-                        if (match.ScoreA.Value > match.ScoreB.Value)
-                            teamALabel.Font = new Font(teamALabel.Font, FontStyle.Bold);
-                        else if (match.ScoreB.Value > match.ScoreA.Value)
-                            teamBLabel.Font = new Font(teamBLabel.Font, FontStyle.Bold);
+                        y = startY + (i * verticalGap);
+                    }
+                    else
+                    {
+                        var parentAKey = (roundNumber - 1, (match.MatchNumber * 2) - 1);
+                        var parentBKey = (roundNumber - 1, match.MatchNumber * 2);
+
+                        bool hasA = _matchBoxes.TryGetValue(parentAKey, out GroupBox? parentA);
+                        bool hasB = _matchBoxes.TryGetValue(parentBKey, out GroupBox? parentB);
+
+                        if (hasA && hasB)
+                        {
+                            int centerA = parentA!.Top + (parentA.Height / 2);
+                            int centerB = parentB!.Top + (parentB.Height / 2);
+                            y = ((centerA + centerB) / 2) - (MATCH_BOX_HEIGHT / 2);
+                        }
+                        else if (hasA)
+                        {
+                            y = (parentA!.Top + (parentA.Height / 2)) - (MATCH_BOX_HEIGHT / 2);
+                        }
+                        else if (hasB)
+                        {
+                            y = (parentB!.Top + (parentB.Height / 2)) - (MATCH_BOX_HEIGHT / 2);
+                        }
+                        else
+                        {
+                            y = startY + (i * verticalGap);
+                        }
                     }
 
-                    box.BackColor = Color.LightGreen;
-                }
+                    GroupBox box = new GroupBox
+                    {
+                        Location = new Point(x, y),
+                        Size = new Size(MATCH_BOX_WIDTH, MATCH_BOX_HEIGHT),
+                        Text = $"R{roundNumber}-{match.MatchNumber}",
+                        Padding = new Padding(5)
+                    };
 
-                box.Controls.Add(teamALabel);
-                box.Controls.Add(teamBLabel);
-                panelBracketContainer.Controls.Add(box);
-                _renderedMatchBoxes.Add(box);
+                    Label teamALabel = new Label
+                    {
+                        Text = match.TeamAName ?? "TBD",
+                        Location = new Point(10, 45),
+                        AutoSize = true,
+                        Font = new Font("Segoe UI", 9F)
+                    };
+
+                    Label teamBLabel = new Label
+                    {
+                        Text = match.TeamBName ?? "TBD",
+                        Location = new Point(10, 85),
+                        AutoSize = true,
+                        Font = new Font("Segoe UI", 9F)
+                    };
+
+                    if (string.Equals(match.Status, "Complete", StringComparison.OrdinalIgnoreCase) &&
+                        match.ScoreA.HasValue &&
+                        match.ScoreB.HasValue)
+                    {
+                        if (match.ScoreA.Value > match.ScoreB.Value)
+                        {
+                            teamALabel.Font = new Font(teamALabel.Font, FontStyle.Bold);
+                        }
+                        else if (match.ScoreB.Value > match.ScoreA.Value)
+                        {
+                            teamBLabel.Font = new Font(teamBLabel.Font, FontStyle.Bold);
+                        }
+
+                        box.BackColor = Color.LightGreen;
+                    }
+
+                    box.Controls.Add(teamALabel);
+                    box.Controls.Add(teamBLabel);
+                    panelBracketContainer.Controls.Add(box);
+
+                    _renderedMatchBoxes.Add(box);
+                    _matchBoxes[(roundNumber, match.MatchNumber)] = box;
+
+                    if (roundNumber > 1)
+                    {
+                        var parentAKey = (roundNumber - 1, (match.MatchNumber * 2) - 1);
+                        var parentBKey = (roundNumber - 1, match.MatchNumber * 2);
+
+                        if (_matchBoxes.TryGetValue(parentAKey, out GroupBox? parentA))
+                        {
+                            _connectorPairs.Add((parentA, box));
+                        }
+
+                        if (_matchBoxes.TryGetValue(parentBKey, out GroupBox? parentB))
+                        {
+                            _connectorPairs.Add((parentB, box));
+                        }
+                    }
+                }
             }
+
             panelBracketContainer.Invalidate();
+        }
+
+        /// <summary>
+        /// Draws connector lines between related rendered match boxes across rounds.
+        /// </summary>
+        /// <param name="g">Graphics surface for drawing lines.</param>
+        private void DrawConnectingLinesFromRenderedBoxes(Graphics g)
+        {
+            if (_connectorPairs.Count == 0)
+            {
+                return;
+            }
+
+            using Pen linePen = new Pen(Color.Black, 2);
+
+            foreach (var pair in _connectorPairs)
+            {
+                Point from = panelBracketContainer.PointToClient(
+                    pair.From.PointToScreen(new Point(pair.From.Width, pair.From.Height / 2)));
+
+                Point to = panelBracketContainer.PointToClient(
+                    pair.To.PointToScreen(new Point(0, pair.To.Height / 2)));
+
+                int midX = from.X + 30;
+
+                g.DrawLine(linePen, from.X, from.Y, midX, from.Y);
+                g.DrawLine(linePen, midX, from.Y, midX, to.Y);
+                g.DrawLine(linePen, midX, to.Y, to.X, to.Y);
+            }
         }
 
         /// <summary>
@@ -237,54 +337,6 @@ namespace Group1Project
             }
 
             DrawConnectingLinesFromRenderedBoxes(e.Graphics);
-        }
-
-        /// <summary>
-        /// Draws connector lines between adjacent rendered match boxes.
-        /// </summary>
-        /// <param name="g">Graphics surface for drawing lines.</param>
-        private void DrawConnectingLinesFromRenderedBoxes(Graphics g)
-        {
-            if (_renderedMatchBoxes.Count < 2)
-            {
-                return;
-            }
-
-            using Pen linePen = new Pen(Color.Black, 2);
-
-            // Keep original insertion order so pairing stays consistent
-            for (int i = 0; i < _renderedMatchBoxes.Count; i += 2)
-            {
-                if (i + 1 >= _renderedMatchBoxes.Count)
-                {
-                    break;
-                }
-
-                GroupBox topBox = _renderedMatchBoxes[i];
-                GroupBox bottomBox = _renderedMatchBoxes[i + 1];
-
-                // Convert box points to panel client coordinates (handles autoscroll correctly)
-                Point topCenterRight = panelBracketContainer.PointToClient(
-                    topBox.PointToScreen(new Point(topBox.Width, topBox.Height / 2)));
-
-                Point bottomCenterRight = panelBracketContainer.PointToClient(
-                    bottomBox.PointToScreen(new Point(bottomBox.Width, bottomBox.Height / 2)));
-
-                int x1 = topCenterRight.X;
-                int y1 = topCenterRight.Y;
-
-                int x2 = bottomCenterRight.X;
-                int y2 = bottomCenterRight.Y;
-
-                int midX = x1 + 50;
-                int outX = midX + 50;
-                int midY = (y1 + y2) / 2;
-
-                g.DrawLine(linePen, x1, y1, midX, y1);
-                g.DrawLine(linePen, x2, y2, midX, y2);
-                g.DrawLine(linePen, midX, y1, midX, y2);
-                g.DrawLine(linePen, midX, midY, outX, midY);
-            }
         }
 
         /// <summary>

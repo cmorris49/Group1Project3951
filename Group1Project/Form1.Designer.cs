@@ -47,12 +47,11 @@ namespace Group1Project
             teamsPlayersToolStripMenuItem = new ToolStripMenuItem();
             bracketsToolStripMenuItem = new ToolStripMenuItem();
             scheduleToolStripMenuItem = new ToolStripMenuItem();
-            standingsToolStripMenuItem = new ToolStripMenuItem();
+            teamStatsToolStripMenuItem = new ToolStripMenuItem();
             resultsToolStripMenuItem = new ToolStripMenuItem();
             toolsToolStripMenuItem = new ToolStripMenuItem();
             generateBracketToolStripMenuItem = new ToolStripMenuItem();
             autoScheduleToolStripMenuItem = new ToolStripMenuItem();
-            recalculateStandingsToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             toolMain = new ToolStrip();
@@ -77,9 +76,9 @@ namespace Group1Project
             btnOpenTournament = new Button();
             btnNewTournament = new Button();
             cboTournament = new ComboBox();
-            lblTournament = new Label();
             panelWorkspace = new Panel();
             labelWorkspaceTitle = new Label();
+            lblTournament = new Label();
             menuMain.SuspendLayout();
             toolMain.SuspendLayout();
             statusMain.SuspendLayout();
@@ -113,74 +112,80 @@ namespace Group1Project
             // newTournamentToolStripMenuItem
             // 
             newTournamentToolStripMenuItem.Name = "newTournamentToolStripMenuItem";
-            newTournamentToolStripMenuItem.Size = new Size(331, 44);
+            newTournamentToolStripMenuItem.Size = new Size(359, 44);
             newTournamentToolStripMenuItem.Text = "New Tournament";
             newTournamentToolStripMenuItem.Click += btnNewTournament_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(331, 44);
+            openToolStripMenuItem.Size = new Size(359, 44);
             openToolStripMenuItem.Text = "Open";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(331, 44);
+            saveToolStripMenuItem.Size = new Size(359, 44);
             saveToolStripMenuItem.Text = "Save";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(331, 44);
+            exitToolStripMenuItem.Size = new Size(359, 44);
             exitToolStripMenuItem.Text = "Exit";
             // 
             // newToolStripMenuItem
             // 
-            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dashboardToolStripMenuItem, teamsPlayersToolStripMenuItem, bracketsToolStripMenuItem, scheduleToolStripMenuItem, standingsToolStripMenuItem, resultsToolStripMenuItem });
+            newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dashboardToolStripMenuItem, teamsPlayersToolStripMenuItem, bracketsToolStripMenuItem, scheduleToolStripMenuItem, teamStatsToolStripMenuItem, resultsToolStripMenuItem });
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(89, 36);
-            newToolStripMenuItem.Text = "New ";
+            newToolStripMenuItem.Size = new Size(85, 36);
+            newToolStripMenuItem.Text = "View";
             // 
             // dashboardToolStripMenuItem
             // 
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            dashboardToolStripMenuItem.Size = new Size(302, 44);
+            dashboardToolStripMenuItem.Size = new Size(359, 44);
             dashboardToolStripMenuItem.Text = "Dashboard";
+            dashboardToolStripMenuItem.Click += btnDashboard_Click;
             // 
             // teamsPlayersToolStripMenuItem
             // 
             teamsPlayersToolStripMenuItem.Name = "teamsPlayersToolStripMenuItem";
-            teamsPlayersToolStripMenuItem.Size = new Size(302, 44);
-            teamsPlayersToolStripMenuItem.Text = "Teams & Players";
+            teamsPlayersToolStripMenuItem.Size = new Size(359, 44);
+            teamsPlayersToolStripMenuItem.Text = "Teams and Players";
+            teamsPlayersToolStripMenuItem.Click += btnTeamsPlayers_Click;
             // 
             // bracketsToolStripMenuItem
             // 
             bracketsToolStripMenuItem.Name = "bracketsToolStripMenuItem";
-            bracketsToolStripMenuItem.Size = new Size(302, 44);
+            bracketsToolStripMenuItem.Size = new Size(359, 44);
             bracketsToolStripMenuItem.Text = "Bracket";
+            bracketsToolStripMenuItem.Click += btnBracket_Click;
             // 
             // scheduleToolStripMenuItem
             // 
             scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            scheduleToolStripMenuItem.Size = new Size(302, 44);
+            scheduleToolStripMenuItem.Size = new Size(359, 44);
             scheduleToolStripMenuItem.Text = "Schedule";
+            scheduleToolStripMenuItem.Click += btnSchedule_Click;
             // 
-            // standingsToolStripMenuItem
+            // teamStatsToolStripMenuItem
             // 
-            standingsToolStripMenuItem.Name = "standingsToolStripMenuItem";
-            standingsToolStripMenuItem.Size = new Size(302, 44);
-            standingsToolStripMenuItem.Text = "Standings";
+            teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
+            teamStatsToolStripMenuItem.Size = new Size(359, 44);
+            teamStatsToolStripMenuItem.Text = "Team Stats";
+            teamStatsToolStripMenuItem.Click += btnTeamStats_Click;
             // 
             // resultsToolStripMenuItem
             // 
             resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            resultsToolStripMenuItem.Size = new Size(302, 44);
+            resultsToolStripMenuItem.Size = new Size(359, 44);
             resultsToolStripMenuItem.Text = "Results";
+            resultsToolStripMenuItem.Click += btnResults_Click;
             // 
             // toolsToolStripMenuItem
             // 
-            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateBracketToolStripMenuItem, autoScheduleToolStripMenuItem, recalculateStandingsToolStripMenuItem });
+            toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateBracketToolStripMenuItem, autoScheduleToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             toolsToolStripMenuItem.Size = new Size(89, 36);
             toolsToolStripMenuItem.Text = "Tools";
@@ -188,20 +193,15 @@ namespace Group1Project
             // generateBracketToolStripMenuItem
             // 
             generateBracketToolStripMenuItem.Name = "generateBracketToolStripMenuItem";
-            generateBracketToolStripMenuItem.Size = new Size(377, 44);
+            generateBracketToolStripMenuItem.Size = new Size(329, 44);
             generateBracketToolStripMenuItem.Text = "Generate Bracket";
+            generateBracketToolStripMenuItem.Click += tsbGenerateBracket_Click;
             // 
             // autoScheduleToolStripMenuItem
             // 
             autoScheduleToolStripMenuItem.Name = "autoScheduleToolStripMenuItem";
-            autoScheduleToolStripMenuItem.Size = new Size(377, 44);
+            autoScheduleToolStripMenuItem.Size = new Size(329, 44);
             autoScheduleToolStripMenuItem.Text = "Auto Schedule";
-            // 
-            // recalculateStandingsToolStripMenuItem
-            // 
-            recalculateStandingsToolStripMenuItem.Name = "recalculateStandingsToolStripMenuItem";
-            recalculateStandingsToolStripMenuItem.Size = new Size(377, 44);
-            recalculateStandingsToolStripMenuItem.Text = "Recalculate Standings";
             // 
             // helpToolStripMenuItem
             // 
@@ -213,7 +213,7 @@ namespace Group1Project
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(212, 44);
+            aboutToolStripMenuItem.Size = new Size(359, 44);
             aboutToolStripMenuItem.Text = "About";
             // 
             // toolMain
@@ -269,6 +269,7 @@ namespace Group1Project
             tsbEnterResult.Name = "tsbEnterResult";
             tsbEnterResult.Size = new Size(176, 36);
             tsbEnterResult.Text = "Enter Result";
+            tsbEnterResult.Click += btnResults_Click;
             // 
             // statusMain
             // 
@@ -405,11 +406,11 @@ namespace Group1Project
             // 
             // grpTournament
             // 
+            grpTournament.Controls.Add(lblTournament);
             grpTournament.Controls.Add(btnSaveTournament);
             grpTournament.Controls.Add(btnOpenTournament);
             grpTournament.Controls.Add(btnNewTournament);
             grpTournament.Controls.Add(cboTournament);
-            grpTournament.Controls.Add(lblTournament);
             grpTournament.Dock = DockStyle.Top;
             grpTournament.Location = new Point(0, 0);
             grpTournament.Margin = new Padding(4);
@@ -418,7 +419,6 @@ namespace Group1Project
             grpTournament.Size = new Size(530, 152);
             grpTournament.TabIndex = 0;
             grpTournament.TabStop = false;
-            grpTournament.Text = "Current Tournament";
             // 
             // btnSaveTournament
             // 
@@ -463,16 +463,6 @@ namespace Group1Project
             cboTournament.TabIndex = 1;
             cboTournament.SelectedIndexChanged += cboTournament_SelectedIndexChanged;
             // 
-            // lblTournament
-            // 
-            lblTournament.AutoSize = true;
-            lblTournament.Location = new Point(11, 28);
-            lblTournament.Margin = new Padding(4, 0, 4, 0);
-            lblTournament.Name = "lblTournament";
-            lblTournament.Size = new Size(148, 32);
-            lblTournament.TabIndex = 0;
-            lblTournament.Text = "Tournament:";
-            // 
             // panelWorkspace
             // 
             panelWorkspace.Controls.Add(labelWorkspaceTitle);
@@ -493,6 +483,15 @@ namespace Group1Project
             labelWorkspaceTitle.Size = new Size(231, 59);
             labelWorkspaceTitle.TabIndex = 0;
             labelWorkspaceTitle.Text = "Dashboard";
+            // 
+            // lblTournament
+            // 
+            lblTournament.AutoSize = true;
+            lblTournament.Location = new Point(13, 22);
+            lblTournament.Name = "lblTournament";
+            lblTournament.Size = new Size(148, 32);
+            lblTournament.TabIndex = 5;
+            lblTournament.Text = "Tournament:";
             // 
             // Form1
             // 
@@ -540,12 +539,11 @@ namespace Group1Project
         private ToolStripMenuItem teamsPlayersToolStripMenuItem;
         private ToolStripMenuItem bracketsToolStripMenuItem;
         private ToolStripMenuItem scheduleToolStripMenuItem;
-        private ToolStripMenuItem standingsToolStripMenuItem;
+        private ToolStripMenuItem teamStatsToolStripMenuItem;
         private ToolStripMenuItem resultsToolStripMenuItem;
         private ToolStripMenuItem toolsToolStripMenuItem;
         private ToolStripMenuItem generateBracketToolStripMenuItem;
         private ToolStripMenuItem autoScheduleToolStripMenuItem;
-        private ToolStripMenuItem recalculateStandingsToolStripMenuItem;
         private ToolStripMenuItem helpToolStripMenuItem;
         private ToolStripMenuItem aboutToolStripMenuItem;
         private ToolStrip toolMain;
@@ -561,7 +559,6 @@ namespace Group1Project
         private GroupBox grpTournament;
         private Button btnNewTournament;
         private ComboBox cboTournament;
-        private Label lblTournament;
         private Panel panelNav;
         private Button btnSaveTournament;
         private Button btnOpenTournament;
@@ -573,5 +570,6 @@ namespace Group1Project
         private Button btnDashboard;
         private Panel panelWorkspace;
         private Label labelWorkspaceTitle;
+        private Label lblTournament;
     }
 }

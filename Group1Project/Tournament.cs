@@ -17,6 +17,9 @@ using System.Xml.Linq;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents a tournament aggregate, including divisions, bracket configuration, and bracket generation behavior.
+    /// </summary>
     internal class Tournament
     {
         /// Gets the list of divisions associated with this instance.
@@ -179,6 +182,10 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Generates a single-elimination bracket from the provided team list.
+        /// </summary>
+        /// <param name="teams">The teams used to generate first-round matchups.</param>
         private void GenerateSingleEliminationBracket(List<Team> teams)
         {
             bracket = new Bracket(BracketType.SingleElimination);
@@ -207,33 +214,6 @@ namespace Group1Project
                 Match match = new Match(teamA, teamB);
                 bracket.AddMatch(match);
             }
-
-            // If odd number of teams
-        }
-
-        public static Tournament CreateTestTournament()
-        {
-            var tournament = new Tournament("Test Tournament 2026", DateTime.Now.AddDays(7), "Test Arena");
-
-            var division = tournament.Divisions[0];
-
-            string[] teamNames = { "Warriors", "Knights", "Dragons", "Phoenix", "Tigers", "Eagles", "Sharks", "Lions" };
-
-            for (int teamIndex = 0; teamIndex < 8; teamIndex++)
-            {
-                var team = new Team(teamNames[teamIndex]);
-                team.Seed = teamIndex + 1;
-
-                for (int playerIndex = 1; playerIndex <= 5; playerIndex++)
-                {
-                    var player = new Player($"Player {playerIndex}", playerIndex + (teamIndex * 10));
-                    team.AddPlayer(player);
-                }
-
-                division.RegisterTeam(team);
-            }
-
-            return tournament;
         }
     }
 }

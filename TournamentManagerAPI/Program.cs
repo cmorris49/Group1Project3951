@@ -1,11 +1,47 @@
 using MySqlConnector;
 
+/// <summary>
+/// Group 1 Project - TournamentManagerAPI Program
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 24, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     ASP.NET Core minimal API info https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis
+/// </summary>
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 var app = builder.Build();
 
+/// <summary>
+/// Reads a required identifier column from a data reader and converts it to string.
+/// </summary>
+/// <param name="reader">The active data reader.</param>
+/// <param name="columnName">The identifier column name.</param>
+/// <returns>The identifier as a string.</returns>
+static string ReadId(MySqlDataReader reader, string columnName)
+{
+    return reader.GetValue(reader.GetOrdinal(columnName)).ToString()!;
+}
+
+/// <summary>
+/// Reads a nullable identifier column from a data reader and converts it to string when present.
+/// </summary>
+/// <param name="reader">The active data reader.</param>
+/// <param name="columnName">The identifier column name.</param>
+/// <returns>The identifier as a string, or null when the database value is null.</returns>
+static string? ReadNullableId(MySqlDataReader reader, string columnName)
+{
+    int ordinal = reader.GetOrdinal(columnName);
+    return reader.IsDBNull(ordinal) ? null : reader.GetValue(ordinal).ToString();
+}
+
+/// <summary>
+/// Verifies database connectivity by returning the current number of tournaments.
+/// </summary>
+/// <returns>A success response containing the tournament count if the database is reachable.</returns>
 app.MapGet("/test-db", async () =>
 {
     await using MySqlConnection connection = new MySqlConnection(connectionString);
@@ -17,6 +53,10 @@ app.MapGet("/test-db", async () =>
     return Results.Ok($"Connected. Tournament count = {result}");
 });
 
+/// <summary>
+/// Retrieves all tournaments ordered by start date.
+/// </summary>
+/// <returns>A list of tournament records including identifier, name, location, start date, and bracket type.</returns>
 app.MapGet("/tournaments", async () =>
 {
     List<object> tournaments = new List<object>();
@@ -50,6 +90,11 @@ app.MapGet("/tournaments", async () =>
     return Results.Ok(tournaments);
 });
 
+/// <summary>
+/// Creates a new tournament and its default division within a single transaction.
+/// </summary>
+/// <param name="request">The tournament creation payload containing name, location, start date, and bracket type.</param>
+/// <returns>The newly created tournament and default division identifiers, or an error response if creation fails.</returns>
 app.MapPost("/tournaments", async (TournamentCreateRequest request) =>
 {
     await using MySqlConnection connection = new MySqlConnection(connectionString);
@@ -101,6 +146,12 @@ app.MapPost("/tournaments", async (TournamentCreateRequest request) =>
     }
 });
 
+/// <summary>
+/// Creates a team under the tournament's primary division and optionally inserts its players.
+/// </summary>
+/// <param name="tournamentId">The identifier of the tournament to add the team to.</param>
+/// <param name="request">The team creation payload containing team name, seed, and optional players.</param>
+/// <returns>A created response with the new team identifier, or an error response if creation fails.</returns>
 app.MapPost("/tournaments/{tournamentId:guid}/teams", async (Guid tournamentId, TeamCreateForTournamentRequest request) =>
 {
     if (string.IsNullOrWhiteSpace(request.Name))
@@ -194,6 +245,11 @@ app.MapPost("/tournaments/{tournamentId:guid}/teams", async (Guid tournamentId, 
     }
 });
 
+/// <summary>
+/// Retrieves aggregate dashboard counts for teams, players, and matches in a tournament.
+/// </summary>
+/// <param name="tournamentId">The identifier of the tournament.</param>
+/// <returns>Dashboard summary counts for the specified tournament.</returns>
 app.MapGet("/tournaments/{tournamentId:guid}/dashboard", async (Guid tournamentId) =>
 {
     await using var connection = new MySqlConnection(connectionString);
@@ -246,6 +302,11 @@ app.MapGet("/tournaments/{tournamentId:guid}/dashboard", async (Guid tournamentI
     return Results.Ok(new { Teams = teams, Players = players, Matches = matches });
 });
 
+/// <summary>
+/// Retrieves all teams in a tournament, including nested player rosters.
+/// </summary>
+/// <param name="tournamentId">The identifier of the tournament.</param>
+/// <returns>A list of teams with division metadata and player collections.</returns>
 app.MapGet("/tournaments/{tournamentId:guid}/teams", async (Guid tournamentId) =>
 {
     await using var connection = new MySqlConnection(connectionString);
@@ -312,6 +373,11 @@ app.MapGet("/tournaments/{tournamentId:guid}/teams", async (Guid tournamentId) =
     return Results.Ok(teams);
 });
 
+/// <summary>
+/// Retrieves all matches for a tournament ordered by bracket round and match number.
+/// </summary>
+/// <param name="tournamentId">The identifier of the tournament.</param>
+/// <returns>A list of matches with team names, schedule data, status, scores, and bracket position.</returns>
 app.MapGet("/tournaments/{tournamentId:guid}/matches", async (Guid tournamentId) =>
 {
     await using var connection = new MySqlConnection(connectionString);
@@ -326,13 +392,15 @@ app.MapGet("/tournaments/{tournamentId:guid}/matches", async (Guid tournamentId)
                m.ScheduledStart,
                m.Status,
                m.ScoreA,
-               m.ScoreB
+               m.ScoreB,
+               m.RoundNumber,
+               m.MatchNumber
         FROM Matches m
         INNER JOIN Bracket b ON b.Id = m.BracketId
         LEFT JOIN Team ta ON ta.Id = m.TeamAId
         LEFT JOIN Team tb ON tb.Id = m.TeamBId
         WHERE b.TournamentId = @TournamentId
-        ORDER BY m.ScheduledStart, m.Id
+        ORDER BY m.RoundNumber, m.MatchNumber
         """;
 
     var matches = new List<MatchReadResponse>();
@@ -343,30 +411,28 @@ app.MapGet("/tournaments/{tournamentId:guid}/matches", async (Guid tournamentId)
     await using var reader = await cmd.ExecuteReaderAsync();
     while (await reader.ReadAsync())
     {
-        var idOrdinal = reader.GetOrdinal("Id");
-        var teamAIdOrdinal = reader.GetOrdinal("TeamAId");
-        var teamBIdOrdinal = reader.GetOrdinal("TeamBId");
-        var teamANameOrdinal = reader.GetOrdinal("TeamAName");
-        var teamBNameOrdinal = reader.GetOrdinal("TeamBName");
-        var scheduledStartOrdinal = reader.GetOrdinal("ScheduledStart");
-        var scoreAOrdinal = reader.GetOrdinal("ScoreA");
-        var scoreBOrdinal = reader.GetOrdinal("ScoreB");
-
         matches.Add(new MatchReadResponse(
-            reader.GetValue(idOrdinal).ToString()!,
-            reader.IsDBNull(teamAIdOrdinal) ? null : reader.GetValue(teamAIdOrdinal).ToString(),
-            reader.IsDBNull(teamANameOrdinal) ? null : reader.GetString("TeamAName"),
-            reader.IsDBNull(teamBIdOrdinal) ? null : reader.GetValue(teamBIdOrdinal).ToString(),
-            reader.IsDBNull(teamBNameOrdinal) ? null : reader.GetString("TeamBName"),
-            reader.IsDBNull(scheduledStartOrdinal) ? null : reader.GetDateTime("ScheduledStart"),
+            ReadId(reader, "Id"),
+            ReadNullableId(reader, "TeamAId"),
+            reader.IsDBNull(reader.GetOrdinal("TeamAName")) ? null : reader.GetString("TeamAName"),
+            ReadNullableId(reader, "TeamBId"),
+            reader.IsDBNull(reader.GetOrdinal("TeamBName")) ? null : reader.GetString("TeamBName"),
+            reader.IsDBNull(reader.GetOrdinal("ScheduledStart")) ? null : reader.GetDateTime("ScheduledStart"),
             reader.GetString("Status"),
-            reader.IsDBNull(scoreAOrdinal) ? null : reader.GetInt32("ScoreA"),
-            reader.IsDBNull(scoreBOrdinal) ? null : reader.GetInt32("ScoreB")));
+            reader.IsDBNull(reader.GetOrdinal("ScoreA")) ? null : reader.GetInt32("ScoreA"),
+            reader.IsDBNull(reader.GetOrdinal("ScoreB")) ? null : reader.GetInt32("ScoreB"),
+            reader.GetInt32("RoundNumber"),
+            reader.GetInt32("MatchNumber")));
     }
 
     return Results.Ok(matches);
 });
 
+/// <summary>
+/// Generates a single-elimination bracket for a tournament and initializes all bracket matches.
+/// </summary>
+/// <param name="tournamentId">The identifier of the tournament.</param>
+/// <returns>A success message when generation completes, or an error response if generation fails.</returns>
 app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tournamentId) =>
 {
     await using var connection = new MySqlConnection(connectionString);
@@ -391,7 +457,7 @@ app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tou
             await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                teamIds.Add(reader.GetValue(reader.GetOrdinal("Id")).ToString()!);
+                teamIds.Add(ReadId(reader, "Id"));
             }
         }
 
@@ -401,15 +467,26 @@ app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tou
             return Results.BadRequest("Need at least 2 teams to generate a bracket.");
         }
 
+        int bracketSize = 1;
+        while (bracketSize < teamIds.Count)
+        {
+            bracketSize *= 2;
+        }
+
+        int totalRounds = (int)Math.Log2(bracketSize);
+
         const string upsertBracketSql = """
             INSERT INTO Bracket (Id, TournamentId, BracketType, TotalRounds)
-            VALUES (UUID(), @TournamentId, 'SingleElimination', 1)
-            ON DUPLICATE KEY UPDATE BracketType = VALUES(BracketType)
+            VALUES (UUID(), @TournamentId, 'SingleElimination', @TotalRounds)
+            ON DUPLICATE KEY UPDATE
+                BracketType = VALUES(BracketType),
+                TotalRounds = VALUES(TotalRounds)
             """;
 
         await using (var cmd = new MySqlCommand(upsertBracketSql, connection, (MySqlTransaction)tx))
         {
             cmd.Parameters.AddWithValue("@TournamentId", tournamentId.ToString());
+            cmd.Parameters.AddWithValue("@TotalRounds", totalRounds);
             await cmd.ExecuteNonQueryAsync();
         }
 
@@ -421,28 +498,131 @@ app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tou
             bracketId = (await cmd.ExecuteScalarAsync())?.ToString()!;
         }
 
-        const string clearMatchesSql = "DELETE FROM Matches WHERE BracketId = @BracketId";
-        await using (var cmd = new MySqlCommand(clearMatchesSql, connection, (MySqlTransaction)tx))
+        await using (var clearCmd = new MySqlCommand("DELETE FROM Matches WHERE BracketId = @BracketId", connection, (MySqlTransaction)tx))
         {
-            cmd.Parameters.AddWithValue("@BracketId", bracketId);
-            await cmd.ExecuteNonQueryAsync();
+            clearCmd.Parameters.AddWithValue("@BracketId", bracketId);
+            await clearCmd.ExecuteNonQueryAsync();
         }
 
         const string insertMatchSql = """
-            INSERT INTO Matches (Id, BracketId, TeamAId, TeamBId, Status)
-            VALUES (UUID(), @BracketId, @TeamAId, @TeamBId, 'Unscheduled')
+            INSERT INTO Matches (Id, BracketId, TeamAId, TeamBId, Status, RoundNumber, MatchNumber)
+            VALUES (UUID(), @BracketId, @TeamAId, @TeamBId, @Status, @RoundNumber, @MatchNumber)
             """;
 
-        for (int i = 0; i < teamIds.Count; i += 2)
+        // Fill power-of-two slots with null byes at the end
+        var slots = new List<string?>(new string?[bracketSize]);
+        for (int i = 0; i < teamIds.Count; i++)
         {
-            var a = teamIds[i];
-            var b = (i + 1 < teamIds.Count) ? teamIds[i + 1] : teamIds[i];
+            slots[i] = teamIds[i];
+        }
+
+        int firstRoundMatches = bracketSize / 2;
+        for (int m = 0; m < firstRoundMatches; m++)
+        {
+            string? teamAId = slots[m * 2];
+            string? teamBId = slots[(m * 2) + 1];
 
             await using var cmd = new MySqlCommand(insertMatchSql, connection, (MySqlTransaction)tx);
             cmd.Parameters.AddWithValue("@BracketId", bracketId);
-            cmd.Parameters.AddWithValue("@TeamAId", a);
-            cmd.Parameters.AddWithValue("@TeamBId", b);
+            cmd.Parameters.AddWithValue("@TeamAId", (object?)teamAId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@TeamBId", (object?)teamBId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@Status", "Unscheduled");
+            cmd.Parameters.AddWithValue("@RoundNumber", 1);
+            cmd.Parameters.AddWithValue("@MatchNumber", m + 1);
             await cmd.ExecuteNonQueryAsync();
+        }
+
+        for (int round = 2; round <= totalRounds; round++)
+        {
+            int matchesInRound = bracketSize / (int)Math.Pow(2, round);
+            for (int m = 1; m <= matchesInRound; m++)
+            {
+                await using var cmd = new MySqlCommand(insertMatchSql, connection, (MySqlTransaction)tx);
+                cmd.Parameters.AddWithValue("@BracketId", bracketId);
+                cmd.Parameters.AddWithValue("@TeamAId", DBNull.Value);
+                cmd.Parameters.AddWithValue("@TeamBId", DBNull.Value);
+                cmd.Parameters.AddWithValue("@Status", "Unscheduled");
+                cmd.Parameters.AddWithValue("@RoundNumber", round);
+                cmd.Parameters.AddWithValue("@MatchNumber", m);
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        // Auto-advance byes
+        for (int round = 1; round < totalRounds; round++)
+        {
+            const string roundSql = """
+                SELECT Id, RoundNumber, MatchNumber, TeamAId, TeamBId, Status
+                FROM Matches
+                WHERE BracketId = @BracketId AND RoundNumber = @RoundNumber
+                ORDER BY MatchNumber
+                """;
+
+            var byeWinners = new List<(int MatchNumber, string WinnerTeamId, bool winnerIsTeamA, string MatchId)>();
+
+            await using (var readCmd = new MySqlCommand(roundSql, connection, (MySqlTransaction)tx))
+            {
+                readCmd.Parameters.AddWithValue("@BracketId", bracketId);
+                readCmd.Parameters.AddWithValue("@RoundNumber", round);
+
+                await using var reader = await readCmd.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    var teamA = ReadNullableId(reader, "TeamAId");
+                    var teamB = ReadNullableId(reader, "TeamBId");
+                    var status = reader.GetString("Status");
+
+                    if (string.Equals(status, "Complete", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(teamA) && string.IsNullOrWhiteSpace(teamB))
+                    {
+                        byeWinners.Add((reader.GetInt32("MatchNumber"), teamA, true, ReadId(reader, "Id")));
+                    }
+                    else if (string.IsNullOrWhiteSpace(teamA) && !string.IsNullOrWhiteSpace(teamB))
+                    {
+                        byeWinners.Add((reader.GetInt32("MatchNumber"), teamB, false, ReadId(reader, "Id")));
+                    }
+                }
+            }
+
+            foreach (var bye in byeWinners)
+            {
+                const string completeByeSql = """
+                    UPDATE Matches
+                    SET ScoreA = @ScoreA,
+                        ScoreB = @ScoreB,
+                        ScoreRecordedAt = UTC_TIMESTAMP(),
+                        ScheduledStart = COALESCE(ScheduledStart, UTC_TIMESTAMP()),
+                        Status = 'Complete'
+                    WHERE Id = @MatchId
+                    """;
+
+                await using (var completeCmd = new MySqlCommand(completeByeSql, connection, (MySqlTransaction)tx))
+                {
+                    completeCmd.Parameters.AddWithValue("@ScoreA", bye.winnerIsTeamA ? 1 : 0);
+                    completeCmd.Parameters.AddWithValue("@ScoreB", bye.winnerIsTeamA ? 0 : 1);
+                    completeCmd.Parameters.AddWithValue("@MatchId", bye.MatchId);
+                    await completeCmd.ExecuteNonQueryAsync();
+                }
+
+                int nextRound = round + 1;
+                int nextMatch = (bye.MatchNumber + 1) / 2;
+                bool toTeamA = (bye.MatchNumber % 2) == 1;
+
+                string nextSql = toTeamA
+                    ? "UPDATE Matches SET TeamAId = @WinnerTeamId WHERE BracketId = @BracketId AND RoundNumber = @RoundNumber AND MatchNumber = @MatchNumber"
+                    : "UPDATE Matches SET TeamBId = @WinnerTeamId WHERE BracketId = @BracketId AND RoundNumber = @RoundNumber AND MatchNumber = @MatchNumber";
+
+                await using var nextCmd = new MySqlCommand(nextSql, connection, (MySqlTransaction)tx);
+                nextCmd.Parameters.AddWithValue("@WinnerTeamId", bye.WinnerTeamId);
+                nextCmd.Parameters.AddWithValue("@BracketId", bracketId);
+                nextCmd.Parameters.AddWithValue("@RoundNumber", nextRound);
+                nextCmd.Parameters.AddWithValue("@MatchNumber", nextMatch);
+                await nextCmd.ExecuteNonQueryAsync();
+            }
         }
 
         await tx.CommitAsync();
@@ -451,10 +631,128 @@ app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tou
     catch (Exception ex)
     {
         await tx.RollbackAsync();
-        return Results.Problem($"Failed to generate bracket: {ex.Message}");
+        return Results.Problem($"Failed to generate bracket: {ex}");
     }
 });
 
+/// <summary>
+/// Records the final result of a match and advances the winning team to the next bracket match when applicable.
+/// </summary>
+/// <param name="matchId">The identifier of the match to update.</param>
+/// <param name="request">The result payload containing Team A and Team B scores.</param>
+/// <returns>A success response when result recording completes, or an error response if validation or persistence fails.</returns>
+app.MapPut("/matches/{matchId:guid}/result", async (Guid matchId, RecordMatchResultRequest request) =>
+{
+    if (request.ScoreA < 0 || request.ScoreB < 0)
+    {
+        return Results.BadRequest("Scores must be non-negative.");
+    }
+
+    if (request.ScoreA == request.ScoreB)
+    {
+        return Results.BadRequest("Single elimination matches cannot end in a tie.");
+    }
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+    await using var tx = await connection.BeginTransactionAsync();
+
+    try
+    {
+        const string loadSql = """
+            SELECT m.Id, m.BracketId, m.RoundNumber, m.MatchNumber, m.TeamAId, m.TeamBId, b.TotalRounds
+            FROM Matches m
+            INNER JOIN Bracket b ON b.Id = m.BracketId
+            WHERE m.Id = @MatchId
+            LIMIT 1
+            """;
+
+        string bracketId;
+        int roundNumber;
+        int matchNumber;
+        int totalRounds;
+        string? teamAId;
+        string? teamBId;
+
+        await using (var loadCmd = new MySqlCommand(loadSql, connection, (MySqlTransaction)tx))
+        {
+            loadCmd.Parameters.AddWithValue("@MatchId", matchId.ToString());
+            await using var reader = await loadCmd.ExecuteReaderAsync();
+
+            if (!await reader.ReadAsync())
+            {
+                await tx.RollbackAsync();
+                return Results.NotFound("Match not found.");
+            }
+
+            bracketId = ReadId(reader, "BracketId");
+            roundNumber = reader.GetInt32("RoundNumber");
+            matchNumber = reader.GetInt32("MatchNumber");
+            totalRounds = reader.GetInt32("TotalRounds");
+            teamAId = ReadNullableId(reader, "TeamAId");
+            teamBId = ReadNullableId(reader, "TeamBId");
+        }
+
+        if (string.IsNullOrWhiteSpace(teamAId) || string.IsNullOrWhiteSpace(teamBId))
+        {
+            await tx.RollbackAsync();
+            return Results.BadRequest("Cannot record result until both teams are assigned.");
+        }
+
+        string winnerTeamId = request.ScoreA > request.ScoreB ? teamAId : teamBId;
+
+        const string completeSql = """
+            UPDATE Matches
+            SET ScoreA = @ScoreA,
+                ScoreB = @ScoreB,
+                ScoreRecordedAt = UTC_TIMESTAMP(),
+                ScheduledStart = COALESCE(ScheduledStart, UTC_TIMESTAMP()),
+                Status = 'Complete'
+            WHERE Id = @MatchId
+            """;
+
+        await using (var completeCmd = new MySqlCommand(completeSql, connection, (MySqlTransaction)tx))
+        {
+            completeCmd.Parameters.AddWithValue("@ScoreA", request.ScoreA);
+            completeCmd.Parameters.AddWithValue("@ScoreB", request.ScoreB);
+            completeCmd.Parameters.AddWithValue("@MatchId", matchId.ToString());
+            await completeCmd.ExecuteNonQueryAsync();
+        }
+
+        if (roundNumber < totalRounds)
+        {
+            int nextRound = roundNumber + 1;
+            int nextMatchNumber = (matchNumber + 1) / 2;
+            bool goesToTeamA = (matchNumber % 2) == 1;
+
+            string nextSql = goesToTeamA
+                ? "UPDATE Matches SET TeamAId = @WinnerTeamId WHERE BracketId = @BracketId AND RoundNumber = @RoundNumber AND MatchNumber = @MatchNumber"
+                : "UPDATE Matches SET TeamBId = @WinnerTeamId WHERE BracketId = @BracketId AND RoundNumber = @RoundNumber AND MatchNumber = @MatchNumber";
+
+            await using var nextCmd = new MySqlCommand(nextSql, connection, (MySqlTransaction)tx);
+            nextCmd.Parameters.AddWithValue("@WinnerTeamId", winnerTeamId);
+            nextCmd.Parameters.AddWithValue("@BracketId", bracketId);
+            nextCmd.Parameters.AddWithValue("@RoundNumber", nextRound);
+            nextCmd.Parameters.AddWithValue("@MatchNumber", nextMatchNumber);
+            await nextCmd.ExecuteNonQueryAsync();
+        }
+
+        await tx.CommitAsync();
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        await tx.RollbackAsync();
+        return Results.Problem($"Failed to record result: {ex.Message}");
+    }
+});
+
+/// <summary>
+/// Schedules or reschedules a match start date and time unless the match is already complete.
+/// </summary>
+/// <param name="matchId">The identifier of the match to schedule.</param>
+/// <param name="request">The scheduling payload containing the target start date and time.</param>
+/// <returns>A success response when scheduling is applied, or a not found response when the match does not exist.</returns>
 app.MapPut("/matches/{matchId:guid}/schedule", async (Guid matchId, ScheduleMatchRequest request) =>
 {
     await using var connection = new MySqlConnection(connectionString);
@@ -475,35 +773,6 @@ app.MapPut("/matches/{matchId:guid}/schedule", async (Guid matchId, ScheduleMatc
     return affected == 0 ? Results.NotFound("Match not found.") : Results.Ok();
 });
 
-app.MapPut("/matches/{matchId:guid}/result", async (Guid matchId, RecordMatchResultRequest request) =>
-{
-    if (request.ScoreA < 0 || request.ScoreB < 0)
-    {
-        return Results.BadRequest("Scores must be non-negative.");
-    }
-
-    await using var connection = new MySqlConnection(connectionString);
-    await connection.OpenAsync();
-
-    const string sql = """
-        UPDATE Matches
-        SET ScoreA = @ScoreA,
-            ScoreB = @ScoreB,
-            ScoreRecordedAt = UTC_TIMESTAMP(),
-            ScheduledStart = COALESCE(ScheduledStart, UTC_TIMESTAMP()),
-            Status = 'Complete'
-        WHERE Id = @MatchId
-        """;
-
-    await using var cmd = new MySqlCommand(sql, connection);
-    cmd.Parameters.AddWithValue("@ScoreA", request.ScoreA);
-    cmd.Parameters.AddWithValue("@ScoreB", request.ScoreB);
-    cmd.Parameters.AddWithValue("@MatchId", matchId.ToString());
-
-    var affected = await cmd.ExecuteNonQueryAsync();
-    return affected == 0 ? Results.NotFound("Match not found.") : Results.Ok();
-});
-
 app.Run();
 
 record TournamentCreateRequest(string Name, string? Location, DateTime StartDate, string BracketType);
@@ -512,6 +781,17 @@ record PlayerCreateRequest(string DisplayName, int Number);
 record TeamCreateForTournamentRequest(string Name, int Seed, List<PlayerCreateRequest>? Players);
 record TeamReadResponse(string Id, string Name, int Seed, string DivisionId, string DivisionName, List<PlayerReadResponse> Players);
 record PlayerReadResponse(string Id, string DisplayName, int Number);
-record MatchReadResponse(string Id, string? TeamAId, string? TeamAName, string? TeamBId, string? TeamBName, DateTime? ScheduledStart, string Status, int? ScoreA, int? ScoreB);
 record ScheduleMatchRequest(DateTime ScheduledStart);
 record RecordMatchResultRequest(int ScoreA, int ScoreB);
+
+record MatchReadResponse(string Id,
+    string? TeamAId,
+    string? TeamAName,
+    string? TeamBId,
+    string? TeamBName,
+    DateTime? ScheduledStart,
+    string Status,
+    int? ScoreA,
+    int? ScoreB,
+    int RoundNumber,
+    int MatchNumber);

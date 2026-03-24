@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/// <summary>
+/// Group 1 Project - ResultsPage UserControl
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 24, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=vs-2022
+/// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the results user interface for entering and reviewing completed match scores.
+    /// </summary>
     public partial class ResultsPage : UserControl
     {
         private Tournament? currentTournament;
@@ -12,6 +23,9 @@ namespace Group1Project
         private List<ApiClient.MatchReadDto> loadedMatches = new List<ApiClient.MatchReadDto>();
         private ApiClient.MatchReadDto? selectedMatch;
 
+        /// <summary>
+        /// Initializes a new instance of the results page and configures result controls.
+        /// </summary>
         public ResultsPage()
         {
             InitializeComponent();
@@ -19,12 +33,19 @@ namespace Group1Project
             InitializeScoreInputs();
         }
 
+        /// <summary>
+        /// Loads the selected tournament context into the results page and refreshes result data.
+        /// </summary>
+        /// <param name="tournament">The tournament to display.</param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
             _ = RefreshResultsAsync();
         }
 
+        /// <summary>
+        /// Configures the results grid columns and behavior.
+        /// </summary>
         private void InitializeResultsGrid()
         {
             dataGridViewResults.AllowUserToAddRows = false;
@@ -45,6 +66,9 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Configures score input ranges for result entry.
+        /// </summary>
         private void InitializeScoreInputs()
         {
             numericScoreA.Minimum = 0;
@@ -54,6 +78,10 @@ namespace Group1Project
             numericScoreB.Maximum = 999;
         }
 
+        /// <summary>
+        /// Retrieves match result data for the current tournament and populates the results grid.
+        /// </summary>
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
         private async Task RefreshResultsAsync()
         {
             dataGridViewResults.Rows.Clear();
@@ -96,6 +124,11 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Computes the winner display text for a match based on recorded scores.
+        /// </summary>
+        /// <param name="match">The match used to determine winner text.</param>
+        /// <returns>The winner name, draw marker, or placeholder text.</returns>
         private static string GetWinnerText(ApiClient.MatchReadDto match)
         {
             if (!match.ScoreA.HasValue || !match.ScoreB.HasValue)
@@ -116,6 +149,10 @@ namespace Group1Project
             return "Draw";
         }
 
+        /// <summary>
+        /// Records a result for the currently selected match.
+        /// </summary>
+        /// <returns>A task representing the asynchronous update operation.</returns>
         private async Task SetSelectedResultAsync()
         {
             if (selectedMatch == null)
@@ -144,6 +181,11 @@ namespace Group1Project
             await RefreshResultsAsync();
         }
 
+        /// <summary>
+        /// Handles result grid selection changes and updates selected match context.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the selection change.</param>
         private void dataGridViewResults_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridViewResults.SelectedRows.Count == 0)
@@ -172,11 +214,21 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Handles the click event for setting a selected match result.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private async void buttonSetResult_Click(object sender, EventArgs e)
         {
             await SetSelectedResultAsync();
         }
 
+        /// <summary>
+        /// Handles the click event for refreshing result data.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private async void buttonRefresh_Click(object sender, EventArgs e)
         {
             await RefreshResultsAsync();

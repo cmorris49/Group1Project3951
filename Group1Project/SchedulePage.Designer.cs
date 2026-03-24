@@ -92,8 +92,11 @@
             // 
             // dateTimePickerStart
             // 
+            dateTimePickerStart.CustomFormat = "MM/dd/yyyy hh:mm tt";
+            dateTimePickerStart.Format = DateTimePickerFormat.Custom;
             dateTimePickerStart.Location = new Point(19, 22);
             dateTimePickerStart.Name = "dateTimePickerStart";
+            dateTimePickerStart.ShowUpDown = true;
             dateTimePickerStart.Size = new Size(398, 39);
             dateTimePickerStart.TabIndex = 0;
             // 

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents a named ruleset configuration for tournament play settings.
+    /// </summary>
     internal class RuleSet
     {
         // Unique identifier for the RuleSet, generated automatically upon instantiation.

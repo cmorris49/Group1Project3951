@@ -3,11 +3,25 @@ using Group1Project;
 using System;
 using System.Linq;
 
+/// <summary>
+/// Group 1 Project - TournamentTests
+/// Author: Cameron, Jun, Jonathan
+/// Date: March 24, 2026; Revision: 1.0
+/// Source:
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     MSTest info https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-mstest
+/// </summary>
 namespace Group1Project.Tests
 {
+    /// <summary>
+    /// Provides unit tests for Tournament construction, division operations, and bracket generation behavior.
+    /// </summary>
     [TestClass]
     public class TournamentTests
     {
+        /// <summary>
+        /// Verifies tournament constructor sets core properties from provided inputs.
+        /// </summary>
         [TestMethod]
         public void Tournament_Constructor_SetsPropertiesCorrectly()
         {
@@ -23,6 +37,9 @@ namespace Group1Project.Tests
             Assert.IsNotNull(tournament.Id);
         }
 
+        /// <summary>
+        /// Verifies tournament constructor creates the default main division.
+        /// </summary>
         [TestMethod]
         public void Tournament_Constructor_CreatesDefaultDivision()
         {
@@ -32,6 +49,9 @@ namespace Group1Project.Tests
             Assert.AreEqual("Main Division", tournament.Divisions[0].Name);
         }
 
+        /// <summary>
+        /// Verifies tournament constructor throws when provided an empty name.
+        /// </summary>
         [TestMethod]
         public void Tournament_Constructor_ThrowsOnEmptyName()
         {
@@ -48,6 +68,9 @@ namespace Group1Project.Tests
             Assert.IsTrue(exceptionThrown, "Expected ArgumentException was not thrown");
         }
 
+        /// <summary>
+        /// Verifies creating a division adds it to the tournament division collection.
+        /// </summary>
         [TestMethod]
         public void CreateDivision_AddsDivisionToTournament()
         {
@@ -59,6 +82,9 @@ namespace Group1Project.Tests
             Assert.AreEqual("Division 2", division.Name);
         }
 
+        /// <summary>
+        /// Verifies creating a duplicate division name throws an invalid operation exception.
+        /// </summary>
         [TestMethod]
         public void CreateDivision_ThrowsOnDuplicateName()
         {
@@ -78,6 +104,9 @@ namespace Group1Project.Tests
             Assert.IsTrue(exceptionThrown, "Expected InvalidOperationException was not thrown");
         }
 
+        /// <summary>
+        /// Verifies removing a division by identifier removes it from the tournament.
+        /// </summary>
         [TestMethod]
         public void RemoveDivision_RemovesDivisionFromTournament()
         {
@@ -90,6 +119,9 @@ namespace Group1Project.Tests
             Assert.AreEqual(1, tournament.Divisions.Count);
         }
 
+        /// <summary>
+        /// Verifies bracket generation creates expected first-round match count for eight teams.
+        /// </summary>
         [TestMethod]
         public void GenerateBracket_CreatesBracketWithCorrectMatches()
         {
@@ -99,7 +131,7 @@ namespace Group1Project.Tests
             for (int i = 0; i < 8; i++)
             {
                 var team = new Team($"Team {i + 1}");
-                team.seed = i + 1;
+                team.Seed = i + 1;
                 division.RegisterTeam(team);
             }
 
@@ -109,6 +141,9 @@ namespace Group1Project.Tests
             Assert.AreEqual(4, tournament.Bracket.Matches.Count);
         }
 
+        /// <summary>
+        /// Verifies bracket generation handles odd team count without failing.
+        /// </summary>
         [TestMethod]
         public void GenerateBracket_HandlesOddNumberOfTeams()
         {
@@ -118,7 +153,7 @@ namespace Group1Project.Tests
             for (int i = 0; i < 9; i++)
             {
                 var team = new Team($"Team {i + 1}");
-                team.seed = i + 1;
+                team.Seed = i + 1;
                 division.RegisterTeam(team);
             }
 
@@ -128,6 +163,9 @@ namespace Group1Project.Tests
             Assert.AreEqual(4, tournament.Bracket.Matches.Count);
         }
 
+        /// <summary>
+        /// Verifies bracket generation throws when fewer than two teams are registered.
+        /// </summary>
         [TestMethod]
         public void GenerateBracket_ThrowsWithLessThanTwoTeams()
         {

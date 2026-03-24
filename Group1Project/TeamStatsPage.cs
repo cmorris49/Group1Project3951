@@ -4,25 +4,46 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+/// <summary>
+/// Group 1 Project - TeamStatsPage UserControl
+/// Author: Cameron, Jun, Jonathan 
+/// Date: March 24, 2026; Revision: 1.0
+/// Source: 
+///     docment on C# at https://www.w3schools.com/cs/index.php
+///     Window form info http://learn.microsoft.com/en-us/visualstudio/ide/create-csharp-winform-visual-studio?view=vs-2022
+/// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the team statistics user interface for calculating and displaying team performance metrics.
+    /// </summary>
     public partial class TeamStatsPage : UserControl
     {
         private Tournament? currentTournament;
         private readonly ApiClient _apiClient = new ApiClient();
 
+        /// <summary>
+        /// Initializes a new instance of the team stats page and configures the stats grid.
+        /// </summary>
         public TeamStatsPage()
         {
             InitializeComponent();
             InitializeTeamStatsGrid();
         }
 
+        /// <summary>
+        /// Loads the selected tournament context into the team stats page and refreshes team statistics.
+        /// </summary>
+        /// <param name="tournament">The tournament to display.</param>
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
             _ = RefreshTeamStatsAsync();
         }
 
+        /// <summary>
+        /// Configures the team statistics grid columns and behavior.
+        /// </summary>
         private void InitializeTeamStatsGrid()
         {
             dataGridViewTeamStats.AllowUserToAddRows = false;
@@ -46,6 +67,10 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Recalculates and displays team statistics using completed match data from the API.
+        /// </summary>
+        /// <returns>A task representing the asynchronous refresh operation.</returns>
         private async Task RefreshTeamStatsAsync()
         {
             dataGridViewTeamStats.Rows.Clear();
@@ -144,6 +169,11 @@ namespace Group1Project
             }
         }
 
+        /// <summary>
+        /// Handles the click event for refreshing team statistics.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments for the click event.</param>
         private async void buttonRefreshStats_Click(object sender, EventArgs e)
         {
             await RefreshTeamStatsAsync();

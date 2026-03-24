@@ -405,13 +405,9 @@ namespace Group1Project
             }
             else
             {
-                MessageBox.Show("Could not generate bracket in database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Could not generate bracket in database.\nTournament ID used: {currentTournament.Id}",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void Form1_Load_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

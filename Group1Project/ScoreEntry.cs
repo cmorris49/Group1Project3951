@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents an immutable score record for a match, including both team scores and record timestamp.
+    /// </summary>
     public class ScoreEntry
     {
         // Score for Team A. Cannot be negative and cannot be modified after initialization.

@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents a collection of tournament matches used for scheduling operations.
+    /// </summary>
     internal class Schedule
     {
         // Store the list of matches in the schedule.

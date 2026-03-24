@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents an individual player associated with a team.
+    /// </summary>
     public class Player
     {
         /// <summary>

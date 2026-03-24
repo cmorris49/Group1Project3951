@@ -19,6 +19,9 @@ using System.Xml.Linq;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the modal form used to collect input and create a new tournament.
+    /// </summary>
     public partial class NewTournamentForm : Form
     {
         /// <summary>

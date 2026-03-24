@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents a team participating in a tournament, including roster, division reference, and seeding information.
+    /// </summary>
     public class Team
     {
         /// <summary>

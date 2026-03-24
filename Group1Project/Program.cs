@@ -7,6 +7,9 @@
 /// </summary>
 namespace Group1Project
 {
+    /// <summary>
+    /// Represents the application entry point and startup configuration for the Group 1 Project.
+    /// </summary>
     internal static class Program
     {
         /// <summary>
