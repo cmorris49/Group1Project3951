@@ -455,6 +455,55 @@ app.MapPost("/tournaments/{tournamentId:guid}/generate-bracket", async (Guid tou
     }
 });
 
+app.MapPut("/matches/{matchId:guid}/schedule", async (Guid matchId, ScheduleMatchRequest request) =>
+{
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = """
+        UPDATE Matches
+        SET ScheduledStart = @ScheduledStart,
+            Status = CASE WHEN Status = 'Complete' THEN Status ELSE 'Scheduled' END
+        WHERE Id = @MatchId
+        """;
+
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@ScheduledStart", request.ScheduledStart);
+    cmd.Parameters.AddWithValue("@MatchId", matchId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Match not found.") : Results.Ok();
+});
+
+app.MapPut("/matches/{matchId:guid}/result", async (Guid matchId, RecordMatchResultRequest request) =>
+{
+    if (request.ScoreA < 0 || request.ScoreB < 0)
+    {
+        return Results.BadRequest("Scores must be non-negative.");
+    }
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = """
+        UPDATE Matches
+        SET ScoreA = @ScoreA,
+            ScoreB = @ScoreB,
+            ScoreRecordedAt = UTC_TIMESTAMP(),
+            ScheduledStart = COALESCE(ScheduledStart, UTC_TIMESTAMP()),
+            Status = 'Complete'
+        WHERE Id = @MatchId
+        """;
+
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@ScoreA", request.ScoreA);
+    cmd.Parameters.AddWithValue("@ScoreB", request.ScoreB);
+    cmd.Parameters.AddWithValue("@MatchId", matchId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Match not found.") : Results.Ok();
+});
+
 app.Run();
 
 record TournamentCreateRequest(string Name, string? Location, DateTime StartDate, string BracketType);
@@ -464,3 +513,5 @@ record TeamCreateForTournamentRequest(string Name, int Seed, List<PlayerCreateRe
 record TeamReadResponse(string Id, string Name, int Seed, string DivisionId, string DivisionName, List<PlayerReadResponse> Players);
 record PlayerReadResponse(string Id, string DisplayName, int Number);
 record MatchReadResponse(string Id, string? TeamAId, string? TeamAName, string? TeamBId, string? TeamBName, DateTime? ScheduledStart, string Status, int? ScoreA, int? ScoreB);
+record ScheduleMatchRequest(DateTime ScheduledStart);
+record RecordMatchResultRequest(int ScoreA, int ScoreB);
