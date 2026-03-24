@@ -112,6 +112,18 @@ namespace Group1Project
                     {
                         bracketPage.LoadTournament(currentTournament);
                     }
+                    else if (panelWorkspace.Controls[0] is SchedulePage schedulePage)
+                    {
+                        schedulePage.LoadTournament(currentTournament);
+                    }
+                    else if (panelWorkspace.Controls[0] is ResultsPage resultsPage)
+                    {
+                        resultsPage.LoadTournament(currentTournament);
+                    }
+                    else if (panelWorkspace.Controls[0] is TeamStatsPage teamStatsPage)
+                    {
+                        teamStatsPage.LoadTournament(currentTournament);
+                    }
                 }
             }
         }
@@ -154,6 +166,18 @@ namespace Group1Project
                 if (control is BracketPage)
                 {
                     return "Bracket";
+                }
+                if (control is SchedulePage)
+                {
+                    return "Schedule";
+                }
+                if (control is ResultsPage)
+                {
+                    return "Results";
+                }
+                if (control is TeamStatsPage)
+                {
+                    return "Team Stats";
                 }
                 return "Unknown";
             }
@@ -266,17 +290,33 @@ namespace Group1Project
         /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnSchedule_Click(object sender, EventArgs e)
         {
-            ShowPage("Schedule");
+            var page = new SchedulePage();
+
+            if (currentTournament != null)
+            {
+                page.LoadTournament(currentTournament);
+            }
+
+            LoadPage(page);
+            UpdateStatusBar();
         }
 
         /// <summary>
-        /// Handles the Click event of the Standings button and displays the Standings page.
+        /// Handles the Click event of the Team Stats button and displays the Team Stats page.
         /// </summary>
-        /// <param name="sender">The source of the event, typically the Standings button.</param>
+        /// <param name="sender">The source of the event, typically the Team stats button.</param>
         /// <param name="e">An EventArgs object that contains the event data.</param>
-        private void btnStandings_Click(object sender, EventArgs e)
+        private void btnTeamStats_Click(object sender, EventArgs e)
         {
-            ShowPage("Standings");
+            var page = new TeamStatsPage();
+
+            if (currentTournament != null)
+            {
+                page.LoadTournament(currentTournament);
+            }
+
+            LoadPage(page);
+            UpdateStatusBar();
         }
 
         /// <summary>
@@ -286,18 +326,15 @@ namespace Group1Project
         /// <param name="e">An EventArgs object that contains the event data.</param>
         private void btnResults_Click(object sender, EventArgs e)
         {
-            ShowPage("Results");
-        }
+            var page = new ResultsPage();
 
-        /// <summary>
-        /// Handles the Click event of the 'New Tournament' menu item to initiate the process of creating a new
-        /// tournament.
-        /// </summary>
-        /// <param name="sender">The source of the event, typically the menu item that was clicked.</param>
-        /// <param name="e">An EventArgs object that contains the event data.</param>
-        private void newTournamentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            if (currentTournament != null)
+            {
+                page.LoadTournament(currentTournament);
+            }
 
+            LoadPage(page);
+            UpdateStatusBar();
         }
 
         /// <summary>
@@ -370,6 +407,11 @@ namespace Group1Project
             {
                 MessageBox.Show("Could not generate bracket in database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
