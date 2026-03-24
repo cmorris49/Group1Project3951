@@ -163,7 +163,16 @@ namespace Group1Project
         /// <returns>Dashboard statistics, or null if unavailable.</returns>
         internal async Task<DashboardStatsDto?> GetDashboardStatsAsync(Guid tournamentId)
         {
-            return await _httpClient.GetFromJsonAsync<DashboardStatsDto>($"tournaments/{tournamentId}/dashboard", _jsonOptions);
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<DashboardStatsDto>($"tournaments/{tournamentId}/dashboard", _jsonOptions);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching dashboard stats: {ex.Message}");
+                return null;
+            }
+
         }
 
         /// <summary>
@@ -173,7 +182,16 @@ namespace Group1Project
         /// <returns>A list of teams, or null if unavailable.</returns>
         internal async Task<List<TeamReadDto>?> GetTeamsForTournamentAsync(Guid tournamentId)
         {
-            return await _httpClient.GetFromJsonAsync<List<TeamReadDto>>($"tournaments/{tournamentId}/teams", _jsonOptions);
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<List<TeamReadDto>>($"tournaments/{tournamentId}/teams", _jsonOptions);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching teams: {ex.Message}");
+                return new List<TeamReadDto>();
+            }
         }
 
         /// <summary>
@@ -183,7 +201,15 @@ namespace Group1Project
         /// <returns>A list of matches, or null if unavailable.</returns>
         internal async Task<List<MatchReadDto>?> GetMatchesForTournamentAsync(Guid tournamentId)
         {
-            return await _httpClient.GetFromJsonAsync<List<MatchReadDto>>($"tournaments/{tournamentId}/matches", _jsonOptions);
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<List<MatchReadDto>>($"tournaments/{tournamentId}/matches", _jsonOptions);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching matches: {ex.Message}");
+                return new List<MatchReadDto>();
+            }
         }
 
         /// <summary>
