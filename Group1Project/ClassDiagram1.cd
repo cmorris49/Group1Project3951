@@ -19,7 +19,7 @@
       <Field Name="txtPlayerName" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAQAAAADgAABkAIADAEEACAAAAAAQQJAAAGAQAAAA=</HashCode>
+      <HashCode>AAAARAAAADgAARkAIADAEEACAAAAAAQQJAAAGAQAAAA=</HashCode>
       <FileName>addTeam.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -31,7 +31,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.BracketPage">
-    <Position X="5.5" Y="6.5" Width="1.5" />
+    <Position X="14.25" Y="4.75" Width="1.5" />
     <Members>
       <Field Name="buttonExportBracket" Hidden="true" />
       <Field Name="buttonGenerateBracket" Hidden="true" />
@@ -48,7 +48,7 @@
       <Field Name="tableMain" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AABAAIAgAiAEgAAAAQCAKgBDhABBAIAAAgAAEQASCAA=</HashCode>
+      <HashCode>AgBAAIAgAiQAgQAAAQCAAAhDgABBAIAAEwAAEQQSCAA=</HashCode>
       <FileName>BracketPage.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -82,18 +82,18 @@
       <Field Name="tableLayoutPanel1" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>gAkIBAEAAKAAAIEQIBCAIQACEIAhACFAAAIFAAQQACA=</HashCode>
+      <HashCode>gAkIFAEAAKIAgYEQIBCAAAICEJAhAANAAAIBAAQQAHE=</HashCode>
       <FileName>DashboardPage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Division">
     <Position X="7.25" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAACCAAAAAgAAAAAAAAAQAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>QAACCAAAAAgAAAAAAAAAQAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Division.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Group1Project.Form1">
+  <Class Name="Group1Project.Form1" Collapsed="true">
     <Position X="9" Y="1" Width="1.5" />
     <Members>
       <Field Name="aboutToolStripMenuItem" Hidden="true" />
@@ -126,16 +126,15 @@
       <Field Name="openToolStripMenuItem" Hidden="true" />
       <Field Name="panelNav" Hidden="true" />
       <Field Name="panelWorkspace" Hidden="true" />
-      <Field Name="recalculateStandingsToolStripMenuItem" Hidden="true" />
       <Field Name="resultsToolStripMenuItem" Hidden="true" />
       <Field Name="saveToolStripMenuItem" Hidden="true" />
       <Field Name="scheduleToolStripMenuItem" Hidden="true" />
       <Field Name="splitMain" Hidden="true" />
       <Field Name="sslHint" Hidden="true" />
       <Field Name="sslTournament" Hidden="true" />
-      <Field Name="standingsToolStripMenuItem" Hidden="true" />
       <Field Name="statusMain" Hidden="true" />
       <Field Name="teamsPlayersToolStripMenuItem" Hidden="true" />
+      <Field Name="teamStatsToolStripMenuItem" Hidden="true" />
       <Field Name="toolMain" Hidden="true" />
       <Field Name="toolsToolStripMenuItem" Hidden="true" />
       <Field Name="tsbAddTeam" Hidden="true" />
@@ -145,8 +144,7 @@
       <Field Name="tsbSave" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>5MCwgFAAAiiAQALQAQSChnsCBAAaAAAEgwFAhOQaCA0=</HashCode>
-      <FileName>Form1.cs</FileName>
+      <HashCode>xICgAFAAACCAQADQAQSCgmkCBAAYAAAEggBAhGACAA0=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Match">
@@ -157,7 +155,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.NewTournamentForm">
-    <Position X="10.75" Y="1.25" Width="1.5" />
+    <Position X="10.75" Y="1" Width="1.5" />
     <Members>
       <Method Name="BtnOk_Click" Hidden="true" />
       <Field Name="buttonCancel" Hidden="true" />
@@ -172,40 +170,40 @@
       <Field Name="textTournamentName" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACCAQAAIAACABAwCAAAAAQAAAQAAAIAAAAg=</HashCode>
+      <HashCode>AAAAAAAAACCAQQAIAACABAwCAAAAAQAAAQAAAIAAAAg=</HashCode>
       <FileName>NewTournamentForm.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Player">
     <Position X="7.25" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAgA=</HashCode>
+      <HashCode>AAACAAAAABAAQAAAAAAAAAACAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Program">
-    <Position X="7.25" Y="6.25" Width="1.5" />
+    <Position X="12.5" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.RuleSet">
-    <Position X="10.75" Y="5.75" Width="1.5" />
+    <Position X="10.75" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RuleSet.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Schedule">
-    <Position X="3.75" Y="9.25" Width="1.5" />
+    <Position X="3.75" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAQAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Schedule.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.ScoreEntry">
-    <Position X="10.75" Y="3.5" Width="1.5" />
+    <Position X="10.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ScoreEntry.cs</FileName>
@@ -221,7 +219,7 @@
   <Class Name="Group1Project.Team">
     <Position X="5.5" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAQAAAABAAAAQAAAAgAAAAAAgAAAAAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAAAAAAFAAAAQAAAAgAAAAAAgAAAABAAA=</HashCode>
       <FileName>Team.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -251,32 +249,122 @@
       <Field Name="splitTeamsPlayers" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>ABEEAAAgBCKCADAAAACABAGCEEARACAAEAAAAAEQEBA=</HashCode>
+      <HashCode>ABAEAACgBCKCATAAAACABAOCEEARACAAEAAAAAEQEBA=</HashCode>
       <FileName>TeamsPlayersPage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Tournament">
-    <Position X="3.75" Y="4.5" Width="1.5" />
+    <Position X="3.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAECEAACAAAAAAEAAAIAFBQAABAAAAAAAAAAgEAAABA=</HashCode>
+      <HashCode>AAECEAACAAAAAAEAAAIAEBQAABAAAAAAAAAAgEAAABA=</HashCode>
       <FileName>Tournament.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Group1Project.Properties.Resources">
-    <Position X="12.75" Y="5" Width="1.5" />
+  <Class Name="Group1Project.Properties.Resources" Collapsed="true">
+    <Position X="12.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+      <HashCode>AAAAAAAAAACAAAAAAAABEAAAAQAAAABABCAEAAAAAII=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.ApiClient">
+    <Position X="14.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAEAAIEAAAIBAAAAAAAAgAAYAQAIAAAAAAAAA=</HashCode>
+      <FileName>ApiClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.ResultsPage">
+    <Position X="12.5" Y="1" Width="1.5" />
+    <Members>
+      <Field Name="buttonRefresh" Hidden="true" />
+      <Field Name="buttonSetResult" Hidden="true" />
+      <Field Name="columnScheduled" Hidden="true" />
+      <Field Name="columnScore" Hidden="true" />
+      <Field Name="columnStatus" Hidden="true" />
+      <Field Name="columnTeamA" Hidden="true" />
+      <Field Name="columnTeamB" Hidden="true" />
+      <Field Name="columnWinner" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="dataGridViewResults" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="labelSelectedMatch" Hidden="true" />
+      <Field Name="numericScoreA" Hidden="true" />
+      <Field Name="numericScoreB" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="tableLayoutMain" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAABAACABeQASQQAAACAQQQCgACBAMEAAkBAAQBRAAA=</HashCode>
+      <FileName>ResultsPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.SchedulePage">
+    <Position X="12.5" Y="7.25" Width="1.5" />
+    <Members>
+      <Field Name="buttonRefresh" Hidden="true" />
+      <Field Name="buttonSetSchedule" Hidden="true" />
+      <Field Name="columnScheduled" Hidden="true" />
+      <Field Name="columnScore" Hidden="true" />
+      <Field Name="columnStatus" Hidden="true" />
+      <Field Name="columnTeamA" Hidden="true" />
+      <Field Name="columnTeamB" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="dataGridViewSchedule" Hidden="true" />
+      <Field Name="dateTimePickerStart" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="tableLayoutPanel1" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAEQAAAACAAAQAAAACABAQCoACFRMAAAEBAAQBQACA=</HashCode>
+      <FileName>SchedulePage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.TeamStatsPage">
+    <Position X="5.5" Y="6.75" Width="1.5" />
+    <Members>
+      <Field Name="buttonRefreshStats" Hidden="true" />
+      <Field Name="columnD" Hidden="true" />
+      <Field Name="columnGP" Hidden="true" />
+      <Field Name="columnL" Hidden="true" />
+      <Field Name="columnPA" Hidden="true" />
+      <Field Name="columnPD" Hidden="true" />
+      <Field Name="columnPF" Hidden="true" />
+      <Field Name="columnTeam" Hidden="true" />
+      <Field Name="columnW" Hidden="true" />
+      <Field Name="columnWinPct" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="dataGridViewTeamStats" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="labelHint" Hidden="true" />
+      <Field Name="labelTitle" Hidden="true" />
+      <Field Name="panel1" Hidden="true" />
+      <Field Name="tableLayoutPanel1" Hidden="true" />
+    </Members>
+    <NestedTypes>
+      <Class Name="Group1Project.TeamStatsPage.TeamStatRow" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>TeamStatsPage.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CFAAAIAABCAAARAAAAGAAAAKEICBAAAEBEEAEQAQACA=</HashCode>
+      <FileName>TeamStatsPage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="Group1Project.BracketType">
-    <Position X="12.75" Y="9.25" Width="1.5" />
+    <Position X="16" Y="8.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAQAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAQEA=</HashCode>
       <FileName>BracketType.cs</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="Group1Project.MatchStatus">
-    <Position X="12.75" Y="7.75" Width="1.5" />
+    <Position X="16" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAAAAAAAAQAEAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>MatchStatus.cs</FileName>

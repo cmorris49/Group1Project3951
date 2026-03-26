@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 TournamentManagerApi/appsettings.json
 **/appsettings.Development.json
+**/TournamentManagerAPI/appsettings.json

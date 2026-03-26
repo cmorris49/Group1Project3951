@@ -68,6 +68,10 @@ namespace Group1Project
             {
                 teams.Add(team);
             }
+            else 
+            { 
+                throw new InvalidOperationException("The team is already registered in the division.");
+            }
         }
 
         /// <summary>
@@ -76,7 +80,14 @@ namespace Group1Project
         /// <param name="teamId">The unique identifier of the team to remove. Must be a valid <see cref="System.Guid"/> representing an
         /// existing team in the division.</param>
         public void UnregisterTeam(Guid teamId) {
-            // Code to unregister a team from the division
+            foreach (var team in teams)
+            {
+                if (team.Id == teamId)
+                {
+                    teams.Remove(team);
+                    break;
+                }
+            }
         }
     }
 }
