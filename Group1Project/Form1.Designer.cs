@@ -72,13 +72,13 @@ namespace Group1Project
             btnTeamsPlayers = new Button();
             btnDashboard = new Button();
             grpTournament = new GroupBox();
+            lblTournament = new Label();
             btnSaveTournament = new Button();
             btnOpenTournament = new Button();
             btnNewTournament = new Button();
             cboTournament = new ComboBox();
             panelWorkspace = new Panel();
             labelWorkspaceTitle = new Label();
-            lblTournament = new Label();
             menuMain.SuspendLayout();
             toolMain.SuspendLayout();
             statusMain.SuspendLayout();
@@ -112,26 +112,26 @@ namespace Group1Project
             // newTournamentToolStripMenuItem
             // 
             newTournamentToolStripMenuItem.Name = "newTournamentToolStripMenuItem";
-            newTournamentToolStripMenuItem.Size = new Size(359, 44);
+            newTournamentToolStripMenuItem.Size = new Size(331, 44);
             newTournamentToolStripMenuItem.Text = "New Tournament";
             newTournamentToolStripMenuItem.Click += btnNewTournament_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(359, 44);
+            openToolStripMenuItem.Size = new Size(331, 44);
             openToolStripMenuItem.Text = "Open";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(359, 44);
+            saveToolStripMenuItem.Size = new Size(331, 44);
             saveToolStripMenuItem.Text = "Save";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(359, 44);
+            exitToolStripMenuItem.Size = new Size(331, 44);
             exitToolStripMenuItem.Text = "Exit";
             // 
             // newToolStripMenuItem
@@ -144,42 +144,42 @@ namespace Group1Project
             // dashboardToolStripMenuItem
             // 
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            dashboardToolStripMenuItem.Size = new Size(359, 44);
+            dashboardToolStripMenuItem.Size = new Size(342, 44);
             dashboardToolStripMenuItem.Text = "Dashboard";
             dashboardToolStripMenuItem.Click += btnDashboard_Click;
             // 
             // teamsPlayersToolStripMenuItem
             // 
             teamsPlayersToolStripMenuItem.Name = "teamsPlayersToolStripMenuItem";
-            teamsPlayersToolStripMenuItem.Size = new Size(359, 44);
+            teamsPlayersToolStripMenuItem.Size = new Size(342, 44);
             teamsPlayersToolStripMenuItem.Text = "Teams and Players";
             teamsPlayersToolStripMenuItem.Click += btnTeamsPlayers_Click;
             // 
             // bracketsToolStripMenuItem
             // 
             bracketsToolStripMenuItem.Name = "bracketsToolStripMenuItem";
-            bracketsToolStripMenuItem.Size = new Size(359, 44);
+            bracketsToolStripMenuItem.Size = new Size(342, 44);
             bracketsToolStripMenuItem.Text = "Bracket";
             bracketsToolStripMenuItem.Click += btnBracket_Click;
             // 
             // scheduleToolStripMenuItem
             // 
             scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            scheduleToolStripMenuItem.Size = new Size(359, 44);
+            scheduleToolStripMenuItem.Size = new Size(342, 44);
             scheduleToolStripMenuItem.Text = "Schedule";
             scheduleToolStripMenuItem.Click += btnSchedule_Click;
             // 
             // teamStatsToolStripMenuItem
             // 
             teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
-            teamStatsToolStripMenuItem.Size = new Size(359, 44);
+            teamStatsToolStripMenuItem.Size = new Size(342, 44);
             teamStatsToolStripMenuItem.Text = "Team Stats";
             teamStatsToolStripMenuItem.Click += btnTeamStats_Click;
             // 
             // resultsToolStripMenuItem
             // 
             resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            resultsToolStripMenuItem.Size = new Size(359, 44);
+            resultsToolStripMenuItem.Size = new Size(342, 44);
             resultsToolStripMenuItem.Text = "Results";
             resultsToolStripMenuItem.Click += btnResults_Click;
             // 
@@ -213,7 +213,7 @@ namespace Group1Project
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(359, 44);
+            aboutToolStripMenuItem.Size = new Size(212, 44);
             aboutToolStripMenuItem.Text = "About";
             // 
             // toolMain
@@ -420,6 +420,15 @@ namespace Group1Project
             grpTournament.TabIndex = 0;
             grpTournament.TabStop = false;
             // 
+            // lblTournament
+            // 
+            lblTournament.AutoSize = true;
+            lblTournament.Location = new Point(13, 22);
+            lblTournament.Name = "lblTournament";
+            lblTournament.Size = new Size(148, 32);
+            lblTournament.TabIndex = 5;
+            lblTournament.Text = "Tournament:";
+            // 
             // btnSaveTournament
             // 
             btnSaveTournament.Location = new Point(191, 104);
@@ -483,15 +492,6 @@ namespace Group1Project
             labelWorkspaceTitle.Size = new Size(231, 59);
             labelWorkspaceTitle.TabIndex = 0;
             labelWorkspaceTitle.Text = "Dashboard";
-            // 
-            // lblTournament
-            // 
-            lblTournament.AutoSize = true;
-            lblTournament.Location = new Point(13, 22);
-            lblTournament.Name = "lblTournament";
-            lblTournament.Size = new Size(148, 32);
-            lblTournament.TabIndex = 5;
-            lblTournament.Text = "Tournament:";
             // 
             // Form1
             // 
