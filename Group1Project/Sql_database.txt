@@ -10,6 +10,34 @@ CREATE TABLE Tournament (
     BracketType VARCHAR(50) NOT NULL DEFAULT 'SingleElimination'
 );
 
+-- Login/auth tables
+CREATE TABLE AppUser (
+    Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    Name VARCHAR(100) NOT NULL,
+    PasswordHash VARCHAR(255) NOT NULL,
+    CreatedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT UQ_AppUser_Name UNIQUE (Name)
+);
+
+CREATE TABLE UserTournamentAccess (
+    UserId CHAR(36) NOT NULL,
+    TournamentId CHAR(36) NOT NULL,
+    GrantedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT PK_UserTournamentAccess
+        PRIMARY KEY (UserId, TournamentId),
+
+    CONSTRAINT FK_UserTournamentAccess_User
+        FOREIGN KEY (UserId)
+        REFERENCES AppUser(Id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT FK_UserTournamentAccess_Tournament
+        FOREIGN KEY (TournamentId)
+        REFERENCES Tournament(Id)
+        ON DELETE CASCADE
+);
+
 CREATE TABLE Division (
     Id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     TournamentId CHAR(36) NOT NULL,
@@ -63,6 +91,8 @@ CREATE TABLE Matches (
     ScoreA INT NULL,
     ScoreB INT NULL,
     ScoreRecordedAt DATETIME NULL,
+    RoundNumber INT NOT NULL DEFAULT 1,
+    MatchNumber INT NOT NULL DEFAULT 1,
 
     CONSTRAINT FK_Matches_Bracket
         FOREIGN KEY (BracketId)
@@ -88,3 +118,106 @@ CREATE INDEX IX_Division_TournamentId ON Division(TournamentId);
 CREATE INDEX IX_Team_DivisionId ON Team(DivisionId);
 CREATE INDEX IX_Player_TeamId ON Player(TeamId);
 CREATE INDEX IX_Matches_BracketId ON Matches(BracketId);
+CREATE INDEX IX_Matches_Bracket_Round_Match ON Matches(BracketId, RoundNumber, MatchNumber);
+CREATE INDEX IX_UserTournamentAccess_TournamentId ON UserTournamentAccess(TournamentId);
+
+-- =========================================================
+-- Seed test tournament with 8 teams and players
+-- =========================================================
+SET @TournamentId = UUID();
+SET @DivisionId = UUID();
+
+INSERT INTO Tournament (Id, Name, Location, StartDate, BracketType)
+VALUES (@TournamentId, 'Test Tournament 2026', 'Test Arena', DATE_ADD(NOW(), INTERVAL 7 DAY), 'SingleElimination');
+
+INSERT INTO Division (Id, TournamentId, Name)
+VALUES (@DivisionId, @TournamentId, 'Main Division');
+
+SET @Team1 = UUID();
+SET @Team2 = UUID();
+SET @Team3 = UUID();
+SET @Team4 = UUID();
+SET @Team5 = UUID();
+SET @Team6 = UUID();
+SET @Team7 = UUID();
+SET @Team8 = UUID();
+
+INSERT INTO Team (Id, DivisionId, Name, Seed) VALUES
+(@Team1, @DivisionId, 'Warriors', 1),
+(@Team2, @DivisionId, 'Knights', 2),
+(@Team3, @DivisionId, 'Dragons', 3),
+(@Team4, @DivisionId, 'Phoenix', 4),
+(@Team5, @DivisionId, 'Tigers', 5),
+(@Team6, @DivisionId, 'Eagles', 6),
+(@Team7, @DivisionId, 'Sharks', 7),
+(@Team8, @DivisionId, 'Lions', 8);
+
+INSERT INTO Player (Id, TeamId, DisplayName, Number) VALUES
+(UUID(), @Team1, 'Warriors Player 1', 1),
+(UUID(), @Team1, 'Warriors Player 2', 2),
+(UUID(), @Team1, 'Warriors Player 3', 3),
+(UUID(), @Team1, 'Warriors Player 4', 4),
+(UUID(), @Team1, 'Warriors Player 5', 5),
+
+(UUID(), @Team2, 'Knights Player 1', 1),
+(UUID(), @Team2, 'Knights Player 2', 2),
+(UUID(), @Team2, 'Knights Player 3', 3),
+(UUID(), @Team2, 'Knights Player 4', 4),
+(UUID(), @Team2, 'Knights Player 5', 5),
+
+(UUID(), @Team3, 'Dragons Player 1', 1),
+(UUID(), @Team3, 'Dragons Player 2', 2),
+(UUID(), @Team3, 'Dragons Player 3', 3),
+(UUID(), @Team3, 'Dragons Player 4', 4),
+(UUID(), @Team3, 'Dragons Player 5', 5),
+
+(UUID(), @Team4, 'Phoenix Player 1', 1),
+(UUID(), @Team4, 'Phoenix Player 2', 2),
+(UUID(), @Team4, 'Phoenix Player 3', 3),
+(UUID(), @Team4, 'Phoenix Player 4', 4),
+(UUID(), @Team4, 'Phoenix Player 5', 5),
+
+(UUID(), @Team5, 'Tigers Player 1', 1),
+(UUID(), @Team5, 'Tigers Player 2', 2),
+(UUID(), @Team5, 'Tigers Player 3', 3),
+(UUID(), @Team5, 'Tigers Player 4', 4),
+(UUID(), @Team5, 'Tigers Player 5', 5),
+
+(UUID(), @Team6, 'Eagles Player 1', 1),
+(UUID(), @Team6, 'Eagles Player 2', 2),
+(UUID(), @Team6, 'Eagles Player 3', 3),
+(UUID(), @Team6, 'Eagles Player 4', 4),
+(UUID(), @Team6, 'Eagles Player 5', 5),
+
+(UUID(), @Team7, 'Sharks Player 1', 1),
+(UUID(), @Team7, 'Sharks Player 2', 2),
+(UUID(), @Team7, 'Sharks Player 3', 3),
+(UUID(), @Team7, 'Sharks Player 4', 4),
+(UUID(), @Team7, 'Sharks Player 5', 5),
+
+(UUID(), @Team8, 'Lions Player 1', 1),
+(UUID(), @Team8, 'Lions Player 2', 2),
+(UUID(), @Team8, 'Lions Player 3', 3),
+(UUID(), @Team8, 'Lions Player 4', 4),
+(UUID(), @Team8, 'Lions Player 5', 5);
+
+-- =========================================================
+-- Seed test user and grant tournament access
+-- NOTE: SHA2 here is simple for local/dev bootstrap.
+-- For production, use BCrypt/Argon2 in API code.
+-- =========================================================
+SET @TestUserId = UUID();
+
+INSERT INTO AppUser (Id, Name, PasswordHash)
+VALUES (@TestUserId, 'testuser', SHA2('test1234', 256));
+
+INSERT INTO UserTournamentAccess (UserId, TournamentId)
+VALUES (@TestUserId, @TournamentId);
+
+-- Helpful verification output
+SELECT Id, Name, Location, StartDate, BracketType FROM Tournament;
+SELECT Id, Name, Seed FROM Team WHERE DivisionId = @DivisionId ORDER BY Seed;
+SELECT COUNT(*) AS PlayerCount FROM Player p INNER JOIN Team t ON t.Id = p.TeamId WHERE t.DivisionId = @DivisionId;
+
+SELECT Id, Name, PasswordHash, CreatedAt FROM AppUser;
+SELECT UserId, TournamentId, GrantedAt FROM UserTournamentAccess;
