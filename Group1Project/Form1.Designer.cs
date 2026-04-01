@@ -100,8 +100,7 @@ namespace Group1Project
             menuMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, newToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem, accounToolStripMenuItem });
             menuMain.Location = new Point(0, 0);
             menuMain.Name = "menuMain";
-            menuMain.Padding = new Padding(11, 4, 0, 4);
-            menuMain.Size = new Size(1538, 44);
+            menuMain.Size = new Size(828, 24);
             menuMain.TabIndex = 1;
             menuMain.Text = "menuStrip1";
             // 
@@ -109,32 +108,32 @@ namespace Group1Project
             // 
             fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newTournamentToolStripMenuItem, openToolStripMenuItem, saveToolStripMenuItem, exitToolStripMenuItem });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(71, 36);
+            fileToolStripMenuItem.Size = new Size(37, 20);
             fileToolStripMenuItem.Text = "File";
             // 
             // newTournamentToolStripMenuItem
             // 
             newTournamentToolStripMenuItem.Name = "newTournamentToolStripMenuItem";
-            newTournamentToolStripMenuItem.Size = new Size(359, 44);
+            newTournamentToolStripMenuItem.Size = new Size(166, 22);
             newTournamentToolStripMenuItem.Text = "New Tournament";
             newTournamentToolStripMenuItem.Click += btnNewTournament_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(359, 44);
+            openToolStripMenuItem.Size = new Size(166, 22);
             openToolStripMenuItem.Text = "Open";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(359, 44);
+            saveToolStripMenuItem.Size = new Size(166, 22);
             saveToolStripMenuItem.Text = "Save";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(359, 44);
+            exitToolStripMenuItem.Size = new Size(166, 22);
             exitToolStripMenuItem.Text = "Exit";
             exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
@@ -142,48 +141,48 @@ namespace Group1Project
             // 
             newToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { dashboardToolStripMenuItem, teamsPlayersToolStripMenuItem, bracketsToolStripMenuItem, scheduleToolStripMenuItem, teamStatsToolStripMenuItem, resultsToolStripMenuItem });
             newToolStripMenuItem.Name = "newToolStripMenuItem";
-            newToolStripMenuItem.Size = new Size(85, 36);
+            newToolStripMenuItem.Size = new Size(44, 20);
             newToolStripMenuItem.Text = "View";
             // 
             // dashboardToolStripMenuItem
             // 
             dashboardToolStripMenuItem.Name = "dashboardToolStripMenuItem";
-            dashboardToolStripMenuItem.Size = new Size(342, 44);
+            dashboardToolStripMenuItem.Size = new Size(171, 22);
             dashboardToolStripMenuItem.Text = "Dashboard";
             dashboardToolStripMenuItem.Click += btnDashboard_Click;
             // 
             // teamsPlayersToolStripMenuItem
             // 
             teamsPlayersToolStripMenuItem.Name = "teamsPlayersToolStripMenuItem";
-            teamsPlayersToolStripMenuItem.Size = new Size(342, 44);
+            teamsPlayersToolStripMenuItem.Size = new Size(171, 22);
             teamsPlayersToolStripMenuItem.Text = "Teams and Players";
             teamsPlayersToolStripMenuItem.Click += btnTeamsPlayers_Click;
             // 
             // bracketsToolStripMenuItem
             // 
             bracketsToolStripMenuItem.Name = "bracketsToolStripMenuItem";
-            bracketsToolStripMenuItem.Size = new Size(342, 44);
+            bracketsToolStripMenuItem.Size = new Size(171, 22);
             bracketsToolStripMenuItem.Text = "Bracket";
             bracketsToolStripMenuItem.Click += btnBracket_Click;
             // 
             // scheduleToolStripMenuItem
             // 
             scheduleToolStripMenuItem.Name = "scheduleToolStripMenuItem";
-            scheduleToolStripMenuItem.Size = new Size(342, 44);
+            scheduleToolStripMenuItem.Size = new Size(171, 22);
             scheduleToolStripMenuItem.Text = "Schedule";
             scheduleToolStripMenuItem.Click += btnSchedule_Click;
             // 
             // teamStatsToolStripMenuItem
             // 
             teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
-            teamStatsToolStripMenuItem.Size = new Size(342, 44);
+            teamStatsToolStripMenuItem.Size = new Size(171, 22);
             teamStatsToolStripMenuItem.Text = "Team Stats";
             teamStatsToolStripMenuItem.Click += btnTeamStats_Click;
             // 
             // resultsToolStripMenuItem
             // 
             resultsToolStripMenuItem.Name = "resultsToolStripMenuItem";
-            resultsToolStripMenuItem.Size = new Size(342, 44);
+            resultsToolStripMenuItem.Size = new Size(171, 22);
             resultsToolStripMenuItem.Text = "Results";
             resultsToolStripMenuItem.Click += btnResults_Click;
             // 
@@ -191,53 +190,53 @@ namespace Group1Project
             // 
             toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generateBracketToolStripMenuItem, autoScheduleToolStripMenuItem });
             toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            toolsToolStripMenuItem.Size = new Size(89, 36);
+            toolsToolStripMenuItem.Size = new Size(47, 20);
             toolsToolStripMenuItem.Text = "Tools";
             // 
             // generateBracketToolStripMenuItem
             // 
             generateBracketToolStripMenuItem.Name = "generateBracketToolStripMenuItem";
-            generateBracketToolStripMenuItem.Size = new Size(329, 44);
+            generateBracketToolStripMenuItem.Size = new Size(163, 22);
             generateBracketToolStripMenuItem.Text = "Generate Bracket";
             generateBracketToolStripMenuItem.Click += tsbGenerateBracket_Click;
             // 
             // autoScheduleToolStripMenuItem
             // 
             autoScheduleToolStripMenuItem.Name = "autoScheduleToolStripMenuItem";
-            autoScheduleToolStripMenuItem.Size = new Size(329, 44);
+            autoScheduleToolStripMenuItem.Size = new Size(163, 22);
             autoScheduleToolStripMenuItem.Text = "Auto Schedule";
             // 
             // helpToolStripMenuItem
             // 
             helpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
             helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            helpToolStripMenuItem.Size = new Size(84, 36);
+            helpToolStripMenuItem.Size = new Size(44, 20);
             helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(212, 44);
+            aboutToolStripMenuItem.Size = new Size(107, 22);
             aboutToolStripMenuItem.Text = "About";
             // 
             // accounToolStripMenuItem
             // 
             accounToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loginToolStripMenuItem, logoutToolStripMenuItem });
             accounToolStripMenuItem.Name = "accounToolStripMenuItem";
-            accounToolStripMenuItem.Size = new Size(121, 36);
+            accounToolStripMenuItem.Size = new Size(64, 20);
             accounToolStripMenuItem.Text = "Account";
             // 
             // loginToolStripMenuItem
             // 
             loginToolStripMenuItem.Name = "loginToolStripMenuItem";
-            loginToolStripMenuItem.Size = new Size(222, 44);
+            loginToolStripMenuItem.Size = new Size(112, 22);
             loginToolStripMenuItem.Text = "Login";
             loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
             // 
             // logoutToolStripMenuItem
             // 
             logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            logoutToolStripMenuItem.Size = new Size(222, 44);
+            logoutToolStripMenuItem.Size = new Size(112, 22);
             logoutToolStripMenuItem.Text = "Logout";
             logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
@@ -246,10 +245,10 @@ namespace Group1Project
             toolMain.GripStyle = ToolStripGripStyle.Hidden;
             toolMain.ImageScalingSize = new Size(32, 32);
             toolMain.Items.AddRange(new ToolStripItem[] { tsbSave, tsbAddTeam, tsbGenerateBracket, tsbAutoSchedule, tsbEnterResult });
-            toolMain.Location = new Point(0, 44);
+            toolMain.Location = new Point(0, 24);
             toolMain.Name = "toolMain";
-            toolMain.Padding = new Padding(0, 0, 4, 0);
-            toolMain.Size = new Size(1538, 42);
+            toolMain.Padding = new Padding(0, 0, 2, 0);
+            toolMain.Size = new Size(828, 39);
             toolMain.TabIndex = 2;
             toolMain.Text = "toolStrip1";
             // 
@@ -258,7 +257,7 @@ namespace Group1Project
             tsbSave.Image = Properties.Resources.save;
             tsbSave.ImageTransparentColor = Color.Magenta;
             tsbSave.Name = "tsbSave";
-            tsbSave.Size = new Size(100, 36);
+            tsbSave.Size = new Size(67, 36);
             tsbSave.Text = "Save";
             // 
             // tsbAddTeam
@@ -266,7 +265,7 @@ namespace Group1Project
             tsbAddTeam.Image = Properties.Resources.add_group;
             tsbAddTeam.ImageTransparentColor = Color.Magenta;
             tsbAddTeam.Name = "tsbAddTeam";
-            tsbAddTeam.Size = new Size(157, 36);
+            tsbAddTeam.Size = new Size(97, 36);
             tsbAddTeam.Text = "Add Team";
             tsbAddTeam.Click += tsbAddTeam_Click;
             // 
@@ -275,7 +274,7 @@ namespace Group1Project
             tsbGenerateBracket.Image = Properties.Resources.New_bracket;
             tsbGenerateBracket.ImageTransparentColor = Color.Magenta;
             tsbGenerateBracket.Name = "tsbGenerateBracket";
-            tsbGenerateBracket.Size = new Size(232, 36);
+            tsbGenerateBracket.Size = new Size(132, 36);
             tsbGenerateBracket.Text = "Generate Bracket";
             tsbGenerateBracket.Click += tsbGenerateBracket_Click;
             // 
@@ -284,7 +283,7 @@ namespace Group1Project
             tsbAutoSchedule.Image = Properties.Resources.schedule;
             tsbAutoSchedule.ImageTransparentColor = Color.Magenta;
             tsbAutoSchedule.Name = "tsbAutoSchedule";
-            tsbAutoSchedule.Size = new Size(206, 36);
+            tsbAutoSchedule.Size = new Size(120, 36);
             tsbAutoSchedule.Text = "Auto Schedule";
             // 
             // tsbEnterResult
@@ -292,7 +291,7 @@ namespace Group1Project
             tsbEnterResult.Image = Properties.Resources.enter;
             tsbEnterResult.ImageTransparentColor = Color.Magenta;
             tsbEnterResult.Name = "tsbEnterResult";
-            tsbEnterResult.Size = new Size(176, 36);
+            tsbEnterResult.Size = new Size(105, 36);
             tsbEnterResult.Text = "Enter Result";
             tsbEnterResult.Click += btnResults_Click;
             // 
@@ -300,31 +299,31 @@ namespace Group1Project
             // 
             statusMain.ImageScalingSize = new Size(32, 32);
             statusMain.Items.AddRange(new ToolStripItem[] { sslTournament, sslHint });
-            statusMain.Location = new Point(0, 1018);
+            statusMain.Location = new Point(0, 475);
             statusMain.Name = "statusMain";
-            statusMain.Padding = new Padding(2, 0, 15, 0);
-            statusMain.Size = new Size(1538, 42);
+            statusMain.Padding = new Padding(1, 0, 8, 0);
+            statusMain.Size = new Size(828, 22);
             statusMain.TabIndex = 3;
             statusMain.Text = "statusStrip1";
             // 
             // sslTournament
             // 
             sslTournament.Name = "sslTournament";
-            sslTournament.Size = new Size(224, 32);
+            sslTournament.Size = new Size(113, 17);
             sslTournament.Text = "Tournament: (none)";
             // 
             // sslHint
             // 
             sslHint.Name = "sslHint";
-            sslHint.Size = new Size(78, 32);
+            sslHint.Size = new Size(39, 17);
             sslHint.Text = "Ready";
             // 
             // splitMain
             // 
             splitMain.Dock = DockStyle.Fill;
             splitMain.FixedPanel = FixedPanel.Panel1;
-            splitMain.Location = new Point(0, 86);
-            splitMain.Margin = new Padding(7, 8, 7, 8);
+            splitMain.Location = new Point(0, 63);
+            splitMain.Margin = new Padding(4, 4, 4, 4);
             splitMain.Name = "splitMain";
             // 
             // splitMain.Panel1
@@ -336,9 +335,9 @@ namespace Group1Project
             // splitMain.Panel2
             // 
             splitMain.Panel2.Controls.Add(panelWorkspace);
-            splitMain.Size = new Size(1538, 932);
-            splitMain.SplitterDistance = 530;
-            splitMain.SplitterWidth = 13;
+            splitMain.Size = new Size(828, 412);
+            splitMain.SplitterDistance = 285;
+            splitMain.SplitterWidth = 7;
             splitMain.TabIndex = 4;
             // 
             // panelNav
@@ -350,20 +349,20 @@ namespace Group1Project
             panelNav.Controls.Add(btnTeamsPlayers);
             panelNav.Controls.Add(btnDashboard);
             panelNav.Dock = DockStyle.Fill;
-            panelNav.Location = new Point(0, 152);
-            panelNav.Margin = new Padding(4);
+            panelNav.Location = new Point(0, 71);
+            panelNav.Margin = new Padding(2, 2, 2, 2);
             panelNav.Name = "panelNav";
-            panelNav.Padding = new Padding(13, 15, 13, 15);
-            panelNav.Size = new Size(530, 780);
+            panelNav.Padding = new Padding(7, 7, 7, 7);
+            panelNav.Size = new Size(285, 341);
             panelNav.TabIndex = 1;
             // 
             // btnResults
             // 
             btnResults.Dock = DockStyle.Top;
-            btnResults.Location = new Point(13, 240);
-            btnResults.Margin = new Padding(4);
+            btnResults.Location = new Point(7, 112);
+            btnResults.Margin = new Padding(2, 2, 2, 2);
             btnResults.Name = "btnResults";
-            btnResults.Size = new Size(504, 45);
+            btnResults.Size = new Size(271, 21);
             btnResults.TabIndex = 5;
             btnResults.Text = "Results";
             btnResults.UseVisualStyleBackColor = true;
@@ -372,10 +371,10 @@ namespace Group1Project
             // btnStandings
             // 
             btnStandings.Dock = DockStyle.Top;
-            btnStandings.Location = new Point(13, 195);
-            btnStandings.Margin = new Padding(4);
+            btnStandings.Location = new Point(7, 91);
+            btnStandings.Margin = new Padding(2, 2, 2, 2);
             btnStandings.Name = "btnStandings";
-            btnStandings.Size = new Size(504, 45);
+            btnStandings.Size = new Size(271, 21);
             btnStandings.TabIndex = 4;
             btnStandings.Text = "Team Stats";
             btnStandings.UseVisualStyleBackColor = true;
@@ -384,10 +383,10 @@ namespace Group1Project
             // btnSchedule
             // 
             btnSchedule.Dock = DockStyle.Top;
-            btnSchedule.Location = new Point(13, 150);
-            btnSchedule.Margin = new Padding(4);
+            btnSchedule.Location = new Point(7, 70);
+            btnSchedule.Margin = new Padding(2, 2, 2, 2);
             btnSchedule.Name = "btnSchedule";
-            btnSchedule.Size = new Size(504, 45);
+            btnSchedule.Size = new Size(271, 21);
             btnSchedule.TabIndex = 3;
             btnSchedule.Text = "Schedule";
             btnSchedule.UseVisualStyleBackColor = true;
@@ -396,10 +395,10 @@ namespace Group1Project
             // btnBracket
             // 
             btnBracket.Dock = DockStyle.Top;
-            btnBracket.Location = new Point(13, 105);
-            btnBracket.Margin = new Padding(4);
+            btnBracket.Location = new Point(7, 49);
+            btnBracket.Margin = new Padding(2, 2, 2, 2);
             btnBracket.Name = "btnBracket";
-            btnBracket.Size = new Size(504, 45);
+            btnBracket.Size = new Size(271, 21);
             btnBracket.TabIndex = 2;
             btnBracket.Text = "Bracket";
             btnBracket.UseVisualStyleBackColor = true;
@@ -408,10 +407,10 @@ namespace Group1Project
             // btnTeamsPlayers
             // 
             btnTeamsPlayers.Dock = DockStyle.Top;
-            btnTeamsPlayers.Location = new Point(13, 60);
-            btnTeamsPlayers.Margin = new Padding(4);
+            btnTeamsPlayers.Location = new Point(7, 28);
+            btnTeamsPlayers.Margin = new Padding(2, 2, 2, 2);
             btnTeamsPlayers.Name = "btnTeamsPlayers";
-            btnTeamsPlayers.Size = new Size(504, 45);
+            btnTeamsPlayers.Size = new Size(271, 21);
             btnTeamsPlayers.TabIndex = 1;
             btnTeamsPlayers.Text = "Teams and Players";
             btnTeamsPlayers.UseVisualStyleBackColor = true;
@@ -420,10 +419,10 @@ namespace Group1Project
             // btnDashboard
             // 
             btnDashboard.Dock = DockStyle.Top;
-            btnDashboard.Location = new Point(13, 15);
-            btnDashboard.Margin = new Padding(4);
+            btnDashboard.Location = new Point(7, 7);
+            btnDashboard.Margin = new Padding(2, 2, 2, 2);
             btnDashboard.Name = "btnDashboard";
-            btnDashboard.Size = new Size(504, 45);
+            btnDashboard.Size = new Size(271, 21);
             btnDashboard.TabIndex = 0;
             btnDashboard.Text = "Dashboard";
             btnDashboard.UseVisualStyleBackColor = true;
@@ -438,48 +437,49 @@ namespace Group1Project
             grpTournament.Controls.Add(cboTournament);
             grpTournament.Dock = DockStyle.Top;
             grpTournament.Location = new Point(0, 0);
-            grpTournament.Margin = new Padding(4);
+            grpTournament.Margin = new Padding(2, 2, 2, 2);
             grpTournament.Name = "grpTournament";
-            grpTournament.Padding = new Padding(4);
-            grpTournament.Size = new Size(530, 152);
+            grpTournament.Padding = new Padding(2, 2, 2, 2);
+            grpTournament.Size = new Size(285, 71);
             grpTournament.TabIndex = 0;
             grpTournament.TabStop = false;
             // 
             // lblTournament
             // 
             lblTournament.AutoSize = true;
-            lblTournament.Location = new Point(13, 22);
+            lblTournament.Location = new Point(7, 10);
+            lblTournament.Margin = new Padding(2, 0, 2, 0);
             lblTournament.Name = "lblTournament";
-            lblTournament.Size = new Size(148, 32);
+            lblTournament.Size = new Size(75, 15);
             lblTournament.TabIndex = 5;
             lblTournament.Text = "Tournament:";
             // 
             // btnSaveTournament
             // 
-            btnSaveTournament.Location = new Point(191, 104);
-            btnSaveTournament.Margin = new Padding(4);
+            btnSaveTournament.Location = new Point(103, 49);
+            btnSaveTournament.Margin = new Padding(2, 2, 2, 2);
             btnSaveTournament.Name = "btnSaveTournament";
-            btnSaveTournament.Size = new Size(85, 45);
+            btnSaveTournament.Size = new Size(46, 21);
             btnSaveTournament.TabIndex = 4;
             btnSaveTournament.Text = "Save";
             btnSaveTournament.UseVisualStyleBackColor = true;
             // 
             // btnOpenTournament
             // 
-            btnOpenTournament.Location = new Point(102, 104);
-            btnOpenTournament.Margin = new Padding(4);
+            btnOpenTournament.Location = new Point(55, 49);
+            btnOpenTournament.Margin = new Padding(2, 2, 2, 2);
             btnOpenTournament.Name = "btnOpenTournament";
-            btnOpenTournament.Size = new Size(85, 45);
+            btnOpenTournament.Size = new Size(46, 21);
             btnOpenTournament.TabIndex = 3;
             btnOpenTournament.Text = "Open";
             btnOpenTournament.UseVisualStyleBackColor = true;
             // 
             // btnNewTournament
             // 
-            btnNewTournament.Location = new Point(11, 104);
-            btnNewTournament.Margin = new Padding(4);
+            btnNewTournament.Location = new Point(6, 49);
+            btnNewTournament.Margin = new Padding(2, 2, 2, 2);
             btnNewTournament.Name = "btnNewTournament";
-            btnNewTournament.Size = new Size(85, 45);
+            btnNewTournament.Size = new Size(46, 21);
             btnNewTournament.TabIndex = 2;
             btnNewTournament.Text = "New";
             btnNewTournament.UseVisualStyleBackColor = true;
@@ -490,10 +490,10 @@ namespace Group1Project
             cboTournament.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cboTournament.DropDownStyle = ComboBoxStyle.DropDownList;
             cboTournament.FormattingEnabled = true;
-            cboTournament.Location = new Point(11, 58);
-            cboTournament.Margin = new Padding(4);
+            cboTournament.Location = new Point(6, 27);
+            cboTournament.Margin = new Padding(2, 2, 2, 2);
             cboTournament.Name = "cboTournament";
-            cboTournament.Size = new Size(499, 40);
+            cboTournament.Size = new Size(271, 23);
             cboTournament.TabIndex = 1;
             cboTournament.SelectedIndexChanged += cboTournament_SelectedIndexChanged;
             // 
@@ -502,33 +502,33 @@ namespace Group1Project
             panelWorkspace.Controls.Add(labelWorkspaceTitle);
             panelWorkspace.Dock = DockStyle.Fill;
             panelWorkspace.Location = new Point(0, 0);
-            panelWorkspace.Margin = new Padding(4);
+            panelWorkspace.Margin = new Padding(2, 2, 2, 2);
             panelWorkspace.Name = "panelWorkspace";
-            panelWorkspace.Size = new Size(995, 932);
+            panelWorkspace.Size = new Size(536, 412);
             panelWorkspace.TabIndex = 0;
             // 
             // labelWorkspaceTitle
             // 
             labelWorkspaceTitle.AutoSize = true;
             labelWorkspaceTitle.Font = new Font("Segoe UI", 16F);
-            labelWorkspaceTitle.Location = new Point(17, 15);
-            labelWorkspaceTitle.Margin = new Padding(4, 0, 4, 0);
+            labelWorkspaceTitle.Location = new Point(9, 7);
+            labelWorkspaceTitle.Margin = new Padding(2, 0, 2, 0);
             labelWorkspaceTitle.Name = "labelWorkspaceTitle";
-            labelWorkspaceTitle.Size = new Size(231, 59);
+            labelWorkspaceTitle.Size = new Size(118, 30);
             labelWorkspaceTitle.TabIndex = 0;
             labelWorkspaceTitle.Text = "Dashboard";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1538, 1060);
+            ClientSize = new Size(828, 497);
             Controls.Add(splitMain);
             Controls.Add(statusMain);
             Controls.Add(toolMain);
             Controls.Add(menuMain);
-            Margin = new Padding(4);
-            MinimumSize = new Size(1083, 647);
+            Margin = new Padding(2, 2, 2, 2);
+            MinimumSize = new Size(591, 324);
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Tournament Bracket Manager";

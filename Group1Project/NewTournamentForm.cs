@@ -41,6 +41,11 @@ namespace Group1Project
             dateTimePickerStartDate.Value = DateTime.Today;
             buttonCreate.DialogResult = DialogResult.None;
             buttonCreate.Click += BtnOk_Click;
+
+            // Populate bracket type choices
+            comboBoxBracketType.Items.Add("SingleElimination");
+            comboBoxBracketType.Items.Add("RoundRobin");
+            comboBoxBracketType.SelectedIndex = 0; // default: SingleElimination
         }
 
         /// <summary>
@@ -65,6 +70,12 @@ namespace Group1Project
             // Create the object in memory
             CreatedTournament = new Tournament(name, startDate, location);
 
+            // Apply selected bracket type
+            if (Enum.TryParse<BracketType>(comboBoxBracketType.SelectedItem?.ToString(), out var bracketType))
+            {
+                CreatedTournament.BracketType = bracketType;
+            }
+
             // save to database
             bool isSaved = await _apiClient.CreateTournamentAsync(CreatedTournament);
 
@@ -75,7 +86,7 @@ namespace Group1Project
                 this.Close();
             }
             else
-            { 
+            {
                 CreatedTournament = null;
                 MessageBox.Show("Failed to save the tournament to the database. Is the API running?", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

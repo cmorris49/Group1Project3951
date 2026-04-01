@@ -34,6 +34,8 @@
             dateTimePickerStartDate = new DateTimePicker();
             labelLocation = new Label();
             textLocation = new TextBox();
+            labelBracketType = new Label();
+            comboBoxBracketType = new ComboBox();
             buttonCreate = new Button();
             buttonCancel = new Button();
             SuspendLayout();
@@ -87,6 +89,23 @@
             textLocation.Size = new Size(200, 39);
             textLocation.TabIndex = 5;
             // 
+            // labelBracketType
+            // 
+            labelBracketType.AutoSize = true;
+            labelBracketType.Location = new Point(12, 225);
+            labelBracketType.Name = "labelBracketType";
+            labelBracketType.Size = new Size(150, 32);
+            labelBracketType.TabIndex = 8;
+            labelBracketType.Text = "Bracket Type";
+            // 
+            // comboBoxBracketType
+            // 
+            comboBoxBracketType.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxBracketType.Location = new Point(232, 220);
+            comboBoxBracketType.Name = "comboBoxBracketType";
+            comboBoxBracketType.Size = new Size(200, 40);
+            comboBoxBracketType.TabIndex = 9;
+            // 
             // buttonCreate
             // 
             buttonCreate.DialogResult = DialogResult.OK;
@@ -116,6 +135,8 @@
             ClientSize = new Size(800, 450);
             Controls.Add(buttonCancel);
             Controls.Add(buttonCreate);
+            Controls.Add(comboBoxBracketType);
+            Controls.Add(labelBracketType);
             Controls.Add(textLocation);
             Controls.Add(labelLocation);
             Controls.Add(dateTimePickerStartDate);
@@ -140,6 +161,8 @@
         private DateTimePicker dateTimePickerStartDate;
         private Label labelLocation;
         private TextBox textLocation;
+        private Label labelBracketType;
+        private ComboBox comboBoxBracketType;
         private Button buttonCreate;
         private Button buttonCancel;
     }

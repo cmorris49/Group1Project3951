@@ -60,13 +60,13 @@ namespace Group1Project
             tableMain.Controls.Add(panelViewHost, 0, 1);
             tableMain.Dock = DockStyle.Fill;
             tableMain.Location = new Point(0, 0);
-            tableMain.Margin = new Padding(4, 4, 4, 4);
+            tableMain.Margin = new Padding(2);
             tableMain.Name = "tableMain";
             tableMain.RowCount = 1;
-            tableMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 79F));
+            tableMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 37F));
             tableMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 21F));
-            tableMain.Size = new Size(1436, 986);
+            tableMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 10F));
+            tableMain.Size = new Size(773, 462);
             tableMain.TabIndex = 0;
             // 
             // panelHeader
@@ -77,10 +77,10 @@ namespace Group1Project
             panelHeader.Controls.Add(buttonExportBracket);
             panelHeader.Controls.Add(labelStage);
             panelHeader.Dock = DockStyle.Fill;
-            panelHeader.Location = new Point(4, 4);
-            panelHeader.Margin = new Padding(4, 4, 4, 4);
+            panelHeader.Location = new Point(2, 2);
+            panelHeader.Margin = new Padding(2);
             panelHeader.Name = "panelHeader";
-            panelHeader.Size = new Size(1428, 71);
+            panelHeader.Size = new Size(769, 33);
             panelHeader.TabIndex = 0;
             // 
             // comboBoxView
@@ -88,19 +88,18 @@ namespace Group1Project
             comboBoxView.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxView.FormattingEnabled = true;
             comboBoxView.Items.AddRange(new object[] { "Bracket", "Matches" });
-            comboBoxView.Location = new Point(282, 20);
-            comboBoxView.Margin = new Padding(6, 6, 6, 6);
+            comboBoxView.Location = new Point(152, 9);
             comboBoxView.Name = "comboBoxView";
-            comboBoxView.Size = new Size(242, 40);
+            comboBoxView.Size = new Size(132, 23);
             comboBoxView.TabIndex = 5;
             // 
             // buttonResetBracket
             // 
             buttonResetBracket.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonResetBracket.Location = new Point(1166, 15);
-            buttonResetBracket.Margin = new Padding(4, 4, 4, 4);
+            buttonResetBracket.Location = new Point(628, 7);
+            buttonResetBracket.Margin = new Padding(2);
             buttonResetBracket.Name = "buttonResetBracket";
-            buttonResetBracket.Size = new Size(121, 45);
+            buttonResetBracket.Size = new Size(65, 21);
             buttonResetBracket.TabIndex = 3;
             buttonResetBracket.Text = "Reset";
             buttonResetBracket.UseVisualStyleBackColor = true;
@@ -108,10 +107,10 @@ namespace Group1Project
             // buttonGenerateBracket
             // 
             buttonGenerateBracket.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonGenerateBracket.Location = new Point(1042, 15);
-            buttonGenerateBracket.Margin = new Padding(4, 4, 4, 4);
+            buttonGenerateBracket.Location = new Point(561, 7);
+            buttonGenerateBracket.Margin = new Padding(2);
             buttonGenerateBracket.Name = "buttonGenerateBracket";
-            buttonGenerateBracket.Size = new Size(121, 45);
+            buttonGenerateBracket.Size = new Size(65, 21);
             buttonGenerateBracket.TabIndex = 2;
             buttonGenerateBracket.Text = "Generate";
             buttonGenerateBracket.UseVisualStyleBackColor = true;
@@ -119,10 +118,10 @@ namespace Group1Project
             // buttonExportBracket
             // 
             buttonExportBracket.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonExportBracket.Location = new Point(1293, 15);
-            buttonExportBracket.Margin = new Padding(4, 4, 4, 4);
+            buttonExportBracket.Location = new Point(696, 7);
+            buttonExportBracket.Margin = new Padding(2);
             buttonExportBracket.Name = "buttonExportBracket";
-            buttonExportBracket.Size = new Size(121, 45);
+            buttonExportBracket.Size = new Size(65, 21);
             buttonExportBracket.TabIndex = 1;
             buttonExportBracket.Text = "Export";
             buttonExportBracket.UseVisualStyleBackColor = true;
@@ -131,10 +130,10 @@ namespace Group1Project
             // 
             labelStage.AutoSize = true;
             labelStage.Font = new Font("Segoe UI", 16F);
-            labelStage.Location = new Point(11, 9);
-            labelStage.Margin = new Padding(4, 0, 4, 0);
+            labelStage.Location = new Point(6, 4);
+            labelStage.Margin = new Padding(2, 0, 2, 0);
             labelStage.Name = "labelStage";
-            labelStage.Size = new Size(275, 59);
+            labelStage.Size = new Size(143, 30);
             labelStage.TabIndex = 0;
             labelStage.Text = "Bracket Type:";
             // 
@@ -143,10 +142,10 @@ namespace Group1Project
             panelViewHost.Controls.Add(dataGridViewStageMatches);
             panelViewHost.Controls.Add(panelBracketContainer);
             panelViewHost.Dock = DockStyle.Fill;
-            panelViewHost.Location = new Point(4, 83);
-            panelViewHost.Margin = new Padding(4, 4, 4, 4);
+            panelViewHost.Location = new Point(2, 39);
+            panelViewHost.Margin = new Padding(2);
             panelViewHost.Name = "panelViewHost";
-            panelViewHost.Size = new Size(1428, 899);
+            panelViewHost.Size = new Size(769, 421);
             panelViewHost.TabIndex = 1;
             // 
             // dataGridViewStageMatches
@@ -157,14 +156,14 @@ namespace Group1Project
             dataGridViewStageMatches.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewStageMatches.Dock = DockStyle.Fill;
             dataGridViewStageMatches.Location = new Point(0, 0);
-            dataGridViewStageMatches.Margin = new Padding(4, 4, 4, 4);
+            dataGridViewStageMatches.Margin = new Padding(2);
             dataGridViewStageMatches.MultiSelect = false;
             dataGridViewStageMatches.Name = "dataGridViewStageMatches";
             dataGridViewStageMatches.ReadOnly = true;
             dataGridViewStageMatches.RowHeadersVisible = false;
             dataGridViewStageMatches.RowHeadersWidth = 82;
             dataGridViewStageMatches.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewStageMatches.Size = new Size(1428, 899);
+            dataGridViewStageMatches.Size = new Size(769, 421);
             dataGridViewStageMatches.TabIndex = 1;
             dataGridViewStageMatches.Visible = false;
             // 
@@ -173,20 +172,20 @@ namespace Group1Project
             panelBracketContainer.AutoScroll = true;
             panelBracketContainer.Dock = DockStyle.Fill;
             panelBracketContainer.Location = new Point(0, 0);
-            panelBracketContainer.Margin = new Padding(4, 4, 4, 4);
+            panelBracketContainer.Margin = new Padding(2);
             panelBracketContainer.Name = "panelBracketContainer";
-            panelBracketContainer.Size = new Size(1428, 899);
+            panelBracketContainer.Size = new Size(769, 421);
             panelBracketContainer.TabIndex = 1;
             panelBracketContainer.Visible = false;
             // 
             // BracketPage
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tableMain);
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(2);
             Name = "BracketPage";
-            Size = new Size(1436, 986);
+            Size = new Size(773, 462);
             tableMain.ResumeLayout(false);
             panelHeader.ResumeLayout(false);
             panelHeader.PerformLayout();

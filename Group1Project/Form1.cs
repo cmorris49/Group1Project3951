@@ -38,13 +38,59 @@ namespace Group1Project
         {
             InitializeComponent();
 
-            // For testing purposes, we can create a sample tournament with dummy data to populate the UI.
-            //var testTournament = Tournament.CreateTestTournament();
-            //tournaments.Add(testTournament);
-            //currentTournament = testTournament;
-            // End of testing code - remove when done
-
             this.Load += Form1_Load;
+            ApplyToolbarStyle();
+        }
+
+        /// <summary>
+        /// Applies visual improvements to the toolbar: background color, button spacing,
+        /// separator lines, and tooltip text — without touching the Designer file.
+        /// </summary>
+        private void ApplyToolbarStyle()
+        {
+            // ── Toolbar background ───────────────────────────────────────────
+            toolMain.BackColor = Color.FromArgb(245, 246, 250);
+            toolMain.Padding = new Padding(4, 2, 4, 2);
+            toolMain.ImageScalingSize = new Size(24, 24);
+
+            // ── Button styles ────────────────────────────────────────────────
+            StyleToolButton(tsbSave, "💾 Save", "Save the current tournament", Color.FromArgb(52, 152, 219));
+            StyleToolButton(tsbAddTeam, "➕ Add Team", "Add a new team to the tournament", Color.FromArgb(39, 174, 96));
+            StyleToolButton(tsbGenerateBracket, "🏆 Generate Bracket", "Generate the tournament bracket", Color.FromArgb(142, 68, 173));
+            StyleToolButton(tsbAutoSchedule, "📅 Auto Schedule", "Automatically schedule all matches", Color.FromArgb(211, 84, 0));
+            StyleToolButton(tsbEnterResult, "✔ Enter Result", "Enter a match result", Color.FromArgb(192, 57, 43));
+
+            // ── Separator between groups ─────────────────────────────────────
+            var sep = new ToolStripSeparator();
+            toolMain.Items.Insert(1, sep); // separator after Save
+        }
+
+        /// <summary>
+        /// Styles an individual toolbar button with consistent padding, font, and tooltip.
+        /// </summary>
+        private static void StyleToolButton(ToolStripButton btn, string text,
+            string tooltip, Color accentColor)
+        {
+            btn.Text = text;
+            btn.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            btn.ForeColor = Color.FromArgb(50, 50, 60);
+            btn.Padding = new Padding(8, 2, 8, 2);
+            btn.AutoToolTip = false;
+            btn.ToolTipText = tooltip;
+            btn.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            btn.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Highlight on hover via mouse events
+            btn.MouseEnter += (s, e) =>
+            {
+                btn.ForeColor = accentColor;
+                btn.Font = new Font(btn.Font, FontStyle.Bold);
+            };
+            btn.MouseLeave += (s, e) =>
+            {
+                btn.ForeColor = Color.FromArgb(50, 50, 60);
+                btn.Font = new Font(btn.Font, FontStyle.Regular);
+            };
         }
 
         /// <summary>

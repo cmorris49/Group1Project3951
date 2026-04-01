@@ -35,6 +35,7 @@ namespace Group1Project
         {
             InitializeComponent();
             InitializeNextMatchCard();
+            ApplyVisualStyle();
         }
 
         /// <summary>
@@ -83,6 +84,97 @@ namespace Group1Project
                 ?? new List<ApiClient.MatchReadDto>();
 
             PopulateDashboardMatchSections(matches);
+        }
+
+        /// <summary>
+        /// Applies visual styling to dashboard cards and section labels in code,
+        /// without modifying the Designer file.
+        /// </summary>
+        private void ApplyVisualStyle()
+        {
+            // ── Header ──────────────────────────────────────────────────────
+            panelDashHeader.BackColor = Color.FromArgb(30, 30, 60);
+            labelDashTitle.ForeColor = Color.White;
+            labelDashTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            labelDashTournament.ForeColor = Color.FromArgb(180, 200, 255);
+            labelDashTournament.Font = new Font("Segoe UI", 11F);
+
+            // ── Stat cards: color-coded by category ─────────────────────────
+            StyleCard(cardTeams, labelCardTeamsTitle, lblTeamsCount,
+                Color.FromArgb(41, 128, 185),  // blue
+                "Teams", "👥");
+
+            StyleCard(cardPlayers, labelCardPlayersTitle, lblPlayersCount,
+                Color.FromArgb(39, 174, 96),   // green
+                "Players", "🏃");
+
+            StyleCard(cardMatches, labelCardMatchesTitle, lblMatchesCount,
+                Color.FromArgb(142, 68, 173),  // purple
+                "Matches", "⚔");
+
+            StyleCard(cardNextMatch, labelCardNextMatchTitle, null,
+                Color.FromArgb(211, 84, 0),    // orange
+                "Next Match", "📅");
+
+            // ── Section labels ───────────────────────────────────────────────
+            StyleSectionLabel(labelRecent, "Recent Activity");
+            StyleSectionLabel(labelUpcomingEvents, "Upcoming Events");
+
+            // ── Recent activity listbox ──────────────────────────────────────
+            listBox1.Font = new Font("Segoe UI", 9.5F);
+            listBox1.BorderStyle = BorderStyle.None;
+            listBox1.BackColor = Color.FromArgb(248, 249, 250);
+
+            // ── Upcoming events panel ────────────────────────────────────────
+            flowLayoutPanel1.BackColor = Color.FromArgb(248, 249, 250);
+        }
+
+        /// <summary>
+        /// Applies a consistent card style: colored title bar area, large white number, icon.
+        /// </summary>
+        private static void StyleCard(Panel card, Label titleLabel, Label? countLabel,
+            Color accentColor, string titleText, string icon)
+        {
+            card.BackColor = Color.White;
+            card.BorderStyle = BorderStyle.None;
+
+            // Simulate a colored top stripe by painting the card background
+            card.Paint += (s, e) =>
+            {
+                e.Graphics.FillRectangle(new SolidBrush(accentColor),
+                    0, 0, card.Width, 38);
+                // subtle shadow border
+                using var pen = new Pen(Color.FromArgb(220, 220, 220));
+                e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
+            };
+
+            // Title in the colored stripe
+            titleLabel.Text = $"{icon}  {titleText}";
+            titleLabel.ForeColor = Color.White;
+            titleLabel.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            titleLabel.Location = new Point(8, 6);
+            titleLabel.AutoSize = true;
+            titleLabel.BackColor = Color.Transparent;
+
+            // Count number centred below
+            if (countLabel != null)
+            {
+                countLabel.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
+                countLabel.ForeColor = accentColor;
+                countLabel.TextAlign = ContentAlignment.MiddleCenter;
+                countLabel.BackColor = Color.Transparent;
+            }
+        }
+
+        /// <summary>
+        /// Applies a bold underlined style to section header labels.
+        /// </summary>
+        private static void StyleSectionLabel(Label label, string text)
+        {
+            label.Text = text;
+            label.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            label.ForeColor = Color.FromArgb(50, 50, 80);
+            label.Padding = new Padding(4, 4, 0, 6);
         }
 
         /// <summary>

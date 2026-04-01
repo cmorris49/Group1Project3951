@@ -44,6 +44,9 @@ namespace Group1Project
 
         private readonly List<(GroupBox From, GroupBox To)> _connectorPairs = new List<(GroupBox From, GroupBox To)>();
 
+        // "Generate Next Round" button shown only for Swiss brackets
+        private Button _btnNextRound = new Button();
+
         /// <summary>
         /// Initializes a new instance of the BracketPage user control, configures UI defaults,
         /// and wires event handlers for view switching, panel painting, and resize redraw behavior.
@@ -66,12 +69,30 @@ namespace Group1Project
             {
                 if (_apiMatches.Count > 0 && panelBracketContainer.Visible)
                 {
-                    DrawBracketTreeFromApiMatches();
+                    if (currentTournament?.BracketType == BracketType.RoundRobin)
+                        DrawRoundRobinPanel();
+                    else if (currentTournament?.BracketType == BracketType.Swiss)
+                        DrawSwissPanel();
+                    else
+                        DrawBracketTreeFromApiMatches();
                 }
             };
 
+            // "Generate Next Round" button — shown only for Swiss
+            _btnNextRound.Text = "Generate Next Round";
+            _btnNextRound.Size = new Size(190, 40);
+            _btnNextRound.Visible = false;
+            _btnNextRound.Click += async (s, e) =>
+            {
+                if (currentTournament == null) return;
+                _btnNextRound.Enabled = false;
+                bool ok = await _apiClient.GenerateNextRoundAsync(currentTournament.Id);
+                _btnNextRound.Enabled = true;
+                if (ok) await RefreshBracketAsync();
+            };
+
             if (comboBoxView.Items.Count > 0)
-            { 
+            {
                 comboBoxView.SelectedIndex = 0;
             }
             ShowView("Bracket");
@@ -84,6 +105,17 @@ namespace Group1Project
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
+
+            // Anchor the Next Round button inside the bracket container (top-right)
+            if (!panelBracketContainer.Controls.Contains(_btnNextRound))
+            {
+                _btnNextRound.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+                _btnNextRound.Location = new Point(
+                    panelBracketContainer.Width - _btnNextRound.Width - 10, 10);
+                panelBracketContainer.Controls.Add(_btnNextRound);
+                _btnNextRound.BringToFront();
+            }
+
             _ = RefreshBracketAsync();
         }
 
@@ -143,7 +175,245 @@ namespace Group1Project
                     scoreText);
             }
 
-            DrawBracketTreeFromApiMatches();
+            bool isRoundRobin = currentTournament.BracketType == BracketType.RoundRobin;
+            bool isSwiss = currentTournament.BracketType == BracketType.Swiss;
+
+            // Show "Generate Next Round" button only for Swiss when matches exist
+            _btnNextRound.Visible = isSwiss && _apiMatches.Count > 0;
+
+            if (isRoundRobin)
+            {
+                DrawRoundRobinPanel();
+            }
+            else if (isSwiss)
+            {
+                DrawSwissPanel();
+                if (_btnNextRound.Visible) _btnNextRound.BringToFront();
+            }
+            else
+            {
+                DrawBracketTreeFromApiMatches();
+            }
+        }
+
+        /// <summary>
+        /// Renders a round-by-round table layout for Round Robin tournaments.
+        /// Each round is shown as a labelled group of matches.
+        /// </summary>
+        private void DrawRoundRobinPanel()
+        {
+            panelBracketContainer.Controls.Clear();
+            _renderedMatchBoxes.Clear();
+            _matchBoxes.Clear();
+            _connectorPairs.Clear();
+
+            if (_apiMatches.Count == 0)
+            {
+                Label noMatches = new Label
+                {
+                    Text = "No matches to display",
+                    AutoSize = true,
+                    Location = new Point(20, 20),
+                    Font = new Font("Segoe UI", 14)
+                };
+                panelBracketContainer.Controls.Add(noMatches);
+                return;
+            }
+
+            panelBracketContainer.AutoScroll = true;
+
+            var rounds = _apiMatches
+                .GroupBy(m => m.RoundNumber)
+                .OrderBy(g => g.Key)
+                .ToList();
+
+            int y = 10;
+            const int rowHeight = 24;
+            const int headerHeight = 28;
+            const int roundPadding = 12;
+
+            foreach (var roundGroup in rounds)
+            {
+                var matchesInRound = roundGroup.OrderBy(m => m.MatchNumber).ToList();
+
+                // Round header label
+                Label roundLabel = new Label
+                {
+                    Text = $"Round {roundGroup.Key}",
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    Location = new Point(10, y),
+                    AutoSize = true,
+                    ForeColor = Color.DarkBlue
+                };
+                panelBracketContainer.Controls.Add(roundLabel);
+                y += headerHeight;
+
+                foreach (var match in matchesInRound)
+                {
+                    string score = (match.ScoreA.HasValue && match.ScoreB.HasValue)
+                        ? $"{match.ScoreA.Value} - {match.ScoreB.Value}"
+                        : "vs";
+
+                    string status = string.Equals(match.Status, "Complete",
+                        StringComparison.OrdinalIgnoreCase) ? "✓" : "·";
+
+                    Label matchLabel = new Label
+                    {
+                        Text = $"  {status}  {(match.TeamAName ?? "TBD").PadRight(20)} {score.PadLeft(7)}  {match.TeamBName ?? "TBD"}",
+                        Font = new Font("Consolas", 9),
+                        Location = new Point(20, y),
+                        AutoSize = true,
+                        ForeColor = string.Equals(match.Status, "Complete",
+                            StringComparison.OrdinalIgnoreCase) ? Color.DarkGreen : Color.Black
+                    };
+                    panelBracketContainer.Controls.Add(matchLabel);
+                    y += rowHeight;
+                }
+
+                y += roundPadding;
+            }
+        }
+
+        /// <summary>
+        /// Renders a round-by-round table layout for Swiss tournaments.
+        /// Shows win counts next to each team name and highlights the current (latest) round.
+        /// </summary>
+        private void DrawSwissPanel()
+        {
+            panelBracketContainer.Controls.Clear();
+            _renderedMatchBoxes.Clear();
+            _matchBoxes.Clear();
+            _connectorPairs.Clear();
+
+            if (_apiMatches.Count == 0)
+            {
+                Label noMatches = new Label
+                {
+                    Text = "No matches yet — click Generate to create Round 1.",
+                    AutoSize = true,
+                    Location = new Point(20, 20),
+                    Font = new Font("Segoe UI", 11)
+                };
+                panelBracketContainer.Controls.Add(noMatches);
+                return;
+            }
+
+            panelBracketContainer.AutoScroll = true;
+
+            // Build win counts from completed matches
+            var wins = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            foreach (var m in _apiMatches.Where(m =>
+                string.Equals(m.Status, "Complete", StringComparison.OrdinalIgnoreCase)
+                && m.ScoreA.HasValue && m.ScoreB.HasValue
+                && m.TeamAId != null && m.TeamBId != null))
+            {
+                wins.TryAdd(m.TeamAId!, 0);
+                wins.TryAdd(m.TeamBId!, 0);
+                if (m.ScoreA > m.ScoreB) wins[m.TeamAId!]++;
+                else if (m.ScoreB > m.ScoreA) wins[m.TeamBId!]++;
+            }
+
+            var rounds = _apiMatches
+                .GroupBy(m => m.RoundNumber)
+                .OrderBy(g => g.Key)
+                .ToList();
+
+            int latestRound = rounds.Max(g => g.Key);
+
+            int y = 10;
+            const int rowHeight = 26;
+            const int headerHeight = 30;
+            const int roundPadding = 14;
+
+            foreach (var roundGroup in rounds)
+            {
+                bool isCurrentRound = roundGroup.Key == latestRound;
+                var matchesInRound = roundGroup.OrderBy(m => m.MatchNumber).ToList();
+
+                // Round header
+                Label roundLabel = new Label
+                {
+                    Text = $"Round {roundGroup.Key}{(isCurrentRound ? "  ◀ current" : "")}",
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    Location = new Point(10, y),
+                    AutoSize = true,
+                    ForeColor = isCurrentRound ? Color.DarkRed : Color.DarkBlue
+                };
+                panelBracketContainer.Controls.Add(roundLabel);
+                y += headerHeight;
+
+                foreach (var match in matchesInRound)
+                {
+                    bool complete = string.Equals(match.Status, "Complete", StringComparison.OrdinalIgnoreCase);
+                    string status = complete ? "✓" : "·";
+
+                    string nameA = match.TeamAName ?? "TBD";
+                    string nameB = match.TeamBName ?? "TBD";
+
+                    // Append win count if known
+                    int wA = match.TeamAId != null && wins.TryGetValue(match.TeamAId, out var wa) ? wa : 0;
+                    int wB = match.TeamBId != null && wins.TryGetValue(match.TeamBId, out var wb) ? wb : 0;
+                    string labelA = $"{nameA} ({wA}W)";
+                    string labelB = $"{nameB} ({wB}W)";
+
+                    string score = (match.ScoreA.HasValue && match.ScoreB.HasValue)
+                        ? $"{match.ScoreA.Value} - {match.ScoreB.Value}"
+                        : "vs";
+
+                    Label matchLabel = new Label
+                    {
+                        Text = $"  {status}  {labelA.PadRight(22)} {score.PadLeft(7)}  {labelB}",
+                        Font = new Font("Consolas", 9),
+                        Location = new Point(20, y),
+                        AutoSize = true,
+                        ForeColor = complete ? Color.DarkGreen : Color.Black
+                    };
+                    panelBracketContainer.Controls.Add(matchLabel);
+                    y += rowHeight;
+                }
+
+                y += roundPadding;
+            }
+
+            // Standings summary at the bottom
+            if (wins.Count > 0)
+            {
+                y += 10;
+                Label standingsHeader = new Label
+                {
+                    Text = "── Standings ──",
+                    Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                    Location = new Point(10, y),
+                    AutoSize = true,
+                    ForeColor = Color.Gray
+                };
+                panelBracketContainer.Controls.Add(standingsHeader);
+                y += 24;
+
+                foreach (var entry in wins.OrderByDescending(kv => kv.Value))
+                {
+                    // Find team name from matches
+                    string teamName = _apiMatches
+                        .Where(m => string.Equals(m.TeamAId, entry.Key, StringComparison.OrdinalIgnoreCase))
+                        .Select(m => m.TeamAName)
+                        .FirstOrDefault()
+                        ?? _apiMatches
+                            .Where(m => string.Equals(m.TeamBId, entry.Key, StringComparison.OrdinalIgnoreCase))
+                            .Select(m => m.TeamBName)
+                            .FirstOrDefault()
+                        ?? entry.Key;
+
+                    Label row = new Label
+                    {
+                        Text = $"  {teamName.PadRight(20)} {entry.Value} W",
+                        Font = new Font("Consolas", 9),
+                        Location = new Point(20, y),
+                        AutoSize = true
+                    };
+                    panelBracketContainer.Controls.Add(row);
+                    y += 22;
+                }
+            }
         }
 
         /// <summary>
@@ -356,11 +626,3 @@ namespace Group1Project
         }
     }
 }
-
-        
-
-    
-
-        
-
-

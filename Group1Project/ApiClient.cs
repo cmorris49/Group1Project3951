@@ -69,7 +69,7 @@ namespace Group1Project
         public ApiClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7077/");
+            _httpClient.BaseAddress = new Uri("http://localhost:5000/");
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace Group1Project
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
             PropertyNameCaseInsensitive = true,
-            Converters = { 
-                new JsonStringEnumConverter() 
+            Converters = {
+                new JsonStringEnumConverter()
             }
         };
 
@@ -388,6 +388,40 @@ namespace Group1Project
                 MessageBox.Show(
                     $"Error generating bracket:\n{ex}",
                     "Generate Bracket Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Requests next-round generation for a Swiss tournament.
+        /// </summary>
+        /// <param name="tournamentId">The identifier of the tournament.</param>
+        /// <returns>True if generation succeeds; otherwise, false.</returns>
+        internal async Task<bool> GenerateNextRoundAsync(Guid tournamentId)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsync($"tournaments/{tournamentId}/generate-next-round", null);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show(
+                        $"Generate Next Round failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                        "Generate Next Round Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Error generating next round:\n{ex}",
+                    "Generate Next Round Error",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return false;

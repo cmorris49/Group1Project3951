@@ -121,7 +121,7 @@ namespace Group1Project
             {
                 throw new ArgumentException("Division name is required.", nameof(name));
             }
-                
+
             var trimmed = name.Trim();
 
             if (divisions.Any(d => string.Equals(d.Name, trimmed, StringComparison.OrdinalIgnoreCase)))
@@ -177,8 +177,68 @@ namespace Group1Project
                 case BracketType.SingleElimination:
                     GenerateSingleEliminationBracket(allTeams);
                     break;
+                case BracketType.RoundRobin:
+                    GenerateRoundRobinBracket(allTeams);
+                    break;
                 default:
                     throw new NotImplementedException($"{BracketType} bracket generation not yet implemented.");
+            }
+        }
+
+        /// <summary>
+        /// Generates a round-robin bracket where every team plays every other team exactly once.
+        /// Uses the circle/rotation algorithm. If the number of teams is odd, a virtual "Bye"
+        /// team is added so the rotation works evenly; matches against the Bye team represent a
+        /// rest round for the real team.
+        /// </summary>
+        /// <param name="teams">The teams used to generate matchups.</param>
+        private void GenerateRoundRobinBracket(List<Team> teams)
+        {
+            bracket = new Bracket(BracketType.RoundRobin);
+
+            // Sort teams by seed (unseeded teams go last), then alphabetically
+            var seededTeams = teams
+                .OrderBy(t => t.Seed == 0 ? int.MaxValue : t.Seed)
+                .ThenBy(t => t.Name)
+                .ToList();
+
+            // If odd number of teams, add a null placeholder (bye slot)
+            bool hasBye = seededTeams.Count % 2 != 0;
+            if (hasBye)
+            {
+                seededTeams.Add(null!); // null acts as bye
+            }
+
+            int n = seededTeams.Count;          // always even now
+            int totalRounds = n - 1;
+            int matchesPerRound = n / 2;
+
+            bracket.SetTotalRounds(totalRounds);
+
+            // Circle algorithm: fix index 0, rotate the rest counter-clockwise each round
+            var rotation = new List<Team?>(seededTeams);
+
+            for (int round = 1; round <= totalRounds; round++)
+            {
+                for (int m = 0; m < matchesPerRound; m++)
+                {
+                    Team? home = rotation[m];
+                    Team? away = rotation[n - 1 - m];
+
+                    // Skip matches involving the bye placeholder
+                    if (home == null || away == null)
+                        continue;
+
+                    bracket.AddMatch(new Match(home, away));
+                }
+
+                // Rotate: keep index 0 fixed, shift positions 1..n-1 right by one
+                var last = rotation[n - 1];
+                for (int i = n - 1; i > 1; i--)
+                {
+                    rotation[i] = rotation[i - 1];
+                }
+                rotation[1] = last;
             }
         }
 
@@ -217,7 +277,3 @@ namespace Group1Project
         }
     }
 }
-
-
-
-
