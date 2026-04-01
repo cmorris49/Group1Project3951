@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -23,6 +24,8 @@ namespace Group1Project
     public class ApiClient
     {
         private readonly HttpClient _httpClient;
+        private string? _currentUserId;
+        private string? _currentUserName;
 
         private sealed record TournamentCreateRequest(
             string Name,
@@ -55,6 +58,11 @@ namespace Group1Project
             int RoundNumber,
             int MatchNumber);
 
+        public sealed record LoginResult(bool Success, string? UserId, string? UserName, string? ErrorMessage);
+        private sealed record LoginRequestDto(string Name, string Password);
+        private sealed record LoginResponseDto(string Id, string Name);
+        private sealed record RegisterRequestDto(string Name, string Password);
+
         /// <summary>
         /// Initializes a new API client instance with the base address for TournamentManagerAPI.
         /// </summary>
@@ -64,11 +72,140 @@ namespace Group1Project
             _httpClient.BaseAddress = new Uri("https://localhost:7077/");
         }
 
+        /// <summary>
+        /// Defines shared JSON serialization settings used for API request and response payloads.
+        /// Includes case-insensitive property matching and enum string conversion.
+        /// </summary>
         private static readonly JsonSerializerOptions _jsonOptions = new()
         {
             PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() }
+            Converters = { 
+                new JsonStringEnumConverter() 
+            }
         };
+
+        /// <summary>
+        /// Gets a value indicating whether a user is currently authenticated in the client context.
+        /// </summary>
+        public bool IsLoggedIn
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_currentUserId);
+            }
+        }
+
+        /// <summary>
+        /// Gets the current authenticated user's display name, or an empty string when not authenticated.
+        /// </summary>
+        public string CurrentUserName
+        {
+            get
+            {
+                return _currentUserName ?? string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current authenticated user's identifier, or an empty string when not authenticated.
+        /// </summary>
+        public string CurrentUserId
+        {
+            get
+            {
+                return _currentUserId ?? string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// Applies the current user identifier header to outgoing API requests, or removes it when no user is authenticated.
+        /// </summary>
+        private void ApplyUserHeader()
+        {
+            _httpClient.DefaultRequestHeaders.Remove("X-User-Id");
+
+            if (!string.IsNullOrWhiteSpace(_currentUserId))
+            {
+                _httpClient.DefaultRequestHeaders.Add("X-User-Id", _currentUserId);
+            }
+        }
+
+        /// <summary>
+        /// Sends login credentials to the API and stores authenticated user context when login succeeds.
+        /// </summary>
+        /// <param name="name">The user name for authentication.</param>
+        /// <param name="password">The password for authentication.</param>
+        /// <returns>A login result indicating success, user identity values, and any error details.</returns>
+        internal async Task<LoginResult> LoginAsync(string name, string password)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("auth/login", new LoginRequestDto(name, password));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new LoginResult(false, null, null, "Invalid username or password.");
+                }
+
+                var login = await response.Content.ReadFromJsonAsync<LoginResponseDto>(_jsonOptions);
+                if (login == null || string.IsNullOrWhiteSpace(login.Id))
+                {
+                    return new LoginResult(false, null, null, "Login response was invalid.");
+                }
+
+                _currentUserId = login.Id;
+                _currentUserName = login.Name;
+                ApplyUserHeader();
+
+                return new LoginResult(true, login.Id, login.Name, null);
+            }
+            catch (Exception ex)
+            {
+                return new LoginResult(false, null, null, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Clears authenticated user context and removes authentication headers from subsequent API requests.
+        /// </summary>
+        internal void Logout()
+        {
+            _currentUserId = null;
+            _currentUserName = null;
+            ApplyUserHeader();
+        }
+
+        /// <summary>
+        /// Sends a registration request to the API for a new user account.
+        /// </summary>
+        /// <param name="name">The requested user name.</param>
+        /// <param name="password">The requested account password.</param>
+        /// <returns>A login-style result indicating whether registration succeeded and any error details.</returns>
+        internal async Task<LoginResult> RegisterAsync(string name, string password)
+        {
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("auth/register", new RegisterRequestDto(name, password));
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    return new LoginResult(false, null, null, string.IsNullOrWhiteSpace(body) ? "Registration failed." : body);
+                }
+
+                var created = await response.Content.ReadFromJsonAsync<LoginResponseDto>(_jsonOptions);
+                if (created == null || string.IsNullOrWhiteSpace(created.Id))
+                {
+                    return new LoginResult(false, null, null, "Registration response was invalid.");
+                }
+
+                return new LoginResult(true, created.Id, created.Name, null);
+            }
+            catch (Exception ex)
+            {
+                return new LoginResult(false, null, null, ex.Message);
+            }
+        }
 
         /// <summary>
         /// Retrieves all tournaments from the API.
@@ -78,7 +215,18 @@ namespace Group1Project
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<List<Tournament>>("tournaments", _jsonOptions);
+                var response = await _httpClient.GetAsync("tournaments");
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    return new List<Tournament>();
+                }
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new List<Tournament>();
+                }
+
+                return await response.Content.ReadFromJsonAsync<List<Tournament>>(_jsonOptions);
             }
             catch (Exception ex)
             {

@@ -54,6 +54,9 @@ namespace Group1Project
             autoScheduleToolStripMenuItem = new ToolStripMenuItem();
             helpToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            accounToolStripMenuItem = new ToolStripMenuItem();
+            loginToolStripMenuItem = new ToolStripMenuItem();
+            logoutToolStripMenuItem = new ToolStripMenuItem();
             toolMain = new ToolStrip();
             tsbSave = new ToolStripButton();
             tsbAddTeam = new ToolStripButton();
@@ -94,7 +97,7 @@ namespace Group1Project
             // menuMain
             // 
             menuMain.ImageScalingSize = new Size(32, 32);
-            menuMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, newToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem });
+            menuMain.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, newToolStripMenuItem, toolsToolStripMenuItem, helpToolStripMenuItem, accounToolStripMenuItem });
             menuMain.Location = new Point(0, 0);
             menuMain.Name = "menuMain";
             menuMain.Padding = new Padding(11, 4, 0, 4);
@@ -112,27 +115,28 @@ namespace Group1Project
             // newTournamentToolStripMenuItem
             // 
             newTournamentToolStripMenuItem.Name = "newTournamentToolStripMenuItem";
-            newTournamentToolStripMenuItem.Size = new Size(331, 44);
+            newTournamentToolStripMenuItem.Size = new Size(359, 44);
             newTournamentToolStripMenuItem.Text = "New Tournament";
             newTournamentToolStripMenuItem.Click += btnNewTournament_Click;
             // 
             // openToolStripMenuItem
             // 
             openToolStripMenuItem.Name = "openToolStripMenuItem";
-            openToolStripMenuItem.Size = new Size(331, 44);
+            openToolStripMenuItem.Size = new Size(359, 44);
             openToolStripMenuItem.Text = "Open";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(331, 44);
+            saveToolStripMenuItem.Size = new Size(359, 44);
             saveToolStripMenuItem.Text = "Save";
             // 
             // exitToolStripMenuItem
             // 
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            exitToolStripMenuItem.Size = new Size(331, 44);
+            exitToolStripMenuItem.Size = new Size(359, 44);
             exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // newToolStripMenuItem
             // 
@@ -215,6 +219,27 @@ namespace Group1Project
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(212, 44);
             aboutToolStripMenuItem.Text = "About";
+            // 
+            // accounToolStripMenuItem
+            // 
+            accounToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { loginToolStripMenuItem, logoutToolStripMenuItem });
+            accounToolStripMenuItem.Name = "accounToolStripMenuItem";
+            accounToolStripMenuItem.Size = new Size(121, 36);
+            accounToolStripMenuItem.Text = "Account";
+            // 
+            // loginToolStripMenuItem
+            // 
+            loginToolStripMenuItem.Name = "loginToolStripMenuItem";
+            loginToolStripMenuItem.Size = new Size(222, 44);
+            loginToolStripMenuItem.Text = "Login";
+            loginToolStripMenuItem.Click += loginToolStripMenuItem_Click;
+            // 
+            // logoutToolStripMenuItem
+            // 
+            logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            logoutToolStripMenuItem.Size = new Size(222, 44);
+            logoutToolStripMenuItem.Text = "Logout";
+            logoutToolStripMenuItem.Click += logoutToolStripMenuItem_Click;
             // 
             // toolMain
             // 
@@ -571,5 +596,8 @@ namespace Group1Project
         private Panel panelWorkspace;
         private Label labelWorkspaceTitle;
         private Label lblTournament;
+        private ToolStripMenuItem accounToolStripMenuItem;
+        private ToolStripMenuItem loginToolStripMenuItem;
+        private ToolStripMenuItem logoutToolStripMenuItem;
     }
 }

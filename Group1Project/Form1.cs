@@ -48,15 +48,83 @@ namespace Group1Project
         }
 
         /// <summary>
-        /// Loads tournaments from the API when the main form finishes loading and initializes the current selection.
+        /// Handles the form load event by requiring authentication and loading tournament data for the signed-in user.
         /// </summary>
         /// <param name="sender">The event source.</param>
         /// <param name="e">Event arguments for form load.</param>
         private async void Form1_Load(object? sender, EventArgs e)
         {
+            if (!await EnsureLoggedInAsync())
+            {
+                LogoutAndExitApplication();
+                return;
+            }
+
+            await ReloadTournamentsAsync();
+        }
+
+        /// <summary>
+        /// Ensures that a user is authenticated by displaying the login dialog until login succeeds
+        /// or the user cancels. Supports sign-up flow from the same dialog.
+        /// </summary>
+        /// <returns>True when a user is authenticated; otherwise, false.</returns>
+        private async Task<bool> EnsureLoggedInAsync()
+        {
+            while (!_apiClient.IsLoggedIn)
+            {
+                using var loginForm = new LoginForm();
+                var dialogResult = loginForm.ShowDialog(this);
+
+                if (dialogResult == DialogResult.Cancel)
+                {
+                    return false;
+                }
+
+                if (dialogResult == DialogResult.Retry)
+                {
+                    var registerResult = await _apiClient.RegisterAsync(loginForm.UserName, loginForm.Password);
+                    if (!registerResult.Success)
+                    {
+                        MessageBox.Show(registerResult.ErrorMessage ?? "Sign up failed.", "Sign Up", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Account created. Please log in.", "Sign Up", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    continue;
+                }
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    var loginResult = await _apiClient.LoginAsync(loginForm.UserName, loginForm.Password);
+                    if (!loginResult.Success)
+                    {
+                        MessageBox.Show(loginResult.ErrorMessage ?? "Login failed.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Logs out the current user and exits the application.
+        /// </summary>
+        private void LogoutAndExitApplication()
+        {
+            _apiClient.Logout();
+            Application.Exit();
+        }
+
+        /// <summary>
+        /// Reloads tournaments available to the current user and refreshes tournament-related UI state.
+        /// </summary>
+        /// <returns>A task that completes when tournament data and UI refresh are finished.</returns>
+        private async Task ReloadTournamentsAsync()
+        {
             var loaded = await _apiClient.GetTournamentsAsync();
             tournaments = loaded ?? new List<Tournament>();
-
             currentTournament = tournaments.Count > 0 ? tournaments[0] : null;
 
             RefreshTournamentList();
@@ -65,6 +133,54 @@ namespace Group1Project
                 : "Tournament: (none)";
 
             UpdateStatusBar();
+        }
+
+        /// <summary>
+        /// Handles the Login menu action by prompting for authentication and reloading tournaments on success.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the menu click.</param>
+        private async void loginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (await EnsureLoggedInAsync())
+            {
+                await ReloadTournamentsAsync();
+            }
+        }
+
+        /// <summary>
+        /// Handles the Logout menu action by clearing current state, prompting for login again, and exiting if login is canceled.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the menu click.</param>
+        private async void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _apiClient.Logout();
+
+            tournaments = new List<Tournament>();
+            currentTournament = null;
+            RefreshTournamentList();
+            lblTournament.Text = "Tournament: (none)";
+            panelWorkspace.Controls.Clear();
+            UpdateStatusBar();
+
+            if (!await EnsureLoggedInAsync())
+            {
+                LogoutAndExitApplication();
+                return;
+            }
+
+            await ReloadTournamentsAsync();
+        }
+
+        /// <summary>
+        /// Handles the Exit menu action by logging out the current user and closing the application.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the menu click.</param>
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LogoutAndExitApplication();
         }
 
         /// <summary>
@@ -134,15 +250,20 @@ namespace Group1Project
         /// </summary>
         private void UpdateStatusBar()
         {
+            var authStatus = _apiClient.IsLoggedIn
+                ? $"Logged in: {_apiClient.CurrentUserName}"
+                : "Not logged in";
+
             if (currentTournament != null)
             {
-                sslHint.Text = $"Current Tournament: {currentTournament.Name} | {GetCurrentViewName()}";
+                sslHint.Text = $"{authStatus} | Current Tournament: {currentTournament.Name} | {GetCurrentViewName()}";
             }
             else
             {
-                sslHint.Text = "No tournament selected";
+                sslHint.Text = $"{authStatus} | No tournament selected";
             }
         }
+
 
         /// <summary>
         /// Retrieves the name of the current view being displayed in the workspace panel. 
