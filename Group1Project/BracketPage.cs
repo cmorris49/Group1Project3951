@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 /// <summary>
 /// Group 1 Project - BracketPage UserControl
@@ -622,6 +623,114 @@ namespace Group1Project
                 dataGridViewStageMatches.Columns.Add("columnTeamB", "Team B");
                 dataGridViewStageMatches.Columns.Add("columnStatus", "Status");
                 dataGridViewStageMatches.Columns.Add("columnScore", "Score");
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event for the Export Bracket button, exporting the current tournament's details,
+        /// divisions, teams, players, and matches to a text file.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Export Bracket button.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
+        private async void buttonExportBracket_Click(object sender, EventArgs e)
+        {
+            if (currentTournament == null)
+            {
+                MessageBox.Show("No tournament loaded to export.", "Export", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            _btnNextRound.Enabled = false;
+            buttonExportBracket.Enabled = false;
+
+            try
+            {
+                // Fetch latest teams and matches from API to ensure up-to-date export
+                var teams = await _apiClient.GetTeamsForTournamentAsync(currentTournament.Id) ?? new List<ApiClient.TeamReadDto>();
+                var matches = await _apiClient.GetMatchesForTournamentAsync(currentTournament.Id) ?? new List<ApiClient.MatchReadDto>();
+
+                // Build export string with tournament details, divisions, teams, players, and matches
+                var sb = new StringBuilder();
+                sb.AppendLine($"Tournament: {currentTournament.Name}");
+                sb.AppendLine($"Id: {currentTournament.Id}");
+                sb.AppendLine($"Location: {currentTournament.Location}");
+                sb.AppendLine($"Start: {currentTournament.StartDate:u}");
+                sb.AppendLine($"Bracket Type: {currentTournament.BracketType}");
+                sb.AppendLine(new string('-', 60));
+
+                // Get divisions and teams for export
+                // Format: Division: [Division Name] (Id: [Division Id])
+                //         Team: [Team Name]  Seed: [Seed]  Id: [Team Id]
+                //         Player: [Player Name]  #[Player Number]  Id: [Player Id]
+                //         ~~~~Repeat for each team in the division~~~
+                // Teams are grouped under their respective divisions. If a division has no teams, it is noted as "(no teams)".
+                sb.AppendLine("Divisions and Teams:");
+                foreach (var d in currentTournament.Divisions)
+                {
+                    sb.AppendLine($" Division: {d.Name} (Id: {d.Id})");
+                    var divTeams = teams.Where(t => string.Equals(t.DivisionId, d.Id.ToString(), StringComparison.OrdinalIgnoreCase)).ToList();
+                    if (divTeams.Count == 0)
+                    {
+                        sb.AppendLine("  (no teams)");
+                    }
+                    else
+                    {
+                        foreach (var t in divTeams)
+                        {
+                            sb.AppendLine($"  Team: {t.Name}  Seed: {t.Seed}  Id: {t.Id}");
+                            if (t.Players != null && t.Players.Count > 0)
+                            {
+                                foreach (var p in t.Players)
+                                {
+                                    sb.AppendLine($"    Player: {p.DisplayName}  #{p.Number}  Id: {p.Id}");
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Break line between teams and matches
+                sb.AppendLine(new string('-', 60));
+
+                // Get matches for export
+                // Format: R[Round Number] M[Match Number]: [Team A Name] vs [Team B Name]   Status: [Status]   Score: [ScoreA-ScoreB or - if not available]   Id:[Match Id]
+                sb.AppendLine("Matches:");
+                foreach (var m in matches.OrderBy(x => x.RoundNumber).ThenBy(x => x.MatchNumber))
+                {
+                    string score = (m.ScoreA.HasValue && m.ScoreB.HasValue) ? $"{m.ScoreA}-{m.ScoreB}" : "-";
+                    sb.AppendLine($"R{m.RoundNumber} M{m.MatchNumber}: {m.TeamAName ?? "TBD"} vs {m.TeamBName ?? "TBD"}   Status: {m.Status}   Score: {score}   Id:{m.Id}");
+                }
+
+                sb.AppendLine();
+
+                // Footer with export timestamp
+                DateTime exportTime = DateTime.Now;
+                sb.AppendLine($"Exported on {exportTime:u}");
+
+                using var sfd = new SaveFileDialog()
+                {
+                    Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                    FileName = $"{currentTournament.Name?.Replace(' ', '_')}_export.txt",
+                    Title = "Export Tournament"
+                };
+
+                if (sfd.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                await File.WriteAllTextAsync(sfd.FileName, sb.ToString(), Encoding.UTF8);
+
+                MessageBox.Show($"Tournament exported to:\n{sfd.FileName}", "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Export failed: {ex.Message}", "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                _btnNextRound.Enabled = true;
+                buttonExportBracket.Enabled = true;
             }
         }
     }
