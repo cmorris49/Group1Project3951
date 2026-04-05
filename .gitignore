@@ -365,3 +365,6 @@ FodyWeavers.xsd
 TournamentManagerApi/appsettings.json
 **/appsettings.Development.json
 /Group1Project.sln
+
+# Local secrets
+TournamentManagerAPI/appsettings.json
