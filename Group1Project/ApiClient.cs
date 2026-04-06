@@ -70,7 +70,7 @@ namespace Group1Project
         public ApiClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:5000/");
+            _httpClient.BaseAddress = new Uri("https://tournamentmanagerapi20260405220305-h3atgqd2bqgtg3hh.canadacentral-01.azurewebsites.net/");
         }
 
         /// <summary>

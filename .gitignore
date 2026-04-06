@@ -368,3 +368,13 @@ TournamentManagerApi/appsettings.json
 
 # Local secrets
 TournamentManagerAPI/appsettings.json
+
+# Local secrets
+TournamentManagerAPI/appsettings.json
+**/appsettings.Development.json
+
+# Local DB import scratch files
+**/sql_railway.sql
+
+# Keep solution tracked (do NOT ignore .sln)
+!/Group1Project.sln
