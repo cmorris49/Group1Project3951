@@ -255,8 +255,13 @@ app.MapGet("/tournaments", async (HttpContext httpContext) =>
 /// </summary>
 /// <param name="request">The tournament creation payload containing name, location, start date, and bracket type.</param>
 /// <returns>The newly created tournament and default division identifiers, or an error response if creation fails.</returns>
-app.MapPost("/tournaments", async (TournamentCreateRequest request) =>
+app.MapPost("/tournaments", async (HttpContext httpContext, TournamentCreateRequest request) =>
 {
+    if (!TryReadUserId(httpContext, out var userId))
+    {
+        return Results.Unauthorized();
+    }
+
     await using MySqlConnection connection = new MySqlConnection(connectionString);
     await connection.OpenAsync();
 
@@ -293,6 +298,18 @@ app.MapPost("/tournaments", async (TournamentCreateRequest request) =>
             cmd.Parameters.AddWithValue("@Id", divisionId);
             cmd.Parameters.AddWithValue("@TournamentId", tournamentId);
             cmd.Parameters.AddWithValue("@Name", "Main Division");
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        const string insertAccessSql = """
+            INSERT INTO UserTournamentAccess (UserId, TournamentId)
+            VALUES (@UserId, @TournamentId)
+            """;
+
+        await using (var cmd = new MySqlCommand(insertAccessSql, connection, (MySqlTransaction)tx))
+        {
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@TournamentId", tournamentId);
             await cmd.ExecuteNonQueryAsync();
         }
 
@@ -1305,6 +1322,111 @@ app.MapPut("/matches/{matchId:guid}/schedule", async (Guid matchId, ScheduleMatc
     return affected == 0 ? Results.NotFound("Match not found.") : Results.Ok();
 });
 
+app.MapPut("/teams/{teamId:guid}", async (Guid teamId, TeamNameUpdateRequest request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Name))
+    {
+        return Results.BadRequest("Team name is required.");
+    }
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = "UPDATE Team SET Name = @Name WHERE Id = @TeamId";
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@Name", request.Name.Trim());
+    cmd.Parameters.AddWithValue("@TeamId", teamId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Team not found.") : Results.Ok();
+});
+
+app.MapDelete("/teams/{teamId:guid}", async (Guid teamId) =>
+{
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = "DELETE FROM Team WHERE Id = @TeamId";
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@TeamId", teamId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Team not found.") : Results.Ok();
+});
+
+app.MapPost("/teams/{teamId:guid}/players", async (Guid teamId, PlayerUpsertRequest request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.DisplayName))
+    {
+        return Results.BadRequest("Player name is required.");
+    }
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string existsSql = "SELECT COUNT(*) FROM Team WHERE Id = @TeamId";
+    await using (var existsCmd = new MySqlCommand(existsSql, connection))
+    {
+        existsCmd.Parameters.AddWithValue("@TeamId", teamId.ToString());
+        var exists = Convert.ToInt32(await existsCmd.ExecuteScalarAsync());
+        if (exists == 0)
+        {
+            return Results.NotFound("Team not found.");
+        }
+    }
+
+    const string insertSql = """
+        INSERT INTO Player (Id, TeamId, DisplayName, Number)
+        VALUES (UUID(), @TeamId, @DisplayName, @Number)
+        """;
+
+    await using var cmd = new MySqlCommand(insertSql, connection);
+    cmd.Parameters.AddWithValue("@TeamId", teamId.ToString());
+    cmd.Parameters.AddWithValue("@DisplayName", request.DisplayName.Trim());
+    cmd.Parameters.AddWithValue("@Number", request.Number);
+    await cmd.ExecuteNonQueryAsync();
+
+    return Results.Ok();
+});
+
+app.MapPut("/players/{playerId:guid}", async (Guid playerId, PlayerUpsertRequest request) =>
+{
+    if (string.IsNullOrWhiteSpace(request.DisplayName))
+    {
+        return Results.BadRequest("Player name is required.");
+    }
+
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = """
+        UPDATE Player
+        SET DisplayName = @DisplayName, Number = @Number
+        WHERE Id = @PlayerId
+        """;
+
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@DisplayName", request.DisplayName.Trim());
+    cmd.Parameters.AddWithValue("@Number", request.Number);
+    cmd.Parameters.AddWithValue("@PlayerId", playerId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Player not found.") : Results.Ok();
+});
+
+app.MapDelete("/players/{playerId:guid}", async (Guid playerId) =>
+{
+    await using var connection = new MySqlConnection(connectionString);
+    await connection.OpenAsync();
+
+    const string sql = "DELETE FROM Player WHERE Id = @PlayerId";
+    await using var cmd = new MySqlCommand(sql, connection);
+    cmd.Parameters.AddWithValue("@PlayerId", playerId.ToString());
+
+    var affected = await cmd.ExecuteNonQueryAsync();
+    return affected == 0 ? Results.NotFound("Player not found.") : Results.Ok();
+});
+
 app.Run();
 
 record TournamentCreateRequest(string Name, string? Location, DateTime StartDate, string BracketType);
@@ -1318,6 +1440,9 @@ record RecordMatchResultRequest(int ScoreA, int ScoreB);
 record LoginRequest(string Name, string Password);
 record LoginResponse(string Id, string Name);
 record RegisterRequest(string Name, string Password);
+
+record TeamNameUpdateRequest(string Name);
+record PlayerUpsertRequest(string DisplayName, int Number);
 
 record MatchReadResponse(string Id,
     string? TeamAId,

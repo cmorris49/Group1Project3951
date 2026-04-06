@@ -30,22 +30,23 @@ namespace Group1Project
         internal Tournament? CreatedTournament { get; private set; }
 
         // The ApiClient to talk to the database
-        private readonly ApiClient _apiClient = new ApiClient();
+        private readonly ApiClient _apiClient;
 
         /// <summary>
         /// Initializes a new instance of the NewTournamentForm class and sets up the user interface components, including event handlers for form controls.
         /// </summary>
-        public NewTournamentForm()
+        public NewTournamentForm(ApiClient apiClient)
         {
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+
             InitializeComponent();
             dateTimePickerStartDate.Value = DateTime.Today;
             buttonCreate.DialogResult = DialogResult.None;
             buttonCreate.Click += BtnOk_Click;
 
-            // Populate bracket type choices
             comboBoxBracketType.Items.Add("SingleElimination");
             comboBoxBracketType.Items.Add("RoundRobin");
-            comboBoxBracketType.SelectedIndex = 0; // default: SingleElimination
+            comboBoxBracketType.SelectedIndex = 0;
         }
 
         /// <summary>

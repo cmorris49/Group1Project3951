@@ -48,21 +48,21 @@ namespace Group1Project
         /// </summary>
         private void ApplyToolbarStyle()
         {
-            // ── Toolbar background ───────────────────────────────────────────
+            // ── Toolbar background 
             toolMain.BackColor = Color.FromArgb(245, 246, 250);
             toolMain.Padding = new Padding(4, 2, 4, 2);
             toolMain.ImageScalingSize = new Size(24, 24);
 
-            // ── Button styles ────────────────────────────────────────────────
+            // ── Button styles 
             StyleToolButton(tsbSave, "💾 Save", "Save the current tournament", Color.FromArgb(52, 152, 219));
             StyleToolButton(tsbAddTeam, "➕ Add Team", "Add a new team to the tournament", Color.FromArgb(39, 174, 96));
             StyleToolButton(tsbGenerateBracket, "🏆 Generate Bracket", "Generate the tournament bracket", Color.FromArgb(142, 68, 173));
             StyleToolButton(tsbAutoSchedule, "📅 Auto Schedule", "Automatically schedule all matches", Color.FromArgb(211, 84, 0));
             StyleToolButton(tsbEnterResult, "✔ Enter Result", "Enter a match result", Color.FromArgb(192, 57, 43));
 
-            // ── Separator between groups ─────────────────────────────────────
+            // ── Separator between groups 
             var sep = new ToolStripSeparator();
-            toolMain.Items.Insert(1, sep); // separator after Save
+            toolMain.Items.Insert(1, sep); 
         }
 
         /// <summary>
@@ -358,7 +358,7 @@ namespace Group1Project
         /// <param name="e">The EventArgs instance containing the event data for the Click event.</param>
         private void btnNewTournament_Click(object sender, EventArgs e)
         {
-            using var dlg = new NewTournamentForm();
+            using var dlg = new NewTournamentForm(_apiClient);
 
             // Show the New Tournament form as a dialog and check if the user created a tournament.
             if (dlg.ShowDialog(this) == DialogResult.OK && dlg.CreatedTournament != null)
@@ -420,7 +420,7 @@ namespace Group1Project
         /// <param name="e">The EventArgs instance containing the event data for the Click event.</param>
         private void btnTeamsPlayers_Click(object sender, EventArgs e)
         {
-            var page = new TeamsPlayersPage();
+            var page = new TeamsPlayersPage(_apiClient);
 
             if (currentTournament != null)
             {
@@ -531,7 +531,7 @@ namespace Group1Project
 
             Division selectedDivision = currentTournament.Divisions[0];
 
-            using var addTeamForm = new addTeam(selectedDivision, currentTournament.Id);
+            using var addTeamForm = new addTeam(selectedDivision, currentTournament.Id, _apiClient);
 
             if (addTeamForm.ShowDialog(this) == DialogResult.OK &&
                 addTeamForm.CreatedTeam != null)

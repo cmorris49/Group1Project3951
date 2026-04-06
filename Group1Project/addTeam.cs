@@ -42,18 +42,19 @@ namespace Group1Project
         private readonly Guid _tournamentId;
 
         // The ApiClient to talk to the database
-        private readonly ApiClient _apiClient = new ApiClient();
+        private readonly ApiClient _apiClient;
 
         /// <summary>
         /// Initializes a new instance of the addTeam class and sets up the user interface components.
         /// </summary>
-        internal addTeam(Division division, Guid tournamentId)
+        internal addTeam(Division division, Guid tournamentId, ApiClient apiClient)
         {
             if (division == null)
             {
                 throw new ArgumentNullException(nameof(division));
             }
 
+            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
             this.division = division;
             _tournamentId = tournamentId;
             InitializeComponent();

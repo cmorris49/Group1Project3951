@@ -46,6 +46,8 @@ namespace Group1Project
         public sealed record TeamReadDto(string Id, string Name, int Seed, string DivisionId, string DivisionName, List<PlayerReadDto> Players);
         public sealed record PlayerReadDto(string Id, string DisplayName, int Number);
         private sealed record TournamentCreateResponse(string TournamentId, string DivisionId);
+        private sealed record TeamNameUpdateRequest(string Name);
+        private sealed record PlayerUpsertRequest(string DisplayName, int Number);
         public sealed record MatchReadDto(
             string Id,
             string? TeamAId,
@@ -482,6 +484,101 @@ namespace Group1Project
                 Console.WriteLine($"Error recording match result: {ex}");
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Updates the name of an existing team.
+        /// </summary>
+        /// <param name="teamId">The identifier of the team to update.</param>
+        /// <param name="name">The new team name.</param>
+        /// <returns>True if the update succeeds; otherwise false.</returns>
+        internal async Task<bool> UpdateTeamNameAsync(string teamId, string name)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"teams/{teamId}", new TeamNameUpdateRequest(name));
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"UpdateTeamName failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                    "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Deletes an existing team.
+        /// </summary>
+        /// <param name="teamId">The identifier of the team to delete.</param>
+        /// <returns>True if deletion succeeds; otherwise false.</returns>
+        internal async Task<bool> DeleteTeamAsync(string teamId)
+        {
+            var response = await _httpClient.DeleteAsync($"teams/{teamId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"DeleteTeam failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                    "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Adds a new player to the specified team.
+        /// </summary>
+        /// <param name="teamId">The identifier of the team that will receive the player.</param>
+        /// <param name="displayName">The player's display name.</param>
+        /// <param name="number">The player's number.</param>
+        /// <returns>True if creation succeeds; otherwise false.</returns>
+        internal async Task<bool> AddPlayerAsync(string teamId, string displayName, int number)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"teams/{teamId}/players", new PlayerUpsertRequest(displayName, number));
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"AddPlayer failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                    "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Updates an existing player's display name and number.
+        /// </summary>
+        /// <param name="playerId">The identifier of the player to update.</param>
+        /// <param name="displayName">The updated player display name.</param>
+        /// <param name="number">The updated player number.</param>
+        /// <returns>True if update succeeds; otherwise false.</returns>
+        internal async Task<bool> UpdatePlayerAsync(string playerId, string displayName, int number)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"players/{playerId}", new PlayerUpsertRequest(displayName, number));
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"UpdatePlayer failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                    "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return response.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Deletes an existing player.
+        /// </summary>
+        /// <param name="playerId">The identifier of the player to delete.</param>
+        /// <returns>True if deletion succeeds; otherwise false.</returns>
+        internal async Task<bool> DeletePlayerAsync(string playerId)
+        {
+            var response = await _httpClient.DeleteAsync($"players/{playerId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                MessageBox.Show($"DeletePlayer failed: {(int)response.StatusCode} {response.StatusCode}\n\n{body}",
+                    "API Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return response.IsSuccessStatusCode;
         }
     }
 }
