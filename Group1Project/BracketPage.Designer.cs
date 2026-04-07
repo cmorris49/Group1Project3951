@@ -46,6 +46,7 @@ namespace Group1Project
             panelViewHost = new Panel();
             dataGridViewStageMatches = new DataGridView();
             panelBracketContainer = new Panel();
+            buttonNextRound = new Button();
             tableMain.SuspendLayout();
             panelHeader.SuspendLayout();
             panelViewHost.SuspendLayout();
@@ -71,6 +72,7 @@ namespace Group1Project
             // 
             // panelHeader
             // 
+            panelHeader.Controls.Add(buttonNextRound);
             panelHeader.Controls.Add(comboBoxView);
             panelHeader.Controls.Add(buttonResetBracket);
             panelHeader.Controls.Add(buttonGenerateBracket);
@@ -107,10 +109,10 @@ namespace Group1Project
             // buttonGenerateBracket
             // 
             buttonGenerateBracket.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonGenerateBracket.Location = new Point(561, 8);
+            buttonGenerateBracket.Location = new Point(550, 8);
             buttonGenerateBracket.Margin = new Padding(2);
             buttonGenerateBracket.Name = "buttonGenerateBracket";
-            buttonGenerateBracket.Size = new Size(65, 24);
+            buttonGenerateBracket.Size = new Size(74, 24);
             buttonGenerateBracket.TabIndex = 2;
             buttonGenerateBracket.Text = "Generate";
             buttonGenerateBracket.UseVisualStyleBackColor = true;
@@ -179,6 +181,18 @@ namespace Group1Project
             panelBracketContainer.TabIndex = 1;
             panelBracketContainer.Visible = false;
             // 
+            // buttonNextRound
+            // 
+            buttonNextRound.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonNextRound.Location = new Point(459, 8);
+            buttonNextRound.Name = "buttonNextRound";
+            buttonNextRound.Size = new Size(86, 23);
+            buttonNextRound.TabIndex = 6;
+            buttonNextRound.Text = "Next round";
+            buttonNextRound.UseVisualStyleBackColor = true;
+            buttonNextRound.Visible = false;
+            buttonNextRound.Click += buttonNextRound_Click;
+            // 
             // BracketPage
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -207,5 +221,6 @@ namespace Group1Project
         private Panel panelViewHost;
         private DataGridView dataGridViewStageMatches;
         private Panel panelBracketContainer;
+        private Button buttonNextRound;
     }
 }

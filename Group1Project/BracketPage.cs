@@ -79,19 +79,6 @@ namespace Group1Project
                 }
             };
 
-            // "Generate Next Round" button — shown only for Swiss
-            _btnNextRound.Text = "Generate Next Round";
-            _btnNextRound.Size = new Size(190, 40);
-            _btnNextRound.Visible = false;
-            _btnNextRound.Click += async (s, e) =>
-            {
-                if (currentTournament == null) return;
-                _btnNextRound.Enabled = false;
-                bool ok = await _apiClient.GenerateNextRoundAsync(currentTournament.Id);
-                _btnNextRound.Enabled = true;
-                if (ok) await RefreshBracketAsync();
-            };
-
             if (comboBoxView.Items.Count > 0)
             {
                 comboBoxView.SelectedIndex = 0;
@@ -106,16 +93,6 @@ namespace Group1Project
         internal void LoadTournament(Tournament tournament)
         {
             currentTournament = tournament;
-
-            // Anchor the Next Round button inside the bracket container (top-right)
-            if (!panelBracketContainer.Controls.Contains(_btnNextRound))
-            {
-                _btnNextRound.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-                _btnNextRound.Location = new Point(
-                    panelBracketContainer.Width - _btnNextRound.Width - 10, 10);
-                panelBracketContainer.Controls.Add(_btnNextRound);
-                _btnNextRound.BringToFront();
-            }
 
             _ = RefreshBracketAsync();
         }
@@ -176,24 +153,20 @@ namespace Group1Project
                     scoreText);
             }
 
-            bool isRoundRobin = currentTournament.BracketType == BracketType.RoundRobin;
-            bool isSwiss = currentTournament.BracketType == BracketType.Swiss;
+            string bracketTypeName = currentTournament.BracketType.ToString();
 
-            // Show "Generate Next Round" button only for Swiss when matches exist
-            _btnNextRound.Visible = isSwiss && _apiMatches.Count > 0;
-
-            if (isRoundRobin)
+            switch(bracketTypeName)
             {
-                DrawRoundRobinPanel();
-            }
-            else if (isSwiss)
-            {
-                DrawSwissPanel();
-                if (_btnNextRound.Visible) _btnNextRound.BringToFront();
-            }
-            else
-            {
-                DrawBracketTreeFromApiMatches();
+                case "RoundRobin":
+                    DrawRoundRobinPanel();
+                    break;
+                case "Swiss":
+                    buttonNextRound.Visible = true;
+                    DrawSwissPanel();
+                    break;
+                default:
+                    DrawBracketTreeFromApiMatches();
+                    break;
             }
         }
 
@@ -731,6 +704,50 @@ namespace Group1Project
             {
                 _btnNextRound.Enabled = true;
                 buttonExportBracket.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the click event for the Next Round button, generating the next round in a Swiss tournament if
+        /// applicable.
+        /// </summary>
+        /// <param name="sender">The source of the event, typically the Next Round button.</param>
+        /// <param name="e">An EventArgs object that contains the event data.</param>
+        private async void buttonNextRound_Click(object sender, EventArgs e)
+        {
+            if (currentTournament == null)
+            {
+                MessageBox.Show("No tournament loaded.", "Generate Next Round", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (currentTournament.BracketType != BracketType.Swiss)
+            {
+                MessageBox.Show("Generate Next Round is only available for Swiss tournaments.", "Generate Next Round", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                buttonNextRound.Enabled = false;
+                _btnNextRound.Enabled = false;
+
+                bool ok = await _apiClient.GenerateNextRoundAsync(currentTournament.Id);
+                if (ok)
+                {
+                    await RefreshBracketAsync();
+                    MessageBox.Show("Next round generated.", "Generate Next Round", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // ApiClient already shows details on failure; provide a brief fallback message
+                    MessageBox.Show("Failed to generate next round. See server response for details.", "Generate Next Round", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            finally
+            {
+                buttonNextRound.Enabled = true;
+                _btnNextRound.Enabled = true;
             }
         }
     }

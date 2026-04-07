@@ -46,6 +46,7 @@ namespace Group1Project
 
             comboBoxBracketType.Items.Add("SingleElimination");
             comboBoxBracketType.Items.Add("RoundRobin");
+            comboBoxBracketType.Items.Add("Swiss");
             comboBoxBracketType.SelectedIndex = 0;
         }
 
