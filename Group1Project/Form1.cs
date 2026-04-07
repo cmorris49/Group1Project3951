@@ -62,7 +62,7 @@ namespace Group1Project
 
             // ── Separator between groups 
             var sep = new ToolStripSeparator();
-            toolMain.Items.Insert(1, sep); 
+            toolMain.Items.Insert(1, sep);
         }
 
         /// <summary>
@@ -296,6 +296,9 @@ namespace Group1Project
         /// </summary>
         private void UpdateStatusBar()
         {
+            loginToolStripMenuItem.Enabled = !_apiClient.IsLoggedIn;
+            logoutToolStripMenuItem.Enabled = _apiClient.IsLoggedIn;
+
             var authStatus = _apiClient.IsLoggedIn
                 ? $"Logged in: {_apiClient.CurrentUserName}"
                 : "Not logged in";
@@ -575,6 +578,610 @@ namespace Group1Project
                 MessageBox.Show($"Could not generate bracket in database.\nTournament ID used: {currentTournament.Id}",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Handles the click event for the Auto Schedule command and starts the bulk scheduling flow.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private async void autoSchedule_Click(object sender, EventArgs e)
+        {
+            await RunAutoScheduleAsync();
+        }
+
+        /// <summary>
+        /// Opens the auto-schedule dialog, then applies schedule times to all schedulable matches
+        /// using the selected start time and increment.
+        /// </summary>
+        /// <returns>A task representing the asynchronous auto-schedule operation.</returns>
+        private async Task RunAutoScheduleAsync()
+        {
+            if (currentTournament == null)
+            {
+                MessageBox.Show("Please create/select a tournament first.",
+                    "No Tournament",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            var matches = await _apiClient.GetMatchesForTournamentAsync(currentTournament.Id)
+                ?? new List<ApiClient.MatchReadDto>();
+
+            var schedulableMatches = matches
+                .Where(match => !string.Equals(match.Status, "Complete", StringComparison.OrdinalIgnoreCase))
+                .Where(match => !string.IsNullOrWhiteSpace(match.TeamAId) && !string.IsNullOrWhiteSpace(match.TeamBId))
+                .OrderBy(match => match.RoundNumber)
+                .ThenBy(match => match.MatchNumber)
+                .ToList();
+
+            if (schedulableMatches.Count == 0)
+            {
+                MessageBox.Show("No schedulable matches were found.",
+                    "Auto Schedule",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            using var dialog = new AutoScheduleDialog();
+            dialog.SetInitialValues(currentTournament.StartDate, 30, "Minutes");
+
+            if (dialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            DateTime nextStart = dialog.FirstMatchStart;
+            TimeSpan increment = dialog.IncrementSpan;
+            int successCount = 0;
+            int failCount = 0;
+
+            foreach (var match in schedulableMatches)
+            {
+                bool ok = await _apiClient.ScheduleMatchAsync(match.Id, nextStart);
+                if (ok)
+                {
+                    successCount++;
+                }
+                else
+                {
+                    failCount++;
+                }
+
+                nextStart = nextStart.Add(increment);
+            }
+
+            if (panelWorkspace.Controls.Count > 0 &&
+                panelWorkspace.Controls[0] is SchedulePage schedulePage)
+            {
+                schedulePage.LoadTournament(currentTournament);
+            }
+
+            MessageBox.Show(
+                $"Auto-schedule complete.\nScheduled: {successCount}\nFailed: {failCount}",
+                "Auto Schedule",
+                MessageBoxButtons.OK,
+                failCount == 0 ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+        }
+
+        /// <summary>
+        /// Handles the click event for Save actions and exports the current tournament to JSON.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private async void saveTournament_Click(object sender, EventArgs e)
+        {
+            await SaveTournamentToJsonAsync();
+        }
+
+        /// <summary>
+        /// Handles the click event for Open actions and imports a tournament from a JSON file.
+        /// </summary>
+        /// <param name="sender">The event source.</param>
+        /// <param name="e">Event arguments for the click event.</param>
+        private async void openTournament_Click(object sender, EventArgs e)
+        {
+            await OpenTournamentFromJsonAsync();
+        }
+
+        /// <summary>
+        /// Exports the currently selected tournament, teams, players, and matches to a JSON file.
+        /// </summary>
+        /// <returns>A task representing the asynchronous export operation.</returns>
+        private async Task SaveTournamentToJsonAsync()
+        {
+            if (currentTournament == null)
+            {
+                MessageBox.Show("Please select a tournament first.",
+                    "Save Tournament",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            var teams = await _apiClient.GetTeamsForTournamentAsync(currentTournament.Id)
+                ?? new List<ApiClient.TeamReadDto>();
+
+            var matches = await _apiClient.GetMatchesForTournamentAsync(currentTournament.Id)
+                ?? new List<ApiClient.MatchReadDto>();
+
+            var export = new TournamentExportFile
+            {
+                SchemaVersion = 1,
+                ExportedAtUtc = DateTime.UtcNow,
+                Tournament = new TournamentExportDto
+                {
+                    Name = currentTournament.Name,
+                    Location = currentTournament.Location,
+                    StartDateUtc = currentTournament.StartDate,
+                    BracketType = currentTournament.BracketType.ToString()
+                },
+                Teams = teams.Select(team => new TeamExportDto
+                {
+                    Name = team.Name,
+                    Seed = team.Seed,
+                    Players = team.Players
+                        .Select(player => new PlayerExportDto
+                        {
+                            DisplayName = player.DisplayName,
+                            Number = player.Number
+                        })
+                        .ToList()
+                }).ToList(),
+                Matches = matches.Select(match => new MatchExportDto
+                {
+                    RoundNumber = match.RoundNumber,
+                    MatchNumber = match.MatchNumber,
+                    TeamAName = match.TeamAName,
+                    TeamBName = match.TeamBName,
+                    ScheduledStartUtc = match.ScheduledStart,
+                    Status = match.Status,
+                    ScoreA = match.ScoreA,
+                    ScoreB = match.ScoreB
+                }).ToList()
+            };
+
+            using var saveDialog = new SaveFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                FileName = $"{currentTournament.Name.Replace(' ', '_')}.json",
+                Title = "Export Tournament to JSON"
+            };
+
+            if (saveDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            var jsonOptions = new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            };
+
+            string json = System.Text.Json.JsonSerializer.Serialize(export, jsonOptions);
+            await System.IO.File.WriteAllTextAsync(saveDialog.FileName, json);
+
+            MessageBox.Show($"Tournament exported to:\n{saveDialog.FileName}",
+                "Export Complete",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Imports tournament data from a JSON file, creates a new tournament owned by the current user,
+        /// and attempts to restore teams, schedule, and recorded results.
+        /// </summary>
+        /// <returns>A task representing the asynchronous import operation.</returns>
+        private async Task OpenTournamentFromJsonAsync()
+        {
+            using var openDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                Title = "Import Tournament from JSON"
+            };
+
+            if (openDialog.ShowDialog(this) != DialogResult.OK)
+            {
+                return;
+            }
+
+            using var loadingDialog = CreateLoadingDialog("Importing tournament data...\nThis " +
+                "may take a few seconds.");
+
+            loadingDialog.Location = new Point(
+                this.Left + (this.Width - loadingDialog.Width) / 2,
+                this.Top + (this.Height - loadingDialog.Height) / 2);
+
+            loadingDialog.Show(this);
+            loadingDialog.BringToFront();
+            loadingDialog.Update();
+            await Task.Yield();
+
+            try
+            {
+                TournamentExportFile? importFile;
+                try
+                {
+                    string json = await System.IO.File.ReadAllTextAsync(openDialog.FileName);
+                    importFile = System.Text.Json.JsonSerializer.Deserialize<TournamentExportFile>(json);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Could not read JSON file.\n{ex.Message}",
+                        "Import Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (importFile == null || importFile.Tournament == null)
+                {
+                    MessageBox.Show("Invalid import file.",
+                        "Import Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
+                string importedName = $"{importFile.Tournament.Name} (Imported)";
+                var importedTournament = new Tournament(
+                    importedName,
+                    importFile.Tournament.StartDateUtc,
+                    importFile.Tournament.Location ?? string.Empty);
+
+                if (Enum.TryParse<BracketType>(importFile.Tournament.BracketType, out var parsedBracketType))
+                {
+                    importedTournament.BracketType = parsedBracketType;
+                }
+
+                bool createdTournament = await _apiClient.CreateTournamentAsync(importedTournament);
+                if (!createdTournament)
+                {
+                    MessageBox.Show("Failed to create imported tournament.",
+                        "Import Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    return;
+                }
+
+                int teamFailures = 0;
+                foreach (var teamDto in importFile.Teams.OrderBy(t => t.Seed).ThenBy(t => t.Name))
+                {
+                    var team = new Team(teamDto.Name)
+                    {
+                        Seed = teamDto.Seed
+                    };
+
+                    foreach (var playerDto in teamDto.Players)
+                    {
+                        team.AddPlayer(new Player(playerDto.DisplayName, playerDto.Number));
+                    }
+
+                    bool createdTeam = await _apiClient.CreateTeamForTournamentAsync(importedTournament.Id, team);
+                    if (!createdTeam)
+                    {
+                        teamFailures++;
+                    }
+                }
+
+                int scheduleFailures = 0;
+                int resultFailures = 0;
+
+                if (importFile.Teams.Count >= 2)
+                {
+                    bool generatedBracket = await _apiClient.GenerateBracketAsync(importedTournament.Id);
+                    if (generatedBracket)
+                    {
+                        var importedMatches = importFile.Matches
+                            .OrderBy(m => m.RoundNumber)
+                            .ThenBy(m => m.MatchNumber)
+                            .ToList();
+
+                        bool isSwiss = importedTournament.BracketType == BracketType.Swiss;
+                        int maxRound = importedMatches.Count == 0 ? 0 : importedMatches.Max(m => m.RoundNumber);
+
+                        for (int round = 1; round <= maxRound; round++)
+                        {
+                            var sourceRoundMatches = importedMatches
+                                .Where(m => m.RoundNumber == round)
+                                .OrderBy(m => m.MatchNumber)
+                                .ToList();
+
+                            var targetMatches = await _apiClient.GetMatchesForTournamentAsync(importedTournament.Id)
+                                ?? new List<ApiClient.MatchReadDto>();
+
+                            var targetByMatchNumber = targetMatches
+                                .Where(m => m.RoundNumber == round)
+                                .ToDictionary(m => m.MatchNumber, m => m);
+
+                            foreach (var sourceMatch in sourceRoundMatches)
+                            {
+                                if (!sourceMatch.ScheduledStartUtc.HasValue)
+                                {
+                                    continue;
+                                }
+
+                                if (!targetByMatchNumber.TryGetValue(sourceMatch.MatchNumber, out var targetMatch))
+                                {
+                                    scheduleFailures++;
+                                    continue;
+                                }
+
+                                bool scheduled = await _apiClient.ScheduleMatchAsync(targetMatch.Id, sourceMatch.ScheduledStartUtc.Value);
+                                if (!scheduled)
+                                {
+                                    scheduleFailures++;
+                                }
+                            }
+
+                            foreach (var sourceMatch in sourceRoundMatches)
+                            {
+                                if (!sourceMatch.ScoreA.HasValue || !sourceMatch.ScoreB.HasValue)
+                                {
+                                    continue;
+                                }
+
+                                if (!targetByMatchNumber.TryGetValue(sourceMatch.MatchNumber, out var targetMatch))
+                                {
+                                    resultFailures++;
+                                    continue;
+                                }
+
+                                if (string.IsNullOrWhiteSpace(targetMatch.TeamAId) || string.IsNullOrWhiteSpace(targetMatch.TeamBId))
+                                {
+                                    continue;
+                                }
+
+                                bool recorded = await _apiClient.RecordMatchResultAsync(
+                                    targetMatch.Id,
+                                    sourceMatch.ScoreA.Value,
+                                    sourceMatch.ScoreB.Value);
+
+                                if (!recorded)
+                                {
+                                    resultFailures++;
+                                }
+                            }
+
+                            if (isSwiss && round < maxRound)
+                            {
+                                bool nextRoundOk = await _apiClient.GenerateNextRoundAsync(importedTournament.Id);
+                                if (!nextRoundOk)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                await ReloadTournamentsAsync();
+
+                int importedIndex = tournaments.FindIndex(t => t.Id == importedTournament.Id);
+                if (importedIndex >= 0)
+                {
+                    cboTournament.SelectedIndex = importedIndex;
+                }
+
+                MessageBox.Show(
+                    $"Import complete.\n" +
+                    $"Tournament: {importedTournament.Name}\n" +
+                    $"Team failures: {teamFailures}\n" +
+                    $"Schedule failures: {scheduleFailures}\n" +
+                    $"Result failures: {resultFailures}",
+                    "Import Complete",
+                    MessageBoxButtons.OK,
+                    (teamFailures + scheduleFailures + resultFailures) == 0
+                        ? MessageBoxIcon.Information
+                        : MessageBoxIcon.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Import failed unexpectedly.\n{ex.Message}",
+                    "Import Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+            finally
+            {
+                loadingDialog.Close();
+            }
+        }
+
+        /// <summary>
+        /// Creates a small non-interactive loading dialog displayed during long-running import operations.
+        /// </summary>
+        /// <param name="message">Message text displayed in the dialog.</param>
+        /// <returns>A configured <see cref="Form"/> instance used as a loading indicator.</returns>
+        private Form CreateLoadingDialog(string message)
+        {
+            var dialog = new Form
+            {
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.Manual,
+                ControlBox = false,
+                ShowInTaskbar = false,
+                TopMost = true,
+                Width = 600,
+                Height = 250,
+                Text = "Please wait..."
+            };
+
+            var table = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                ColumnCount = 1,
+                RowCount = 3,
+                Padding = new Padding(16)
+            };
+
+            table.RowStyles.Add(new RowStyle(SizeType.Percent, 100F)); // message area
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F)); // spacer
+            table.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F)); // progress bar
+
+            var label = new Label
+            {
+                Dock = DockStyle.Fill,
+                TextAlign = ContentAlignment.MiddleCenter,
+                AutoSize = false,
+                Text = message
+            };
+
+            var progressBar = new ProgressBar
+            {
+                Dock = DockStyle.Fill,
+                Style = ProgressBarStyle.Marquee,
+                MarqueeAnimationSpeed = 30
+            };
+
+            table.Controls.Add(label, 0, 0);
+            table.Controls.Add(progressBar, 0, 2);
+            dialog.Controls.Add(table);
+
+            return dialog;
+        }
+
+        /// <summary>
+        /// Represents the root JSON export/import document for a tournament snapshot.
+        /// </summary>
+        private sealed class TournamentExportFile
+        {
+            /// <summary>
+            /// Gets or sets the export schema version for compatibility checks.
+            /// </summary>
+            public int SchemaVersion { get; set; }
+
+            /// <summary>
+            /// Gets or sets the UTC timestamp when export was generated.
+            /// </summary>
+            public DateTime ExportedAtUtc { get; set; }
+
+            /// <summary>
+            /// Gets or sets tournament-level metadata.
+            /// </summary>
+            public TournamentExportDto Tournament { get; set; } = new TournamentExportDto();
+
+            /// <summary>
+            /// Gets or sets exported teams including nested player data.
+            /// </summary>
+            public List<TeamExportDto> Teams { get; set; } = new List<TeamExportDto>();
+
+            /// <summary>
+            /// Gets or sets exported match rows including schedule and scores.
+            /// </summary>
+            public List<MatchExportDto> Matches { get; set; } = new List<MatchExportDto>();
+        }
+
+        /// <summary>
+        /// Represents tournament-level fields included in the JSON snapshot.
+        /// </summary>
+        private sealed class TournamentExportDto
+        {
+            /// <summary>
+            /// Gets or sets the tournament name.
+            /// </summary>
+            public string Name { get; set; } = string.Empty;
+
+            /// <summary>
+            /// Gets or sets the tournament location, if available.
+            /// </summary>
+            public string? Location { get; set; }
+
+            /// <summary>
+            /// Gets or sets the tournament start date and time in UTC.
+            /// </summary>
+            public DateTime StartDateUtc { get; set; }
+
+            /// <summary>
+            /// Gets or sets the bracket type name.
+            /// </summary>
+            public string BracketType { get; set; } = string.Empty;
+        }
+
+        /// <summary>
+        /// Represents a team entry in the JSON snapshot.
+        /// </summary>
+        private sealed class TeamExportDto
+        {
+            /// <summary>
+            /// Gets or sets the team name.
+            /// </summary>
+            public string Name { get; set; } = string.Empty;
+
+            /// <summary>
+            /// Gets or sets the team seed.
+            /// </summary>
+            public int Seed { get; set; }
+
+            /// <summary>
+            /// Gets or sets players associated with the team.
+            /// </summary>
+            public List<PlayerExportDto> Players { get; set; } = new List<PlayerExportDto>();
+        }
+
+        /// <summary>
+        /// Represents a player entry in the JSON snapshot.
+        /// </summary>
+        private sealed class PlayerExportDto
+        {
+            /// <summary>
+            /// Gets or sets the player display name.
+            /// </summary>
+            public string DisplayName { get; set; } = string.Empty;
+
+            /// <summary>
+            /// Gets or sets the player number.
+            /// </summary>
+            public int Number { get; set; }
+        }
+
+        /// <summary>
+        /// Represents a match entry in the JSON snapshot.
+        /// </summary>
+        private sealed class MatchExportDto
+        {
+            /// <summary>
+            /// Gets or sets the match round number.
+            /// </summary>
+            public int RoundNumber { get; set; }
+
+            /// <summary>
+            /// Gets or sets the match number within the round.
+            /// </summary>
+            public int MatchNumber { get; set; }
+
+            /// <summary>
+            /// Gets or sets Team A display name.
+            /// </summary>
+            public string? TeamAName { get; set; }
+
+            /// <summary>
+            /// Gets or sets Team B display name.
+            /// </summary>
+            public string? TeamBName { get; set; }
+
+            /// <summary>
+            /// Gets or sets scheduled match start in UTC, when available.
+            /// </summary>
+            public DateTime? ScheduledStartUtc { get; set; }
+
+            /// <summary>
+            /// Gets or sets the stored match status value.
+            /// </summary>
+            public string Status { get; set; } = string.Empty;
+
+            /// <summary>
+            /// Gets or sets Team A score, when recorded.
+            /// </summary>
+            public int? ScoreA { get; set; }
+
+            /// <summary>
+            /// Gets or sets Team B score, when recorded.
+            /// </summary>
+            public int? ScoreB { get; set; }
         }
     }
 }

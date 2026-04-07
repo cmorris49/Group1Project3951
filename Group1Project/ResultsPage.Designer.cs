@@ -30,11 +30,11 @@
         {
             tableLayoutMain = new TableLayoutPanel();
             panel1 = new Panel();
-            labelSelectedMatch = new Label();
-            numericScoreA = new NumericUpDown();
-            numericScoreB = new NumericUpDown();
-            buttonSetResult = new Button();
             buttonRefresh = new Button();
+            buttonSetResult = new Button();
+            numericScoreB = new NumericUpDown();
+            numericScoreA = new NumericUpDown();
+            labelSelectedMatch = new Label();
             dataGridViewResults = new DataGridView();
             columnTeamA = new DataGridViewTextBoxColumn();
             columnTeamB = new DataGridViewTextBoxColumn();
@@ -44,8 +44,8 @@
             columnStatus = new DataGridViewTextBoxColumn();
             tableLayoutMain.SuspendLayout();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericScoreA).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericScoreB).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericScoreA).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewResults).BeginInit();
             SuspendLayout();
             // 
@@ -77,30 +77,16 @@
             panel1.Size = new Size(1235, 104);
             panel1.TabIndex = 0;
             // 
-            // labelSelectedMatch
+            // buttonRefresh
             // 
-            labelSelectedMatch.AutoSize = true;
-            labelSelectedMatch.Location = new Point(15, 35);
-            labelSelectedMatch.Name = "labelSelectedMatch";
-            labelSelectedMatch.Size = new Size(186, 32);
-            labelSelectedMatch.TabIndex = 0;
-            labelSelectedMatch.Text = "Selected: (none)";
-            // 
-            // numericScoreA
-            // 
-            numericScoreA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericScoreA.Location = new Point(635, 35);
-            numericScoreA.Name = "numericScoreA";
-            numericScoreA.Size = new Size(130, 39);
-            numericScoreA.TabIndex = 1;
-            // 
-            // numericScoreB
-            // 
-            numericScoreB.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericScoreB.Location = new Point(771, 35);
-            numericScoreB.Name = "numericScoreB";
-            numericScoreB.Size = new Size(120, 39);
-            numericScoreB.TabIndex = 2;
+            buttonRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonRefresh.Location = new Point(1073, 35);
+            buttonRefresh.Name = "buttonRefresh";
+            buttonRefresh.Size = new Size(150, 46);
+            buttonRefresh.TabIndex = 4;
+            buttonRefresh.Text = "Refresh";
+            buttonRefresh.UseVisualStyleBackColor = true;
+            buttonRefresh.Click += buttonRefresh_Click;
             // 
             // buttonSetResult
             // 
@@ -113,16 +99,30 @@
             buttonSetResult.UseVisualStyleBackColor = true;
             buttonSetResult.Click += buttonSetResult_Click;
             // 
-            // buttonRefresh
+            // numericScoreB
             // 
-            buttonRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonRefresh.Location = new Point(1073, 35);
-            buttonRefresh.Name = "buttonRefresh";
-            buttonRefresh.Size = new Size(150, 46);
-            buttonRefresh.TabIndex = 4;
-            buttonRefresh.Text = "Refresh";
-            buttonRefresh.UseVisualStyleBackColor = true;
-            buttonRefresh.Click += buttonRefresh_Click;
+            numericScoreB.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numericScoreB.Location = new Point(771, 35);
+            numericScoreB.Name = "numericScoreB";
+            numericScoreB.Size = new Size(120, 39);
+            numericScoreB.TabIndex = 2;
+            // 
+            // numericScoreA
+            // 
+            numericScoreA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            numericScoreA.Location = new Point(635, 35);
+            numericScoreA.Name = "numericScoreA";
+            numericScoreA.Size = new Size(130, 39);
+            numericScoreA.TabIndex = 1;
+            // 
+            // labelSelectedMatch
+            // 
+            labelSelectedMatch.AutoSize = true;
+            labelSelectedMatch.Location = new Point(15, 35);
+            labelSelectedMatch.Name = "labelSelectedMatch";
+            labelSelectedMatch.Size = new Size(186, 32);
+            labelSelectedMatch.TabIndex = 0;
+            labelSelectedMatch.Text = "Selected: (none)";
             // 
             // dataGridViewResults
             // 
@@ -193,8 +193,8 @@
             tableLayoutMain.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericScoreA).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericScoreB).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericScoreA).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewResults).EndInit();
             ResumeLayout(false);
         }
