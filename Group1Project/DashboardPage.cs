@@ -93,28 +93,20 @@ namespace Group1Project
         private void ApplyVisualStyle()
         {
             // ── Header ──────────────────────────────────────────────────────
-            panelDashHeader.BackColor = Color.FromArgb(30, 30, 60);
-            labelDashTitle.ForeColor = Color.White;
-            labelDashTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            labelDashTournament.ForeColor = Color.FromArgb(180, 200, 255);
-            labelDashTournament.Font = new Font("Segoe UI", 11F);
+            panelDashHeader.BackColor = Color.FromArgb(248, 249, 250);
+            panelDashHeader.Padding = new Padding(12, 0, 12, 0);
+
+            labelDashTitle.ForeColor = Color.FromArgb(20, 20, 20);
+            labelDashTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
+
+            labelDashTournament.ForeColor = Color.FromArgb(100, 100, 120);
+            labelDashTournament.Font = new Font("Segoe UI", 10F);
 
             // ── Stat cards: color-coded by category ─────────────────────────
-            StyleCard(cardTeams, labelCardTeamsTitle, lblTeamsCount,
-                Color.FromArgb(41, 128, 185),  // blue
-                "Teams", "👥");
-
-            StyleCard(cardPlayers, labelCardPlayersTitle, lblPlayersCount,
-                Color.FromArgb(39, 174, 96),   // green
-                "Players", "🏃");
-
-            StyleCard(cardMatches, labelCardMatchesTitle, lblMatchesCount,
-                Color.FromArgb(142, 68, 173),  // purple
-                "Matches", "⚔");
-
-            StyleCard(cardNextMatch, labelCardNextMatchTitle, null,
-                Color.FromArgb(211, 84, 0),    // orange
-                "Next Match", "📅");
+            StyleCard(cardTeams, labelCardTeamsTitle, lblTeamsCount, Color.FromArgb(59, 130, 246), "Teams");
+            StyleCard(cardPlayers, labelCardPlayersTitle, lblPlayersCount, Color.FromArgb(34, 197, 94), "Players");
+            StyleCard(cardMatches, labelCardMatchesTitle, lblMatchesCount, Color.FromArgb(168, 85, 247), "Matches");
+            StyleCard(cardNextMatch, labelCardNextMatchTitle, null, Color.FromArgb(249, 115, 22), "Next Match");
 
             // ── Section labels ───────────────────────────────────────────────
             StyleSectionLabel(labelRecent, "Recent Activity");
@@ -123,46 +115,57 @@ namespace Group1Project
             // ── Recent activity listbox ──────────────────────────────────────
             listBox1.Font = new Font("Segoe UI", 9.5F);
             listBox1.BorderStyle = BorderStyle.None;
-            listBox1.BackColor = Color.FromArgb(248, 249, 250);
+            listBox1.BackColor = Color.White;
+            listBox1.ItemHeight = 26;
 
             // ── Upcoming events panel ────────────────────────────────────────
-            flowLayoutPanel1.BackColor = Color.FromArgb(248, 249, 250);
+            flowLayoutPanel1.BackColor = Color.White;
+            flowLayoutPanel1.Padding = new Padding(6);
+
+            // ── Background of whole section ────────────────────────────────────────
+            splitDashBottom.Panel1.BackColor = Color.White;
+            splitDashBottom.Panel2.BackColor = Color.White;
+            splitDashBottom.BackColor = Color.FromArgb(230, 232, 236);
         }
 
         /// <summary>
         /// Applies a consistent card style: colored title bar area, large white number, icon.
         /// </summary>
         private static void StyleCard(Panel card, Label titleLabel, Label? countLabel,
-            Color accentColor, string titleText, string icon)
+                               Color accentColor, string titleText)
         {
             card.BackColor = Color.White;
             card.BorderStyle = BorderStyle.None;
+            card.Padding = new Padding(0);
 
-            // Simulate a colored top stripe by painting the card background
             card.Paint += (s, e) =>
             {
-                e.Graphics.FillRectangle(new SolidBrush(accentColor),
-                    0, 0, card.Width, 38);
-                // subtle shadow border
-                using var pen = new Pen(Color.FromArgb(220, 220, 220));
+                // Accent bar at the top
+                e.Graphics.FillRectangle(new SolidBrush(accentColor), 0, 0, card.Width, 6);
+                // Icon circle behind the title
+                using var pen = new Pen(Color.FromArgb(220, 224, 230));
                 e.Graphics.DrawRectangle(pen, 0, 0, card.Width - 1, card.Height - 1);
             };
 
-            // Title in the colored stripe
-            titleLabel.Text = $"{icon}  {titleText}";
-            titleLabel.ForeColor = Color.White;
-            titleLabel.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
-            titleLabel.Location = new Point(8, 6);
+            // Title label
+            titleLabel.Text = titleText;
+            titleLabel.ForeColor = Color.FromArgb(100, 100, 110);
+            titleLabel.Font = new Font("Segoe UI", 8.5F);
+            titleLabel.Location = new Point(10, 12);
             titleLabel.AutoSize = true;
             titleLabel.BackColor = Color.Transparent;
 
-            // Count number centred below
+            // Count label (if applicable)
             if (countLabel != null)
             {
-                countLabel.Font = new Font("Segoe UI", 28F, FontStyle.Bold);
-                countLabel.ForeColor = accentColor;
-                countLabel.TextAlign = ContentAlignment.MiddleCenter;
+                countLabel.Font = new Font("Segoe UI", 24F, FontStyle.Regular);
+                countLabel.ForeColor = Color.FromArgb(20, 20, 30);
                 countLabel.BackColor = Color.Transparent;
+                countLabel.TextAlign = ContentAlignment.MiddleLeft;
+                countLabel.Location = new Point(10, 36);
+                countLabel.Size = new Size(card.Width - 20, 50);
+                countLabel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                countLabel.AutoSize = false;
             }
         }
 
@@ -172,9 +175,12 @@ namespace Group1Project
         private static void StyleSectionLabel(Label label, string text)
         {
             label.Text = text;
-            label.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            label.ForeColor = Color.FromArgb(50, 50, 80);
-            label.Padding = new Padding(4, 4, 0, 6);
+            label.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+            label.ForeColor = Color.FromArgb(40, 40, 60);
+            label.BackColor = Color.FromArgb(248, 249, 250);
+            label.Padding = new Padding(8, 6, 0, 6);
+            label.Dock = DockStyle.Top;
+            label.Height = 28;
         }
 
         /// <summary>
@@ -184,7 +190,8 @@ namespace Group1Project
         {
             _labelNextMatchValue.AutoSize = false;
             _labelNextMatchValue.TextAlign = ContentAlignment.TopCenter;
-            _labelNextMatchValue.Font = new Font("Segoe UI", 9F);
+            _labelNextMatchValue.Font = new Font("Segoe UI", 8F);
+            _labelNextMatchValue.Location = new Point(6, 20);
 
             _labelNextMatchValue.Location = new Point(6, 24);
             _labelNextMatchValue.Size = new Size(cardNextMatch.Width - 12, cardNextMatch.Height - 28);
@@ -342,6 +349,16 @@ namespace Group1Project
             {
                 label.Text = value;
             }
+        }
+
+        private void tableDashboard_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
