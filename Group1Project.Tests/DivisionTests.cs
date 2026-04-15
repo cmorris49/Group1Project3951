@@ -56,8 +56,20 @@ namespace Group1Project.Tests
             var team = new Team("Warriors");
 
             division.RegisterTeam(team);
-            division.RegisterTeam(team);
 
+            bool exceptionThrown = false;
+
+            try
+            {
+                division.RegisterTeam(team);
+            }
+            catch (InvalidOperationException ex)
+            {
+                exceptionThrown = true;
+                StringAssert.Contains(ex.Message, "already registered");
+            }
+
+            Assert.IsTrue(exceptionThrown, "Expected InvalidOperationException was not thrown.");
             Assert.AreEqual(1, division.Teams.Count);
         }
     }

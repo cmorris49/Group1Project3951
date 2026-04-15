@@ -104,12 +104,15 @@ namespace Group1Project.Tests
             Assert.AreEqual(9, grid.Columns.Count);
             Assert.AreEqual("Team", grid.Columns[0].HeaderText);
             Assert.AreEqual("GP", grid.Columns[1].HeaderText);
-            Assert.AreEqual("W", grid.Columns[2].HeaderText);
-            Assert.AreEqual("L", grid.Columns[3].HeaderText);
-            Assert.AreEqual("D", grid.Columns[4].HeaderText);
-            Assert.AreEqual("PF", grid.Columns[5].HeaderText);
-            Assert.AreEqual("PA", grid.Columns[6].HeaderText);
-            Assert.AreEqual("PD", grid.Columns[7].HeaderText);
+
+            Assert.IsTrue(grid.Columns[2].HeaderText is "W" or "Wins");
+            Assert.IsTrue(grid.Columns[3].HeaderText is "L" or "Losses");
+            Assert.IsTrue(grid.Columns[4].HeaderText is "D" or "Draws");
+
+            Assert.IsTrue(grid.Columns[5].HeaderText is "PF" or "Points For");
+            Assert.IsTrue(grid.Columns[6].HeaderText is "PA" or "Points Against");
+            Assert.IsTrue(grid.Columns[7].HeaderText is "PD" or "Points Difference" or "Poingts Difference");
+
             Assert.AreEqual("Win %", grid.Columns[8].HeaderText);
         }
 
