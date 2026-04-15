@@ -24,14 +24,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Bracket">
-    <Position X="9" Y="8" Width="1.5" />
+    <Position X="9" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>ABACAAAAAAAAQACIAAAAAAAAAAAAAIAAAAAAgAAAAAA=</HashCode>
       <FileName>Bracket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.BracketPage">
-    <Position X="14.25" Y="4.75" Width="1.5" />
+    <Position X="14.25" Y="1" Width="1.5" />
     <Members>
       <Field Name="buttonExportBracket" Hidden="true" />
       <Field Name="buttonGenerateBracket" Hidden="true" />
@@ -48,7 +48,7 @@
       <Field Name="tableMain" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AgBAAIAgAiQAgQAAAQCAAAhDgABBAIAAEwAAEQQSCAA=</HashCode>
+      <HashCode>AgBAAIAgAiQAgQAEAQCAAQhDgABBAIAAEwIIEQQSGAA=</HashCode>
       <FileName>BracketPage.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -60,7 +60,6 @@
       <Field Name="cardPlayers" Hidden="true" />
       <Field Name="cardTeams" Hidden="true" />
       <Field Name="components" Hidden="true" />
-      <Method Name="DashboardPage" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
       <Field Name="flowLayoutPanel1" Hidden="true" />
       <Method Name="InitializeComponent" Hidden="true" />
@@ -82,21 +81,21 @@
       <Field Name="tableLayoutPanel1" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>gAkIFAEAAKIAgYEQIBCAAAICEJAhAANAAAIBAAQQAHE=</HashCode>
-      <FileName>DashboardPage.cs</FileName>
+      <HashCode>gAkIBAEAAKAAAIEQIBCAAAACEIAgAAFAAAABAAQAACA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Division">
-    <Position X="7.25" Y="8" Width="1.5" />
+    <Position X="7.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>QAACCAAAAAgAAAAAAAAAQAQAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Division.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Group1Project.Form1" Collapsed="true">
+  <Class Name="Group1Project.Form1">
     <Position X="9" Y="1" Width="1.5" />
     <Members>
       <Field Name="aboutToolStripMenuItem" Hidden="true" />
+      <Field Name="accounToolStripMenuItem" Hidden="true" />
       <Field Name="autoScheduleToolStripMenuItem" Hidden="true" />
       <Field Name="bracketsToolStripMenuItem" Hidden="true" />
       <Field Name="btnBracket" Hidden="true" />
@@ -120,6 +119,8 @@
       <Method Name="InitializeComponent" Hidden="true" />
       <Field Name="labelWorkspaceTitle" Hidden="true" />
       <Field Name="lblTournament" Hidden="true" />
+      <Field Name="loginToolStripMenuItem" Hidden="true" />
+      <Field Name="logoutToolStripMenuItem" Hidden="true" />
       <Field Name="menuMain" Hidden="true" />
       <Field Name="newToolStripMenuItem" Hidden="true" />
       <Field Name="newTournamentToolStripMenuItem" Hidden="true" />
@@ -131,7 +132,6 @@
       <Field Name="scheduleToolStripMenuItem" Hidden="true" />
       <Field Name="splitMain" Hidden="true" />
       <Field Name="sslHint" Hidden="true" />
-      <Field Name="sslTournament" Hidden="true" />
       <Field Name="statusMain" Hidden="true" />
       <Field Name="teamsPlayersToolStripMenuItem" Hidden="true" />
       <Field Name="teamStatsToolStripMenuItem" Hidden="true" />
@@ -143,12 +143,40 @@
       <Field Name="tsbGenerateBracket" Hidden="true" />
       <Field Name="tsbSave" Hidden="true" />
     </Members>
+    <NestedTypes>
+      <Class Name="Group1Project.Form1.TournamentExportFile" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Group1Project.Form1.TournamentExportDto" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Group1Project.Form1.TeamExportDto" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Group1Project.Form1.PlayerExportDto" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Group1Project.Form1.MatchExportDto" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Form1.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>xICgAFAAACCAQADQAQSCgmkCBAAYAAAEggBAhGACAA0=</HashCode>
+      <HashCode>xICgAFAAACCAQADQAQSCgmECBAAaAAAEigFAhGACAA0=</HashCode>
+      <FileName>Form1.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Match">
-    <Position X="10.75" Y="7.5" Width="1.5" />
+    <Position X="10.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQACAAAEAAQAAIgAAgAAAAAAAEAAAAAAAAgAgAAAAAA=</HashCode>
       <FileName>Match.cs</FileName>
@@ -157,12 +185,14 @@
   <Class Name="Group1Project.NewTournamentForm">
     <Position X="10.75" Y="1" Width="1.5" />
     <Members>
-      <Method Name="BtnOk_Click" Hidden="true" />
       <Field Name="buttonCancel" Hidden="true" />
       <Field Name="buttonCreate" Hidden="true" />
+      <Field Name="comboBoxBracketType" Hidden="true" />
       <Field Name="components" Hidden="true" />
       <Field Name="dateTimePickerStartDate" Hidden="true" />
       <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="labelBracketType" Hidden="true" />
       <Field Name="labelLocation" Hidden="true" />
       <Field Name="labelStartDate" Hidden="true" />
       <Field Name="labelTournamentName" Hidden="true" />
@@ -170,8 +200,7 @@
       <Field Name="textTournamentName" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACCAQQAIAACABAwCAAAAAQAAAQAAAIAAAAg=</HashCode>
-      <FileName>NewTournamentForm.cs</FileName>
+      <HashCode>AAAAAAAAACAAQAAoAACABAwCAAAAAQgAAQAAAIAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Player">
@@ -182,14 +211,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Program">
-    <Position X="12.5" Y="5.25" Width="1.5" />
+    <Position X="12.5" Y="7.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.RuleSet">
-    <Position X="10.75" Y="6" Width="1.5" />
+    <Position X="9" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RuleSet.cs</FileName>
@@ -203,14 +232,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.ScoreEntry">
-    <Position X="10.75" Y="3.25" Width="1.5" />
+    <Position X="10.75" Y="2.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>ScoreEntry.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Standings">
-    <Position X="9" Y="6.25" Width="1.5" />
+    <Position X="9" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>Standings.cs</FileName>
@@ -249,32 +278,32 @@
       <Field Name="splitTeamsPlayers" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>ABAEAACgBCKCATAAAACABAOCEEARACAAEAAAAAEQEBA=</HashCode>
+      <HashCode>gBAEAACgBCKCATAQAACABAOCEEARACAIEAAAAAEQ0BA=</HashCode>
       <FileName>TeamsPlayersPage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Tournament">
     <Position X="3.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAECEAACAAAAAAEAAAIAEBQAABAAAAAAAAAAgEAAABA=</HashCode>
+      <HashCode>AIECEAACAAAAAAEAAAIAEBQAABAAAAAAAAAAgEAAABA=</HashCode>
       <FileName>Tournament.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.Properties.Resources" Collapsed="true">
-    <Position X="12.5" Y="6.5" Width="1.5" />
+    <Position X="12.5" Y="9" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAACAAAAAAAABEAAAAQAAAABABCAEAAAAAII=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.ApiClient">
-    <Position X="14.25" Y="1" Width="1.5" />
+    <Position X="12.5" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAEAAIEAAAIBAAAAAAAAgAAYAQAIAAAAAAAAA=</HashCode>
+      <HashCode>AgAIAAAAEIAIEAAQKBAAICIAAAwAAYIwAMgCAEAAAAA=</HashCode>
       <FileName>ApiClient.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.ResultsPage">
-    <Position X="12.5" Y="1" Width="1.5" />
+    <Position X="16" Y="1" Width="1.5" />
     <Members>
       <Field Name="buttonRefresh" Hidden="true" />
       <Field Name="buttonSetResult" Hidden="true" />
@@ -295,12 +324,12 @@
       <Field Name="tableLayoutMain" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAABAACABeQASQQAAACAQQQCgACBAMEAAkBAAQBRAAA=</HashCode>
+      <HashCode>AAAAAACABKQACAAAAACAAAQCgACAAEEAAkBAAQAAAAA=</HashCode>
       <FileName>ResultsPage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.SchedulePage">
-    <Position X="12.5" Y="7.25" Width="1.5" />
+    <Position X="14.25" Y="7" Width="1.5" />
     <Members>
       <Field Name="buttonRefresh" Hidden="true" />
       <Field Name="buttonSetSchedule" Hidden="true" />
@@ -323,7 +352,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="Group1Project.TeamStatsPage">
-    <Position X="5.5" Y="6.75" Width="1.5" />
+    <Position X="10.75" Y="7.75" Width="1.5" />
     <Members>
       <Field Name="buttonRefreshStats" Hidden="true" />
       <Field Name="columnD" Hidden="true" />
@@ -354,6 +383,62 @@
     <TypeIdentifier>
       <HashCode>CFAAAIAABCAAARAAAAGAAAAKEICBAAAEBEEAEQAQACA=</HashCode>
       <FileName>TeamStatsPage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.AutoScheduleDialog">
+    <Position X="5.5" Y="8.25" Width="1.5" />
+    <Members>
+      <Field Name="buttonCancel" Hidden="true" />
+      <Field Name="buttonOk" Hidden="true" />
+      <Field Name="comboBoxIncrementUnit" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Field Name="dateTimePickerFirstMatch" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="labelFirstMatch" Hidden="true" />
+      <Field Name="labelIncrementValue" Hidden="true" />
+      <Field Name="numericIncrementValue" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAACAAABAYAACABgAGEAAAAAAEAQAAAAAEAAA=</HashCode>
+      <FileName>AutoScheduleDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.EntityInputDialog">
+    <Position X="9" Y="2.25" Width="1.5" />
+    <Members>
+      <Field Name="buttonCancel" Hidden="true" />
+      <Field Name="buttonOk" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="labelName" Hidden="true" />
+      <Field Name="labelNumber" Hidden="true" />
+      <Field Name="numericNumber" Hidden="true" />
+      <Field Name="textBoxName" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAMAACABACCEAAAAAABAQAAAQAAASA=</HashCode>
+      <FileName>EntityInputDialog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Group1Project.LoginForm">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <Members>
+      <Field Name="btnCancel" Hidden="true" />
+      <Field Name="btnLogin" Hidden="true" />
+      <Field Name="btnSignUp" Hidden="true" />
+      <Field Name="components" Hidden="true" />
+      <Method Name="Dispose" Hidden="true" />
+      <Method Name="InitializeComponent" Hidden="true" />
+      <Field Name="lblPassword" Hidden="true" />
+      <Field Name="lblUserName" Hidden="true" />
+      <Field Name="txtPassword" Hidden="true" />
+      <Field Name="txtUserName" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>IAgAAAAQACAAAAEAAACAAEACCAAACAACBwAAAABAAAA=</HashCode>
+      <FileName>LoginForm.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="Group1Project.BracketType">

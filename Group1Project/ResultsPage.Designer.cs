@@ -57,11 +57,12 @@
             tableLayoutMain.Controls.Add(dataGridViewResults, 0, 1);
             tableLayoutMain.Dock = DockStyle.Fill;
             tableLayoutMain.Location = new Point(0, 0);
+            tableLayoutMain.Margin = new Padding(2, 2, 2, 2);
             tableLayoutMain.Name = "tableLayoutMain";
             tableLayoutMain.RowCount = 2;
-            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 110F));
+            tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 58F));
             tableLayoutMain.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutMain.Size = new Size(1241, 1021);
+            tableLayoutMain.Size = new Size(668, 542);
             tableLayoutMain.TabIndex = 0;
             // 
             // panel1
@@ -72,17 +73,19 @@
             panel1.Controls.Add(numericScoreA);
             panel1.Controls.Add(labelSelectedMatch);
             panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(3, 3);
+            panel1.Location = new Point(2, 2);
+            panel1.Margin = new Padding(2, 2, 2, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1235, 104);
+            panel1.Size = new Size(664, 54);
             panel1.TabIndex = 0;
             // 
             // buttonRefresh
             // 
             buttonRefresh.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonRefresh.Location = new Point(1073, 35);
+            buttonRefresh.Location = new Point(577, 19);
+            buttonRefresh.Margin = new Padding(2, 2, 2, 2);
             buttonRefresh.Name = "buttonRefresh";
-            buttonRefresh.Size = new Size(150, 46);
+            buttonRefresh.Size = new Size(81, 24);
             buttonRefresh.TabIndex = 4;
             buttonRefresh.Text = "Refresh";
             buttonRefresh.UseVisualStyleBackColor = true;
@@ -91,9 +94,10 @@
             // buttonSetResult
             // 
             buttonSetResult.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonSetResult.Location = new Point(917, 35);
+            buttonSetResult.Location = new Point(493, 19);
+            buttonSetResult.Margin = new Padding(2, 2, 2, 2);
             buttonSetResult.Name = "buttonSetResult";
-            buttonSetResult.Size = new Size(150, 48);
+            buttonSetResult.Size = new Size(81, 26);
             buttonSetResult.TabIndex = 3;
             buttonSetResult.Text = "Set Result";
             buttonSetResult.UseVisualStyleBackColor = true;
@@ -102,25 +106,30 @@
             // numericScoreB
             // 
             numericScoreB.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericScoreB.Location = new Point(771, 35);
+            numericScoreB.Location = new Point(414, 19);
+            numericScoreB.Margin = new Padding(2, 2, 2, 2);
             numericScoreB.Name = "numericScoreB";
-            numericScoreB.Size = new Size(120, 39);
+            numericScoreB.Size = new Size(65, 25);
             numericScoreB.TabIndex = 2;
             // 
             // numericScoreA
             // 
             numericScoreA.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            numericScoreA.Location = new Point(635, 35);
+            numericScoreA.Location = new Point(341, 19);
+            numericScoreA.Margin = new Padding(2, 2, 2, 2);
             numericScoreA.Name = "numericScoreA";
-            numericScoreA.Size = new Size(130, 39);
+            numericScoreA.Size = new Size(70, 25);
             numericScoreA.TabIndex = 1;
             // 
             // labelSelectedMatch
             // 
             labelSelectedMatch.AutoSize = true;
-            labelSelectedMatch.Location = new Point(15, 35);
+            labelSelectedMatch.BackColor = Color.Moccasin;
+            labelSelectedMatch.ForeColor = SystemColors.ControlText;
+            labelSelectedMatch.Location = new Point(8, 19);
+            labelSelectedMatch.Margin = new Padding(2, 0, 2, 0);
             labelSelectedMatch.Name = "labelSelectedMatch";
-            labelSelectedMatch.Size = new Size(186, 32);
+            labelSelectedMatch.Size = new Size(101, 17);
             labelSelectedMatch.TabIndex = 0;
             labelSelectedMatch.Text = "Selected: (none)";
             // 
@@ -130,14 +139,15 @@
             dataGridViewResults.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewResults.Columns.AddRange(new DataGridViewColumn[] { columnTeamA, columnTeamB, columnScheduled, columnScore, columnWinner, columnStatus });
             dataGridViewResults.Dock = DockStyle.Fill;
-            dataGridViewResults.Location = new Point(3, 113);
+            dataGridViewResults.Location = new Point(2, 60);
+            dataGridViewResults.Margin = new Padding(2, 2, 2, 2);
             dataGridViewResults.MultiSelect = false;
             dataGridViewResults.Name = "dataGridViewResults";
             dataGridViewResults.ReadOnly = true;
             dataGridViewResults.RowHeadersVisible = false;
             dataGridViewResults.RowHeadersWidth = 82;
             dataGridViewResults.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridViewResults.Size = new Size(1235, 905);
+            dataGridViewResults.Size = new Size(664, 480);
             dataGridViewResults.TabIndex = 1;
             dataGridViewResults.SelectionChanged += dataGridViewResults_SelectionChanged;
             // 
@@ -185,11 +195,12 @@
             // 
             // ResultsPage
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tableLayoutMain);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "ResultsPage";
-            Size = new Size(1241, 1021);
+            Size = new Size(668, 542);
             tableLayoutMain.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

@@ -136,42 +136,42 @@
             // 
             // columnW
             // 
-            columnW.HeaderText = "W";
+            columnW.HeaderText = "Wins";
             columnW.MinimumWidth = 10;
             columnW.Name = "columnW";
             columnW.ReadOnly = true;
             // 
             // columnL
             // 
-            columnL.HeaderText = "L";
+            columnL.HeaderText = "Losses";
             columnL.MinimumWidth = 10;
             columnL.Name = "columnL";
             columnL.ReadOnly = true;
             // 
             // columnD
             // 
-            columnD.HeaderText = "D";
+            columnD.HeaderText = "Draws";
             columnD.MinimumWidth = 10;
             columnD.Name = "columnD";
             columnD.ReadOnly = true;
             // 
             // columnPF
             // 
-            columnPF.HeaderText = "PF";
+            columnPF.HeaderText = "Points For";
             columnPF.MinimumWidth = 10;
             columnPF.Name = "columnPF";
             columnPF.ReadOnly = true;
             // 
             // columnPA
             // 
-            columnPA.HeaderText = "PA";
+            columnPA.HeaderText = "Points Against";
             columnPA.MinimumWidth = 10;
             columnPA.Name = "columnPA";
             columnPA.ReadOnly = true;
             // 
             // columnPD
             // 
-            columnPD.HeaderText = "PD";
+            columnPD.HeaderText = "Poingts Difference";
             columnPD.MinimumWidth = 10;
             columnPD.Name = "columnPD";
             columnPD.ReadOnly = true;

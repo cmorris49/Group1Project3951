@@ -82,10 +82,10 @@ namespace Group1Project
             tableDashboard.Margin = new Padding(2);
             tableDashboard.Name = "tableDashboard";
             tableDashboard.RowCount = 3;
-            tableDashboard.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableDashboard.RowStyles.Add(new RowStyle(SizeType.Absolute, 100F));
+            tableDashboard.RowStyles.Add(new RowStyle(SizeType.Absolute, 57F));
+            tableDashboard.RowStyles.Add(new RowStyle(SizeType.Absolute, 113F));
             tableDashboard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableDashboard.Size = new Size(690, 307);
+            tableDashboard.Size = new Size(690, 348);
             tableDashboard.TabIndex = 0;
             tableDashboard.Paint += tableDashboard_Paint;
             // 
@@ -97,7 +97,7 @@ namespace Group1Project
             panelDashHeader.Location = new Point(2, 2);
             panelDashHeader.Margin = new Padding(2);
             panelDashHeader.Name = "panelDashHeader";
-            panelDashHeader.Size = new Size(686, 46);
+            panelDashHeader.Size = new Size(686, 53);
             panelDashHeader.TabIndex = 0;
             // 
             // labelDashTournament
@@ -105,10 +105,10 @@ namespace Group1Project
             labelDashTournament.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             labelDashTournament.AutoSize = true;
             labelDashTournament.Font = new Font("Segoe UI", 12F);
-            labelDashTournament.Location = new Point(516, 12);
+            labelDashTournament.Location = new Point(516, 14);
             labelDashTournament.Margin = new Padding(2, 0, 2, 0);
             labelDashTournament.Name = "labelDashTournament";
-            labelDashTournament.Size = new Size(145, 21);
+            labelDashTournament.Size = new Size(165, 25);
             labelDashTournament.TabIndex = 1;
             labelDashTournament.Text = "Tournament: (none)";
             // 
@@ -116,10 +116,10 @@ namespace Group1Project
             // 
             labelDashTitle.AutoSize = true;
             labelDashTitle.Font = new Font("Segoe UI", 16F);
-            labelDashTitle.Location = new Point(8, 9);
+            labelDashTitle.Location = new Point(8, 10);
             labelDashTitle.Margin = new Padding(2, 0, 2, 0);
             labelDashTitle.Name = "labelDashTitle";
-            labelDashTitle.Size = new Size(118, 30);
+            labelDashTitle.Size = new Size(129, 32);
             labelDashTitle.TabIndex = 0;
             labelDashTitle.Text = "Dashboard";
             // 
@@ -135,13 +135,13 @@ namespace Group1Project
             tableLayoutPanel1.Controls.Add(cardPlayers, 1, 0);
             tableLayoutPanel1.Controls.Add(cardTeams, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(2, 52);
+            tableLayoutPanel1.Location = new Point(2, 59);
             tableLayoutPanel1.Margin = new Padding(2);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.Padding = new Padding(5, 4, 5, 4);
+            tableLayoutPanel1.Padding = new Padding(5);
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(686, 96);
+            tableLayoutPanel1.Size = new Size(686, 109);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // cardNextMatch
@@ -150,10 +150,10 @@ namespace Group1Project
             cardNextMatch.BorderStyle = BorderStyle.FixedSingle;
             cardNextMatch.Controls.Add(labelCardNextMatchTitle);
             cardNextMatch.Dock = DockStyle.Fill;
-            cardNextMatch.Location = new Point(517, 8);
-            cardNextMatch.Margin = new Padding(5, 4, 5, 4);
+            cardNextMatch.Location = new Point(517, 10);
+            cardNextMatch.Margin = new Padding(5);
             cardNextMatch.Name = "cardNextMatch";
-            cardNextMatch.Size = new Size(159, 80);
+            cardNextMatch.Size = new Size(159, 89);
             cardNextMatch.TabIndex = 3;
             // 
             // labelCardNextMatchTitle
@@ -163,7 +163,7 @@ namespace Group1Project
             labelCardNextMatchTitle.Location = new Point(42, 0);
             labelCardNextMatchTitle.Margin = new Padding(2, 0, 2, 0);
             labelCardNextMatchTitle.Name = "labelCardNextMatchTitle";
-            labelCardNextMatchTitle.Size = new Size(68, 15);
+            labelCardNextMatchTitle.Size = new Size(75, 17);
             labelCardNextMatchTitle.TabIndex = 1;
             labelCardNextMatchTitle.Text = "Next Match";
             // 
@@ -174,19 +174,19 @@ namespace Group1Project
             cardMatches.Controls.Add(lblMatchesCount);
             cardMatches.Controls.Add(labelCardMatchesTitle);
             cardMatches.Dock = DockStyle.Fill;
-            cardMatches.Location = new Point(348, 8);
-            cardMatches.Margin = new Padding(5, 4, 5, 4);
+            cardMatches.Location = new Point(348, 10);
+            cardMatches.Margin = new Padding(5);
             cardMatches.Name = "cardMatches";
-            cardMatches.Size = new Size(159, 80);
+            cardMatches.Size = new Size(159, 89);
             cardMatches.TabIndex = 2;
             // 
             // lblMatchesCount
             // 
             lblMatchesCount.Anchor = AnchorStyles.None;
             lblMatchesCount.Font = new Font("Segoe UI", 16F);
-            lblMatchesCount.Location = new Point(59, 31);
+            lblMatchesCount.Location = new Point(59, 34);
             lblMatchesCount.Name = "lblMatchesCount";
-            lblMatchesCount.Size = new Size(140, 50);
+            lblMatchesCount.Size = new Size(140, 57);
             lblMatchesCount.TabIndex = 2;
             lblMatchesCount.Text = "3";
             // 
@@ -197,7 +197,7 @@ namespace Group1Project
             labelCardMatchesTitle.Location = new Point(47, 0);
             labelCardMatchesTitle.Margin = new Padding(2, 0, 2, 0);
             labelCardMatchesTitle.Name = "labelCardMatchesTitle";
-            labelCardMatchesTitle.Size = new Size(52, 15);
+            labelCardMatchesTitle.Size = new Size(57, 17);
             labelCardMatchesTitle.TabIndex = 1;
             labelCardMatchesTitle.Text = "Matches";
             // 
@@ -208,19 +208,19 @@ namespace Group1Project
             cardPlayers.Controls.Add(lblPlayersCount);
             cardPlayers.Controls.Add(labelCardPlayersTitle);
             cardPlayers.Dock = DockStyle.Fill;
-            cardPlayers.Location = new Point(179, 8);
-            cardPlayers.Margin = new Padding(5, 4, 5, 4);
+            cardPlayers.Location = new Point(179, 10);
+            cardPlayers.Margin = new Padding(5);
             cardPlayers.Name = "cardPlayers";
-            cardPlayers.Size = new Size(159, 80);
+            cardPlayers.Size = new Size(159, 89);
             cardPlayers.TabIndex = 1;
             // 
             // lblPlayersCount
             // 
             lblPlayersCount.Anchor = AnchorStyles.None;
             lblPlayersCount.Font = new Font("Segoe UI", 16F);
-            lblPlayersCount.Location = new Point(61, 31);
+            lblPlayersCount.Location = new Point(61, 34);
             lblPlayersCount.Name = "lblPlayersCount";
-            lblPlayersCount.Size = new Size(140, 50);
+            lblPlayersCount.Size = new Size(140, 57);
             lblPlayersCount.TabIndex = 2;
             lblPlayersCount.Text = "2";
             // 
@@ -231,7 +231,7 @@ namespace Group1Project
             labelCardPlayersTitle.Location = new Point(56, 0);
             labelCardPlayersTitle.Margin = new Padding(2, 0, 2, 0);
             labelCardPlayersTitle.Name = "labelCardPlayersTitle";
-            labelCardPlayersTitle.Size = new Size(44, 15);
+            labelCardPlayersTitle.Size = new Size(49, 17);
             labelCardPlayersTitle.TabIndex = 1;
             labelCardPlayersTitle.Text = "Players";
             // 
@@ -241,19 +241,19 @@ namespace Group1Project
             cardTeams.Controls.Add(lblTeamsCount);
             cardTeams.Controls.Add(labelCardTeamsTitle);
             cardTeams.Dock = DockStyle.Fill;
-            cardTeams.Location = new Point(10, 8);
-            cardTeams.Margin = new Padding(5, 4, 5, 4);
+            cardTeams.Location = new Point(10, 10);
+            cardTeams.Margin = new Padding(5);
             cardTeams.Name = "cardTeams";
-            cardTeams.Size = new Size(159, 80);
+            cardTeams.Size = new Size(159, 89);
             cardTeams.TabIndex = 0;
             // 
             // lblTeamsCount
             // 
             lblTeamsCount.Anchor = AnchorStyles.None;
             lblTeamsCount.Font = new Font("Segoe UI", 16F);
-            lblTeamsCount.Location = new Point(65, 31);
+            lblTeamsCount.Location = new Point(65, 34);
             lblTeamsCount.Name = "lblTeamsCount";
-            lblTeamsCount.Size = new Size(140, 50);
+            lblTeamsCount.Size = new Size(91, 43);
             lblTeamsCount.TabIndex = 1;
             lblTeamsCount.Text = "1";
             // 
@@ -261,17 +261,17 @@ namespace Group1Project
             // 
             labelCardTeamsTitle.Anchor = AnchorStyles.Top;
             labelCardTeamsTitle.AutoSize = true;
-            labelCardTeamsTitle.Location = new Point(59, 0);
+            labelCardTeamsTitle.Location = new Point(59, 2);
             labelCardTeamsTitle.Margin = new Padding(2, 0, 2, 0);
             labelCardTeamsTitle.Name = "labelCardTeamsTitle";
-            labelCardTeamsTitle.Size = new Size(41, 15);
+            labelCardTeamsTitle.Size = new Size(45, 17);
             labelCardTeamsTitle.TabIndex = 0;
             labelCardTeamsTitle.Text = "Teams";
             // 
             // splitDashBottom
             // 
             splitDashBottom.Dock = DockStyle.Fill;
-            splitDashBottom.Location = new Point(2, 152);
+            splitDashBottom.Location = new Point(2, 172);
             splitDashBottom.Margin = new Padding(2);
             splitDashBottom.Name = "splitDashBottom";
             // 
@@ -284,7 +284,7 @@ namespace Group1Project
             // 
             splitDashBottom.Panel2.Controls.Add(flowLayoutPanel1);
             splitDashBottom.Panel2.Controls.Add(labelUpcomingEvents);
-            splitDashBottom.Size = new Size(686, 153);
+            splitDashBottom.Size = new Size(686, 174);
             splitDashBottom.SplitterDistance = 278;
             splitDashBottom.SplitterWidth = 2;
             splitDashBottom.TabIndex = 2;
@@ -294,11 +294,11 @@ namespace Group1Project
             listBox1.Dock = DockStyle.Fill;
             listBox1.FormattingEnabled = true;
             listBox1.IntegralHeight = false;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(0, 15);
+            listBox1.ItemHeight = 17;
+            listBox1.Location = new Point(0, 17);
             listBox1.Margin = new Padding(2);
             listBox1.Name = "listBox1";
-            listBox1.Size = new Size(278, 138);
+            listBox1.Size = new Size(278, 157);
             listBox1.TabIndex = 1;
             // 
             // labelRecent
@@ -308,7 +308,7 @@ namespace Group1Project
             labelRecent.Location = new Point(0, 0);
             labelRecent.Margin = new Padding(2, 0, 2, 0);
             labelRecent.Name = "labelRecent";
-            labelRecent.Size = new Size(83, 15);
+            labelRecent.Size = new Size(87, 17);
             labelRecent.TabIndex = 0;
             labelRecent.Text = "RecentActivity";
             // 
@@ -319,11 +319,11 @@ namespace Group1Project
             flowLayoutPanel1.BackColor = SystemColors.Window;
             flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel1.Location = new Point(0, 15);
+            flowLayoutPanel1.Location = new Point(0, 17);
             flowLayoutPanel1.Margin = new Padding(2);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Padding = new Padding(5, 4, 5, 4);
-            flowLayoutPanel1.Size = new Size(406, 138);
+            flowLayoutPanel1.Padding = new Padding(5);
+            flowLayoutPanel1.Size = new Size(406, 157);
             flowLayoutPanel1.TabIndex = 1;
             flowLayoutPanel1.WrapContents = false;
             flowLayoutPanel1.Paint += flowLayoutPanel1_Paint;
@@ -335,18 +335,18 @@ namespace Group1Project
             labelUpcomingEvents.Location = new Point(0, 0);
             labelUpcomingEvents.Margin = new Padding(2, 0, 2, 0);
             labelUpcomingEvents.Name = "labelUpcomingEvents";
-            labelUpcomingEvents.Size = new Size(100, 15);
+            labelUpcomingEvents.Size = new Size(109, 17);
             labelUpcomingEvents.TabIndex = 0;
             labelUpcomingEvents.Text = "Upcoming Events";
             // 
             // DashboardPage
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(tableDashboard);
             Margin = new Padding(2);
             Name = "DashboardPage";
-            Size = new Size(690, 307);
+            Size = new Size(690, 348);
             tableDashboard.ResumeLayout(false);
             panelDashHeader.ResumeLayout(false);
             panelDashHeader.PerformLayout();
